@@ -1,0 +1,850 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package poly.books.ui;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import javax.swing.BorderFactory;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import poly.books.controller.PolybookController;
+import poly.books.dao.impl.UserDAOImpl;
+import poly.books.entity.NguoiDungSD;
+import poly.books.ui.manager.QuanLyHoaDon;
+import poly.books.ui.manager.QuanLySach;
+import poly.books.util.XAuth;
+import poly.books.util.XIcon;
+
+/**
+ *
+ * @author HuyNguyen
+ */
+public class PolybookJFrame extends javax.swing.JFrame implements poly.books.controller.PolybookController {
+
+    /**
+     * Creates new form d
+     */
+    public PolybookJFrame() {
+        initComponents();
+        menu.setBackground(null); // Xóa màu nền mặc định để gradient hiển thị
+        init();
+        // Thêm hiệu ứng click cho các JLabel trong menu
+        addClickEffect(lbBanHang);
+        addClickEffect(lbQLSach);
+        addClickEffect(lbTaiKhoan);
+        addClickEffect(lbQuanLyKH);
+        addClickEffect(lbQuanLyHD);
+        addClickEffect(lbThongKe);
+        addClickEffect(lbgiamgia);
+        addClickEffect(lbDangXuat);
+        addClickEffect(lbDoiMk);
+        addClickEffect(lbLichSu);
+
+    }
+
+    private void showQuanLySachContent() {
+        // Loại bỏ nội dung cũ nếu có
+        mainSach.removeAll();
+        mainSach.revalidate();
+        mainSach.repaint();
+
+        // Tạo instance của QuanLySach và lấy nội dung
+        QuanLySach quanLySach = new QuanLySach(this, false); // Không cần modal
+        JPanel contentPanel = quanLySach.getContentPanel();
+        contentPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2)); // Thêm border nếu cần
+
+        // Thêm nội dung vào mainSach
+        mainSach.setLayout(new BorderLayout());
+        mainSach.add(contentPanel, BorderLayout.CENTER);
+        mainSach.revalidate();
+        mainSach.repaint();
+        showPanel(QuanLySach);
+
+    }
+
+    private void showQuanLyDoiMatKhau() {
+        pnlDoiMatKhau.removeAll();
+        pnlDoiMatKhau.revalidate();
+        pnlDoiMatKhau.repaint();
+
+        // Tạo instance của QuanLySach và lấy nội dung
+        ChangePasswordJDialog quanLymk = new ChangePasswordJDialog(this, false); // Không cần modal
+        JPanel contentPanel = quanLymk.getContentPanel();
+        contentPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2)); // Thêm border nếu cần
+
+        // Thêm nội dung vào mainSach
+        pnlDoiMatKhau.setLayout(new BorderLayout());
+        pnlDoiMatKhau.add(contentPanel, BorderLayout.CENTER);
+        pnlDoiMatKhau.revalidate();
+        pnlDoiMatKhau.repaint();
+        showPanel(DoiMatKhau);
+    }
+
+    private void showQuanLyHoaDonContent() {
+        pnlQuanLyHD.removeAll();
+        pnlQuanLyHD.revalidate();
+        pnlQuanLyHD.repaint();
+
+        // Tạo instance của QuanLySach và lấy nội dung
+        QuanLyHoaDon QuanLyHD = new QuanLyHoaDon(this, false); // Không cần modal
+        JPanel contentPanel = QuanLyHD.getContentPanel();
+        contentPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2)); // Thêm border nếu cần
+
+        // Thêm nội dung vào mainSach
+        pnlQuanLyHD.setLayout(new BorderLayout());
+        pnlQuanLyHD.add(contentPanel, BorderLayout.CENTER);
+        pnlQuanLyHD.revalidate();
+        pnlQuanLyHD.repaint();
+        showPanel(QuanLyHoaDon);
+    }
+    private void showQuanLyBanHang() {
+        pnlBanHang.removeAll();
+        pnlBanHang.revalidate();
+        pnlBanHang.repaint();
+
+        // Tạo instance của QuanLySach và lấy nội dung
+        BanHang QuanLyBH = new BanHang(this, false); // Không cần modal
+        JPanel contentPanel = QuanLyBH.getContentPanel();
+        contentPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2)); // Thêm border nếu cần
+
+        // Thêm nội dung vào mainSach
+        pnlBanHang.setLayout(new BorderLayout());
+        pnlBanHang.add(contentPanel, BorderLayout.CENTER);
+        pnlBanHang.revalidate();
+        pnlBanHang.repaint();
+        showPanel(BanHang);
+    }
+
+    private void showPanel(JPanel panelToShow) {
+        // Ẩn tất cả các panel
+        BanHang.setVisible(false);
+        QuanLySach.setVisible(false);
+        QuanLyHoaDon.setVisible(false);
+        TaiKhoan.setVisible(false);
+        KhachHang.setVisible(false);
+        ThongKe.setVisible(false);
+        GiamGia.setVisible(false);
+        LichSu.setVisible(false);
+        DoiMatKhau.setVisible(false);
+
+        // Hiển thị panel được chọn
+        panelToShow.setVisible(true);
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        main = new javax.swing.JPanel();
+        menu = new poly.books.util.GradientPanel()
+        ;
+        lbBanHang = new javax.swing.JLabel();
+        lbQLSach = new javax.swing.JLabel();
+        lbTaiKhoan = new javax.swing.JLabel();
+        lbQuanLyKH = new javax.swing.JLabel();
+        lbQuanLyHD = new javax.swing.JLabel();
+        lbThongKe = new javax.swing.JLabel();
+        lblAnh = new javax.swing.JLabel();
+        lblHoTen = new javax.swing.JLabel();
+        lblChucVu = new javax.swing.JLabel();
+        lbgiamgia = new javax.swing.JLabel();
+        lbDangXuat = new javax.swing.JLabel();
+        lbDoiMk = new javax.swing.JLabel();
+        lbLichSu = new javax.swing.JLabel();
+        QuanLy = new javax.swing.JPanel();
+        BanHang = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        pnlBanHang = new javax.swing.JPanel();
+        QuanLySach = new javax.swing.JPanel();
+        jLabel12 = new javax.swing.JLabel();
+        mainSach = new javax.swing.JPanel();
+        QuanLyHoaDon = new javax.swing.JPanel();
+        jLabel13 = new javax.swing.JLabel();
+        pnlQuanLyHD = new javax.swing.JPanel();
+        TaiKhoan = new javax.swing.JPanel();
+        jLabel14 = new javax.swing.JLabel();
+        pnlTaiKhoan = new javax.swing.JPanel();
+        KhachHang = new javax.swing.JPanel();
+        jLabel15 = new javax.swing.JLabel();
+        pnlQuanLyKH = new javax.swing.JPanel();
+        GiamGia = new javax.swing.JPanel();
+        jLabel16 = new javax.swing.JLabel();
+        pnlGiamGia = new javax.swing.JPanel();
+        ThongKe = new javax.swing.JPanel();
+        jLabel17 = new javax.swing.JLabel();
+        pnlThongKe = new javax.swing.JPanel();
+        LichSu = new javax.swing.JPanel();
+        jLabel18 = new javax.swing.JLabel();
+        pnlLichSu = new javax.swing.JPanel();
+        DoiMatKhau = new javax.swing.JPanel();
+        jLabel19 = new javax.swing.JLabel();
+        pnlDoiMatKhau = new javax.swing.JPanel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        menu.setBackground(new java.awt.Color(0, 204, 204));
+        menu.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        menu.setPreferredSize(new java.awt.Dimension(200, 577));
+
+        lbBanHang.setBackground(new java.awt.Color(51, 51, 255));
+        lbBanHang.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lbBanHang.setForeground(new java.awt.Color(255, 255, 255));
+        lbBanHang.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbBanHang.setText("Bán Hàng");
+        lbBanHang.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbBanHangMouseClicked(evt);
+            }
+        });
+
+        lbQLSach.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lbQLSach.setForeground(new java.awt.Color(255, 255, 255));
+        lbQLSach.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbQLSach.setText("Quản lý sách");
+        lbQLSach.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbQLSachMouseClicked(evt);
+            }
+        });
+
+        lbTaiKhoan.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lbTaiKhoan.setForeground(new java.awt.Color(255, 255, 255));
+        lbTaiKhoan.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbTaiKhoan.setText("Tài khoản");
+        lbTaiKhoan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbTaiKhoanMouseClicked(evt);
+            }
+        });
+
+        lbQuanLyKH.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lbQuanLyKH.setForeground(new java.awt.Color(255, 255, 255));
+        lbQuanLyKH.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbQuanLyKH.setText("Quản lý khách hàng");
+        lbQuanLyKH.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbQuanLyKHMouseClicked(evt);
+            }
+        });
+
+        lbQuanLyHD.setBackground(new java.awt.Color(0, 153, 153));
+        lbQuanLyHD.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lbQuanLyHD.setForeground(new java.awt.Color(255, 255, 255));
+        lbQuanLyHD.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbQuanLyHD.setText("Quản lý hóa đơn");
+        lbQuanLyHD.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbQuanLyHDMouseClicked(evt);
+            }
+        });
+
+        lbThongKe.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lbThongKe.setForeground(new java.awt.Color(255, 255, 255));
+        lbThongKe.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbThongKe.setText("Thống kê");
+        lbThongKe.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbThongKeMouseClicked(evt);
+            }
+        });
+
+        lblAnh.setBackground(new java.awt.Color(51, 51, 255));
+        lblAnh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/user.png"))); // NOI18N
+
+        lblHoTen.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblHoTen.setForeground(new java.awt.Color(255, 255, 255));
+        lblHoTen.setText("Tên ");
+
+        lblChucVu.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblChucVu.setForeground(new java.awt.Color(255, 255, 255));
+        lblChucVu.setText("Chức vụ");
+
+        lbgiamgia.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lbgiamgia.setForeground(new java.awt.Color(255, 255, 255));
+        lbgiamgia.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbgiamgia.setText("Giảm giá");
+        lbgiamgia.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbgiamgiaMouseClicked(evt);
+            }
+        });
+
+        lbDangXuat.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lbDangXuat.setForeground(new java.awt.Color(255, 255, 255));
+        lbDangXuat.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbDangXuat.setText("Đăng xuất");
+        lbDangXuat.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbDangXuatMouseClicked(evt);
+            }
+        });
+
+        lbDoiMk.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lbDoiMk.setForeground(new java.awt.Color(255, 255, 255));
+        lbDoiMk.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbDoiMk.setText("Đổi Mật Khẩu");
+        lbDoiMk.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbDoiMkMouseClicked(evt);
+            }
+        });
+
+        lbLichSu.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lbLichSu.setForeground(new java.awt.Color(255, 255, 255));
+        lbLichSu.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbLichSu.setText("Lịch Sử");
+        lbLichSu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbLichSuMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout menuLayout = new javax.swing.GroupLayout(menu);
+        menu.setLayout(menuLayout);
+        menuLayout.setHorizontalGroup(
+            menuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(lbBanHang, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(lbQLSach, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(lbTaiKhoan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(lbQuanLyKH, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(lbThongKe, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(lbgiamgia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(lbQuanLyHD, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(lblHoTen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(menuLayout.createSequentialGroup()
+                .addGap(43, 43, 43)
+                .addComponent(lblAnh, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 43, Short.MAX_VALUE))
+            .addComponent(lblChucVu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(lbDoiMk, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(lbLichSu, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(lbDangXuat, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        menuLayout.setVerticalGroup(
+            menuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(menuLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblAnh, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblHoTen, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblChucVu, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lbBanHang, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbQLSach, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbTaiKhoan, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbQuanLyKH, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbQuanLyHD, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbThongKe, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbgiamgia, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbLichSu, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbDoiMk, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbDangXuat, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(18, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout mainLayout = new javax.swing.GroupLayout(main);
+        main.setLayout(mainLayout);
+        mainLayout.setHorizontalGroup(
+            mainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(menu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        mainLayout.setVerticalGroup(
+            mainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(menu, javax.swing.GroupLayout.DEFAULT_SIZE, 705, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(main, java.awt.BorderLayout.LINE_START);
+
+        QuanLy.setLayout(new java.awt.CardLayout());
+
+        BanHang.setBackground(new java.awt.Color(255, 255, 255));
+        BanHang.setLayout(new java.awt.BorderLayout());
+
+        jLabel2.setBackground(new java.awt.Color(0, 144, 193));
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Bán Hàng");
+        jLabel2.setOpaque(true);
+        jLabel2.setPreferredSize(new java.awt.Dimension(84, 50));
+        BanHang.add(jLabel2, java.awt.BorderLayout.PAGE_START);
+
+        pnlBanHang.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout pnlBanHangLayout = new javax.swing.GroupLayout(pnlBanHang);
+        pnlBanHang.setLayout(pnlBanHangLayout);
+        pnlBanHangLayout.setHorizontalGroup(
+            pnlBanHangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1160, Short.MAX_VALUE)
+        );
+        pnlBanHangLayout.setVerticalGroup(
+            pnlBanHangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 655, Short.MAX_VALUE)
+        );
+
+        BanHang.add(pnlBanHang, java.awt.BorderLayout.CENTER);
+
+        QuanLy.add(BanHang, "card2");
+
+        QuanLySach.setBackground(new java.awt.Color(255, 255, 255));
+        QuanLySach.setLayout(new java.awt.BorderLayout());
+
+        jLabel12.setBackground(new java.awt.Color(0, 144, 193));
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel12.setText("Quản lý Sách");
+        jLabel12.setOpaque(true);
+        jLabel12.setPreferredSize(new java.awt.Dimension(84, 50));
+        QuanLySach.add(jLabel12, java.awt.BorderLayout.PAGE_START);
+
+        mainSach.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout mainSachLayout = new javax.swing.GroupLayout(mainSach);
+        mainSach.setLayout(mainSachLayout);
+        mainSachLayout.setHorizontalGroup(
+            mainSachLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1160, Short.MAX_VALUE)
+        );
+        mainSachLayout.setVerticalGroup(
+            mainSachLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 655, Short.MAX_VALUE)
+        );
+
+        QuanLySach.add(mainSach, java.awt.BorderLayout.CENTER);
+
+        QuanLy.add(QuanLySach, "card2");
+
+        QuanLyHoaDon.setBackground(new java.awt.Color(255, 255, 255));
+        QuanLyHoaDon.setLayout(new java.awt.BorderLayout());
+
+        jLabel13.setBackground(new java.awt.Color(0, 144, 193));
+        jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel13.setText("Quản Lý Hóa Đơn");
+        jLabel13.setOpaque(true);
+        jLabel13.setPreferredSize(new java.awt.Dimension(84, 50));
+        QuanLyHoaDon.add(jLabel13, java.awt.BorderLayout.PAGE_START);
+
+        pnlQuanLyHD.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout pnlQuanLyHDLayout = new javax.swing.GroupLayout(pnlQuanLyHD);
+        pnlQuanLyHD.setLayout(pnlQuanLyHDLayout);
+        pnlQuanLyHDLayout.setHorizontalGroup(
+            pnlQuanLyHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1160, Short.MAX_VALUE)
+        );
+        pnlQuanLyHDLayout.setVerticalGroup(
+            pnlQuanLyHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 655, Short.MAX_VALUE)
+        );
+
+        QuanLyHoaDon.add(pnlQuanLyHD, java.awt.BorderLayout.CENTER);
+
+        QuanLy.add(QuanLyHoaDon, "card2");
+
+        TaiKhoan.setBackground(new java.awt.Color(255, 255, 255));
+        TaiKhoan.setLayout(new java.awt.BorderLayout());
+
+        jLabel14.setBackground(new java.awt.Color(0, 144, 193));
+        jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel14.setText("Tài Khoản");
+        jLabel14.setOpaque(true);
+        jLabel14.setPreferredSize(new java.awt.Dimension(84, 50));
+        TaiKhoan.add(jLabel14, java.awt.BorderLayout.PAGE_START);
+
+        pnlTaiKhoan.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout pnlTaiKhoanLayout = new javax.swing.GroupLayout(pnlTaiKhoan);
+        pnlTaiKhoan.setLayout(pnlTaiKhoanLayout);
+        pnlTaiKhoanLayout.setHorizontalGroup(
+            pnlTaiKhoanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1160, Short.MAX_VALUE)
+        );
+        pnlTaiKhoanLayout.setVerticalGroup(
+            pnlTaiKhoanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 655, Short.MAX_VALUE)
+        );
+
+        TaiKhoan.add(pnlTaiKhoan, java.awt.BorderLayout.CENTER);
+
+        QuanLy.add(TaiKhoan, "card2");
+
+        KhachHang.setBackground(new java.awt.Color(255, 255, 255));
+        KhachHang.setLayout(new java.awt.BorderLayout());
+
+        jLabel15.setBackground(new java.awt.Color(0, 144, 193));
+        jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel15.setText("Khách Hàng");
+        jLabel15.setOpaque(true);
+        jLabel15.setPreferredSize(new java.awt.Dimension(84, 50));
+        KhachHang.add(jLabel15, java.awt.BorderLayout.PAGE_START);
+
+        pnlQuanLyKH.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout pnlQuanLyKHLayout = new javax.swing.GroupLayout(pnlQuanLyKH);
+        pnlQuanLyKH.setLayout(pnlQuanLyKHLayout);
+        pnlQuanLyKHLayout.setHorizontalGroup(
+            pnlQuanLyKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1160, Short.MAX_VALUE)
+        );
+        pnlQuanLyKHLayout.setVerticalGroup(
+            pnlQuanLyKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 655, Short.MAX_VALUE)
+        );
+
+        KhachHang.add(pnlQuanLyKH, java.awt.BorderLayout.CENTER);
+
+        QuanLy.add(KhachHang, "card2");
+
+        GiamGia.setBackground(new java.awt.Color(255, 255, 255));
+        GiamGia.setLayout(new java.awt.BorderLayout());
+
+        jLabel16.setBackground(new java.awt.Color(0, 144, 193));
+        jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel16.setText("Giảm Giá");
+        jLabel16.setOpaque(true);
+        jLabel16.setPreferredSize(new java.awt.Dimension(84, 50));
+        GiamGia.add(jLabel16, java.awt.BorderLayout.PAGE_START);
+
+        pnlGiamGia.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout pnlGiamGiaLayout = new javax.swing.GroupLayout(pnlGiamGia);
+        pnlGiamGia.setLayout(pnlGiamGiaLayout);
+        pnlGiamGiaLayout.setHorizontalGroup(
+            pnlGiamGiaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1160, Short.MAX_VALUE)
+        );
+        pnlGiamGiaLayout.setVerticalGroup(
+            pnlGiamGiaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 655, Short.MAX_VALUE)
+        );
+
+        GiamGia.add(pnlGiamGia, java.awt.BorderLayout.CENTER);
+
+        QuanLy.add(GiamGia, "card2");
+
+        ThongKe.setBackground(new java.awt.Color(255, 255, 255));
+        ThongKe.setLayout(new java.awt.BorderLayout());
+
+        jLabel17.setBackground(new java.awt.Color(0, 144, 193));
+        jLabel17.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel17.setText("Thống Kê");
+        jLabel17.setOpaque(true);
+        jLabel17.setPreferredSize(new java.awt.Dimension(84, 50));
+        ThongKe.add(jLabel17, java.awt.BorderLayout.PAGE_START);
+
+        pnlThongKe.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout pnlThongKeLayout = new javax.swing.GroupLayout(pnlThongKe);
+        pnlThongKe.setLayout(pnlThongKeLayout);
+        pnlThongKeLayout.setHorizontalGroup(
+            pnlThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1160, Short.MAX_VALUE)
+        );
+        pnlThongKeLayout.setVerticalGroup(
+            pnlThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 655, Short.MAX_VALUE)
+        );
+
+        ThongKe.add(pnlThongKe, java.awt.BorderLayout.CENTER);
+
+        QuanLy.add(ThongKe, "card2");
+
+        LichSu.setBackground(new java.awt.Color(255, 255, 255));
+        LichSu.setLayout(new java.awt.BorderLayout());
+
+        jLabel18.setBackground(new java.awt.Color(0, 144, 193));
+        jLabel18.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel18.setText("Lịch Sử");
+        jLabel18.setOpaque(true);
+        jLabel18.setPreferredSize(new java.awt.Dimension(84, 50));
+        LichSu.add(jLabel18, java.awt.BorderLayout.PAGE_START);
+
+        pnlLichSu.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout pnlLichSuLayout = new javax.swing.GroupLayout(pnlLichSu);
+        pnlLichSu.setLayout(pnlLichSuLayout);
+        pnlLichSuLayout.setHorizontalGroup(
+            pnlLichSuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1160, Short.MAX_VALUE)
+        );
+        pnlLichSuLayout.setVerticalGroup(
+            pnlLichSuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 655, Short.MAX_VALUE)
+        );
+
+        LichSu.add(pnlLichSu, java.awt.BorderLayout.CENTER);
+
+        QuanLy.add(LichSu, "card2");
+
+        DoiMatKhau.setBackground(new java.awt.Color(255, 255, 255));
+        DoiMatKhau.setLayout(new java.awt.BorderLayout());
+
+        jLabel19.setBackground(new java.awt.Color(0, 144, 193));
+        jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel19.setText("Đổi mật khẩu");
+        jLabel19.setOpaque(true);
+        jLabel19.setPreferredSize(new java.awt.Dimension(84, 50));
+        DoiMatKhau.add(jLabel19, java.awt.BorderLayout.PAGE_START);
+
+        pnlDoiMatKhau.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout pnlDoiMatKhauLayout = new javax.swing.GroupLayout(pnlDoiMatKhau);
+        pnlDoiMatKhau.setLayout(pnlDoiMatKhauLayout);
+        pnlDoiMatKhauLayout.setHorizontalGroup(
+            pnlDoiMatKhauLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1160, Short.MAX_VALUE)
+        );
+        pnlDoiMatKhauLayout.setVerticalGroup(
+            pnlDoiMatKhauLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 655, Short.MAX_VALUE)
+        );
+
+        DoiMatKhau.add(pnlDoiMatKhau, java.awt.BorderLayout.CENTER);
+
+        QuanLy.add(DoiMatKhau, "card2");
+
+        getContentPane().add(QuanLy, java.awt.BorderLayout.CENTER);
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void lbDangXuatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbDangXuatMouseClicked
+         XAuth.user = null; 
+        System.exit(0);
+    }//GEN-LAST:event_lbDangXuatMouseClicked
+
+    private void lbgiamgiaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbgiamgiaMouseClicked
+        showPanel(GiamGia);
+    }//GEN-LAST:event_lbgiamgiaMouseClicked
+
+    private void lbThongKeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbThongKeMouseClicked
+        showPanel(ThongKe);
+    }//GEN-LAST:event_lbThongKeMouseClicked
+
+    private void lbQuanLyHDMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbQuanLyHDMouseClicked
+        showQuanLyHoaDonContent();
+    }//GEN-LAST:event_lbQuanLyHDMouseClicked
+
+    private void lbQuanLyKHMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbQuanLyKHMouseClicked
+        showPanel(KhachHang);
+    }//GEN-LAST:event_lbQuanLyKHMouseClicked
+
+    private void lbTaiKhoanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbTaiKhoanMouseClicked
+        showPanel(TaiKhoan);
+    }//GEN-LAST:event_lbTaiKhoanMouseClicked
+
+    private void lbQLSachMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbQLSachMouseClicked
+        showQuanLySachContent();
+    }//GEN-LAST:event_lbQLSachMouseClicked
+
+    private void lbBanHangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbBanHangMouseClicked
+        showQuanLyBanHang();
+    }//GEN-LAST:event_lbBanHangMouseClicked
+
+    private void lbDoiMkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbDoiMkMouseClicked
+        showQuanLyDoiMatKhau();
+    }//GEN-LAST:event_lbDoiMkMouseClicked
+
+    private void lbLichSuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbLichSuMouseClicked
+        showPanel(LichSu);
+    }//GEN-LAST:event_lbLichSuMouseClicked
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(PolybookJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(PolybookJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(PolybookJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(PolybookJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new PolybookJFrame().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel BanHang;
+    private javax.swing.JPanel DoiMatKhau;
+    private javax.swing.JPanel GiamGia;
+    private javax.swing.JPanel KhachHang;
+    private javax.swing.JPanel LichSu;
+    private javax.swing.JPanel QuanLy;
+    private javax.swing.JPanel QuanLyHoaDon;
+    private javax.swing.JPanel QuanLySach;
+    private javax.swing.JPanel TaiKhoan;
+    private javax.swing.JPanel ThongKe;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel lbBanHang;
+    private javax.swing.JLabel lbDangXuat;
+    private javax.swing.JLabel lbDoiMk;
+    private javax.swing.JLabel lbLichSu;
+    private javax.swing.JLabel lbQLSach;
+    private javax.swing.JLabel lbQuanLyHD;
+    private javax.swing.JLabel lbQuanLyKH;
+    private javax.swing.JLabel lbTaiKhoan;
+    private javax.swing.JLabel lbThongKe;
+    private javax.swing.JLabel lbgiamgia;
+    private javax.swing.JLabel lblAnh;
+    private javax.swing.JLabel lblChucVu;
+    private javax.swing.JLabel lblHoTen;
+    private javax.swing.JPanel main;
+    private javax.swing.JPanel mainSach;
+    private javax.swing.JPanel menu;
+    private javax.swing.JPanel pnlBanHang;
+    private javax.swing.JPanel pnlDoiMatKhau;
+    private javax.swing.JPanel pnlGiamGia;
+    private javax.swing.JPanel pnlLichSu;
+    private javax.swing.JPanel pnlQuanLyHD;
+    private javax.swing.JPanel pnlQuanLyKH;
+    private javax.swing.JPanel pnlTaiKhoan;
+    private javax.swing.JPanel pnlThongKe;
+    // End of variables declaration//GEN-END:variables
+private JLabel selectedLabel = null; // Theo dõi label được chọn
+
+    private void addClickEffect(JLabel label) {
+
+        Color colorEnd = new Color(88, 169, 198);
+
+        label.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                if (selectedLabel != null) {
+                    selectedLabel.setBackground(null);
+                    selectedLabel.setOpaque(false);
+                    selectedLabel.setForeground(Color.WHITE);
+                }
+                label.setBackground(colorEnd);
+                label.setForeground(Color.WHITE);
+                label.setOpaque(true);
+                selectedLabel = label;
+            }
+        });
+    }
+
+    @Override
+    public void init() {
+        this.setIconImage(XIcon.getIcon("/images/logo.png").getImage());
+        this.setLocationRelativeTo(null);
+        this.showWelcomeJDialog(this);
+        this.showLoginJDialog(this);
+        UserDAOImpl userDAO = new UserDAOImpl();
+
+        if (XAuth.user == null) {
+            System.out.println("No user logged in!");
+            lblHoTen.setText("Chưa đăng nhập");
+            lblChucVu.setText("Không xác định");
+            return;
+        }
+
+        String tenDangNhap = XAuth.user.getTenDangNhap();
+        System.out.println("Initializing user: " + tenDangNhap);
+        NguoiDungSD user = userDAO.findById(tenDangNhap);
+        if (user != null) {
+            XIcon.setIcon(lblAnh, "images/" + (user.getHinhAnh() != null ? user.getHinhAnh(): "user.png"));
+            lblHoTen.setText(user.getHoTen());
+            lblChucVu.setText(user.isQuanLy() ? "Quản lý" : "Nhân viên");
+
+            if (!user.isQuanLy()) {
+                lbQLSach.setVisible(false);
+                lbQuanLyHD.setVisible(false);
+                lbQuanLyKH.setVisible(false);
+                lbTaiKhoan.setVisible(false);
+                lbgiamgia.setVisible(false);
+                lbThongKe.setVisible(false);
+            }
+        } else {
+            System.out.println("User not found in database: " + tenDangNhap);
+            lblHoTen.setText("Không tìm thấy người dùng");
+            lblChucVu.setText("Không xác định");
+        }
+
+    }
+
+    @Override
+    public void exit() {
+        PolybookController.super.exit(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
+
+    @Override
+    public void showJDialog(JDialog dialog) {
+        PolybookController.super.showJDialog(dialog); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
+
+    @Override
+    public void showWelcomeJDialog(JFrame frame) {
+        PolybookController.super.showWelcomeJDialog(frame); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
+
+    @Override
+    public void showLoginJDialog(JFrame frame) {
+        PolybookController.super.showLoginJDialog(frame); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
+
+    @Override
+    public void showQuanLySach(JFrame frame) {
+        PolybookController.super.showQuanLySach(frame); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
+
+    @Override
+    public void showQuanLyHoaDon(JFrame frame) {
+        PolybookController.super.showQuanLyHoaDon(frame); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
+}
