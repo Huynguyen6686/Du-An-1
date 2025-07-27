@@ -56,7 +56,16 @@ public class DanhSachSanPham extends javax.swing.JDialog implements poly.books.c
         fillToTable();
         this.parentBanHang = banHang;
     }
-
+  public void setSelectedSach(Sach sach) {
+        DefaultTableModel model = (DefaultTableModel) tbDanhSachSP.getModel();
+        for (int i = 0; i < model.getRowCount(); i++) {
+            if (model.getValueAt(i, 0).equals(sach.getMaSach())) {
+                tbDanhSachSP.setRowSelectionInterval(i, i);
+                setForm(sach);
+                break;
+            }
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

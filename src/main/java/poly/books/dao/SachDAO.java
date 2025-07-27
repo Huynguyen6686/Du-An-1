@@ -102,7 +102,10 @@ public class SachDAO {
     public List<Sach> getAllDanhSachSP() {
         return XQuery.getBeanList(Sach.class, gallDanhSachSP);
     }
-
+public Sach findByISBN(String isbn) {
+    String sql = getAllSQL + " WHERE ISBN = ?";
+    return XQuery.getSingleBean(Sach.class, sql, isbn);
+}
     public List<Sach> getAll() {
         return XQuery.getBeanList(Sach.class, getAllSQL);
     }
