@@ -47,10 +47,7 @@ public class PolybookJFrame extends javax.swing.JFrame implements poly.books.con
     }
 
     private void showQuanLySachContent() {
-        // Loại bỏ nội dung cũ nếu có
-        mainSach.removeAll();
-        mainSach.revalidate();
-        mainSach.repaint();
+    
 
         // Tạo instance của QuanLySach và lấy nội dung
         QuanLySach quanLySach = new QuanLySach(this, false); // Không cần modal
@@ -67,9 +64,7 @@ public class PolybookJFrame extends javax.swing.JFrame implements poly.books.con
     }
 
     private void showQuanLyDoiMatKhau() {
-        pnlDoiMatKhau.removeAll();
-        pnlDoiMatKhau.revalidate();
-        pnlDoiMatKhau.repaint();
+
 
         // Tạo instance của QuanLySach và lấy nội dung
         ChangePasswordJDialog quanLymk = new ChangePasswordJDialog(this, false); // Không cần modal
@@ -85,9 +80,6 @@ public class PolybookJFrame extends javax.swing.JFrame implements poly.books.con
     }
 
     private void showQuanLyHoaDonContent() {
-        pnlQuanLyHD.removeAll();
-        pnlQuanLyHD.revalidate();
-        pnlQuanLyHD.repaint();
 
         // Tạo instance của QuanLySach và lấy nội dung
         QuanLyHoaDon QuanLyHD = new QuanLyHoaDon(this, false); // Không cần modal
@@ -102,9 +94,6 @@ public class PolybookJFrame extends javax.swing.JFrame implements poly.books.con
         showPanel(QuanLyHoaDon);
     }
     private void showQuanLyBanHang() {
-        pnlBanHang.removeAll();
-        pnlBanHang.revalidate();
-        pnlBanHang.repaint();
 
         // Tạo instance của QuanLySach và lấy nội dung
         BanHang QuanLyBH = new BanHang(this, false); // Không cần modal
@@ -117,6 +106,20 @@ public class PolybookJFrame extends javax.swing.JFrame implements poly.books.con
         pnlBanHang.revalidate();
         pnlBanHang.repaint();
         showPanel(BanHang);
+    }
+     private void showThongKe() {
+
+        // Tạo instance của QuanLySach và lấy nội dung
+        ThongKe QlTK = new ThongKe(this, false); // Không cần modal
+        JPanel contentPanel = QlTK.getContentPanel();
+        contentPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2)); // Thêm border nếu cần
+
+        // Thêm nội dung vào mainSach
+        pnlThongKe.setLayout(new BorderLayout());
+        pnlThongKe.add(contentPanel, BorderLayout.CENTER);
+        pnlThongKe.revalidate();
+        pnlThongKe.repaint();
+        showPanel(ThongKe);
     }
 
     private void showPanel(JPanel panelToShow) {
@@ -645,7 +648,7 @@ public class PolybookJFrame extends javax.swing.JFrame implements poly.books.con
     }//GEN-LAST:event_lbgiamgiaMouseClicked
 
     private void lbThongKeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbThongKeMouseClicked
-        showPanel(ThongKe);
+        showThongKe();
     }//GEN-LAST:event_lbThongKeMouseClicked
 
     private void lbQuanLyHDMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbQuanLyHDMouseClicked

@@ -4,6 +4,8 @@
  */
 package poly.books.ui;
 
+import javax.swing.JPanel;
+
 /**
  *
  * @author HuyNguyen
@@ -17,6 +19,9 @@ public class ThongKe extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
     }
+  public JPanel getContentPanel() {
+        return ThongKe; // Trả về JPanel Quanlysach chứa toàn bộ giao diện
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -27,17 +32,45 @@ public class ThongKe extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        ThongKe = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        ThongKe.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel1.setText("Hello World");
+
+        javax.swing.GroupLayout ThongKeLayout = new javax.swing.GroupLayout(ThongKe);
+        ThongKe.setLayout(ThongKeLayout);
+        ThongKeLayout.setHorizontalGroup(
+            ThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ThongKeLayout.createSequentialGroup()
+                .addGap(393, 393, 393)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(380, Short.MAX_VALUE))
+        );
+        ThongKeLayout.setVerticalGroup(
+            ThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ThongKeLayout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(417, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(ThongKe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(ThongKe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -86,5 +119,7 @@ public class ThongKe extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel ThongKe;
+    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

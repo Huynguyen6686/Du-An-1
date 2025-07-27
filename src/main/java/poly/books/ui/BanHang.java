@@ -37,7 +37,7 @@ import poly.books.util.XJdbc;
  * @author HuyNguyen
  */
 public class BanHang extends javax.swing.JDialog implements poly.books.controller.SachController {
-    
+
     private SachDAO sachDAO = new SachDAO();
     private JFrame parentFrame;
     private int maHD = -1;
@@ -60,7 +60,7 @@ public class BanHang extends javax.swing.JDialog implements poly.books.controlle
         txtmaKH.setEditable(false);
         txtTrangThai.setEditable(false);
     }
-    
+
     public JPanel getContentPanel() {
         return QLBanHang; // Trả về JPanel Quanlysach chứa toàn bộ giao diện
     }
@@ -531,15 +531,15 @@ public class BanHang extends javax.swing.JDialog implements poly.books.controlle
         }
         updateThanhTien();
     }
-    
+
     public void setSelectedKhachHang(KhachHang KH) {
         txtmaKH.setText(String.valueOf(KH.getMaKH()));
-        
+
     }
-    
+
     public void setSelectedMaGG(PhieuGiamGia MaGG) {
         txtMaPhieu.setText(String.valueOf(MaGG.getMaPhieu()));
-        
+
     }
 
     /**
@@ -637,31 +637,31 @@ private void thanhToan() {
             JOptionPane.showMessageDialog(this, "Vui lòng tạo hóa đơn trước!");
             return;
         }
-        
+
         try {
             double tongTien = calculateTongTien();
             double giamGia = calculateGiamGia(tongTien);
             double tongThanhToan = tongTien - giamGia;
-            
+
             int phuongThuc = rdoTienMat.isSelected() ? 1 : (rdoTk.isSelected() ? 2 : 1);
-            
+
             HoaDonDAO dao = new HoaDonDAO();
             HoaDon hoaDon = dao.findById(maHD);
-            
+
             if (hoaDon != null) {
                 hoaDon.setTongTien(tongThanhToan);
                 hoaDon.setPhuongThuc(phuongThuc);
                 hoaDon.setNgayThanhToan(XDate.now());
                 hoaDon.setTrangThai(1); // Đã thanh toán
                 hoaDon.setMaPhieu(txtMaPhieu.getText().isEmpty() ? null : Integer.parseInt(txtMaPhieu.getText()));
-                
+
                 dao.update(hoaDon); // Cập nhật hóa đơn vào cơ sở dữ liệu
 
                 txtTongTien.setText(String.format("%.2f", tongThanhToan));
                 txtGiamGia.setText(String.format("%.2f", giamGia));
                 txtTrangThai.setText("Đã thanh toán");
                 txtNgayTT.setText(XDate.format(XDate.now(), "dd-MM-yyyy HH:mm:ss"));
-                
+
                 JOptionPane.showMessageDialog(this, "Thanh toán thành công!");
                 clearForm();
             } else {
@@ -672,19 +672,19 @@ private void thanhToan() {
             JOptionPane.showMessageDialog(this, "Lỗi khi thanh toán: " + e.getMessage());
         }
     }
-    
+
     private void updateThanhTien() {
-        try {
-            int soLuong = (Integer) spSoLuong.getValue();
-            double donGia = txtDonGia.getText().isEmpty() ? 0 : Double.parseDouble(txtDonGia.getText());
-            double thanhTien = soLuong * donGia;
-            txtThanhTien.setText(String.valueOf(thanhTien));
-            calculateTongTien();
-        } catch (NumberFormatException e) {
-            txtThanhTien.setText("0");
-        }
+    try {
+        int soLuong = (Integer) spSoLuong.getValue();
+        double donGia = txtDonGia.getText().isEmpty() ? 0 : Double.parseDouble(txtDonGia.getText());
+        double thanhTien = soLuong * donGia;
+        txtThanhTien.setText(String.valueOf(thanhTien));
+        updateGiamGia(); // Tự động cập nhật mã giảm giá
+    } catch (NumberFormatException e) {
+        txtThanhTien.setText("0");
     }
-    
+}
+
     private double calculateTongTien() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         double tongTien = 0;
@@ -699,7 +699,7 @@ private void thanhToan() {
         }
         return tongTien; // Không gọi updateGiamGia
     }
-    
+
     private void huyHoaDon() {
         if (maHD != -1) {
             try {
@@ -727,91 +727,101 @@ private void thanhToan() {
             JOptionPane.showMessageDialog(this, "Đã hủy hóa đơn!");
         }
     }
-    
+
     private double calculateGiamGia(double tongTien) {
-        String maPhieuText = txtMaPhieu.getText().trim();
-        if (!maPhieuText.isEmpty()) {
-            try {
-                int maPhieu = Integer.parseInt(maPhieuText);
-                int maKH = Integer.parseInt(txtmaKH.getText().trim());
-                String sql = "SELECT GiaTri FROM PhieuGiamGia WHERE MaPhieu = ? AND MaKH = ? AND TrangThai = 1";
-                Double giaTri = XJdbc.getValue(sql, Double.class, maPhieu, maKH);
-                if (giaTri != null) {
-                    // Kiểm tra điều kiện áp dụng mã giảm giá
-                    String sqlDieuKien = "SELECT DieuKienApDung FROM PhieuGiamGia WHERE MaPhieu = ? AND MaKH = ?";
-                    Integer dieuKien = XJdbc.getValue(sqlDieuKien, Integer.class, maPhieu, maKH);
-                    if (dieuKien != null && tongTien >= dieuKien) {
-                        return giaTri;
+        try {
+            String sql = "SELECT MaPhieu, GiaTri, DieuKienApDung FROM PhieuGiamGia WHERE TrangThai = 1 AND DieuKienApDung <= ?";
+            try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setDouble(1, tongTien);
+                ResultSet rs = ps.executeQuery();
+                int bestMaPhieu = -1;
+                double bestGiaTri = 0;
+                double minDifference = Double.MAX_VALUE;
+                while (rs.next()) {
+                    int maPhieu = rs.getInt("MaPhieu");
+                    double giaTri = rs.getDouble("GiaTri");
+                    int dieuKien = rs.getInt("DieuKienApDung");
+                    double difference = Math.abs(tongTien - dieuKien);
+                    if (difference < minDifference) {
+                        minDifference = difference;
+                        bestMaPhieu = maPhieu;
+                        bestGiaTri = giaTri;
                     }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+                if (bestMaPhieu != -1) {
+                    txtMaPhieu.setText(String.valueOf(bestMaPhieu));
+                    return bestGiaTri;
+                }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi khi tìm mã giảm giá: " + e.getMessage());
         }
-        return 0; // Không áp dụng giảm giá nếu không có mã giảm giá
+        txtMaPhieu.setText("");
+        return 0;
     }
-    
+
     @Override
     public void showDanhSachSanPham(JFrame frame, BanHang banHang) {
         this.showJDialog(new DanhSachSanPham(frame, true, banHang));
     }
-    
+
     @Override
     public void open() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
     @Override
     public void setForm(Sach entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
     @Override
     public Sach getForm() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
     @Override
     public void fillToTable() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
     @Override
     public void delete() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
     @Override
     public void clear() {
     }
-    
+
     @Override
     public void create() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
     @Override
     public void update() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
     @Override
     public void setEditable(boolean editable) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
     private void addToHoaDon() throws SQLException {
         if (maHD == -1) {
             JOptionPane.showMessageDialog(this, "Vui lòng tạo hóa đơn trước!");
             return;
         }
-        
+
         String maSach = txtMaSach.getText().trim();
         if (maSach.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm!");
             return;
         }
-        
+
         int maSachInt;
         try {
             maSachInt = Integer.parseInt(maSach);
@@ -819,24 +829,23 @@ private void thanhToan() {
             JOptionPane.showMessageDialog(this, "Mã sách không hợp lệ!");
             return;
         }
-        
+
         Sach sach = sachDAO.findByID(maSachInt);
         if (sach == null) {
             JOptionPane.showMessageDialog(this, "Sản phẩm không tồn tại!");
             return;
         }
-        
+
         int soLuong = (Integer) spSoLuong.getValue();
         if (soLuong <= 0) {
             JOptionPane.showMessageDialog(this, "Số lượng phải lớn hơn 0!");
             return;
         }
-        
-        System.out.println("MaSach: " + maSachInt);
+
         Integer tonKho = null;
         String sqlKhoCheck = "SELECT SoLuong FROM Kho WHERE MaSach = ?";
         try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sqlKhoCheck)) {
-            ps.setInt(1, maSachInt); // Rõ ràng gán kiểu INT
+            ps.setInt(1, maSachInt);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 tonKho = rs.getInt(1);
@@ -846,23 +855,22 @@ private void thanhToan() {
             JOptionPane.showMessageDialog(this, "Số lượng vượt quá tồn kho (" + (tonKho != null ? tonKho : 0) + ")!");
             return;
         }
-        
+
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0);
         model.addRow(new Object[]{
             sach.getMaSach(),
             sach.getTenSach(),
             soLuong,
             sach.getGiaBan()
         });
-        
+
         String sqlKho = "UPDATE Kho SET SoLuong = SoLuong - ? WHERE MaSach = ?";
         try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sqlKho)) {
             ps.setInt(1, soLuong);
             ps.setInt(2, maSachInt);
             ps.executeUpdate();
         }
-        
+
         String sql = "INSERT INTO ChiTietHoaDon (MaHD, MaSach, SoLuong, DonGia) VALUES (?, ?, ?, ?)";
         try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maHD);
@@ -871,18 +879,17 @@ private void thanhToan() {
             ps.setDouble(4, sach.getGiaBan());
             ps.executeUpdate();
         }
-        
+
         clear();
-        updateGiamGia();
+        updateGiamGia(); // Tự động cập nhật mã giảm giá
     }
-    
+
     private int createHoaDon() {
         if (XAuth.user == null || XAuth.currentTenDangNhap == null) {
             JOptionPane.showMessageDialog(this, "Người dùng chưa đăng nhập!");
-            System.out.println("Error: XAuth.user or currentTenDangNhap is null");
             return -1;
         }
-        
+
         String maKHText = txtmaKH.getText().trim();
         int maKH;
         if (maKHText.isEmpty()) {
@@ -904,20 +911,15 @@ private void thanhToan() {
             JOptionPane.showMessageDialog(this, "Mã khách hàng không hợp lệ!");
             return -1;
         }
-        
-        String tenDangNhap = XAuth.currentTenDangNhap.trim();
-        System.out.println("TenDangNhap in createHoaDon: " + tenDangNhap);
-        System.out.println("MaKH: " + maKH);
-        
+
         Integer maPhieu = null;
         String maPhieuText = txtMaPhieu.getText().trim();
         if (!maPhieuText.isEmpty()) {
             try {
                 maPhieu = Integer.parseInt(maPhieuText);
-                String sql = "SELECT MaPhieu FROM PhieuGiamGia WHERE MaPhieu = ? AND MaKH = ? AND TrangThai = 1";
+                String sql = "SELECT MaPhieu FROM PhieuGiamGia WHERE MaPhieu = ? AND TrangThai = 1";
                 try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
                     ps.setInt(1, maPhieu);
-                    ps.setInt(2, maKH);
                     ResultSet rs = ps.executeQuery();
                     if (!rs.next()) {
                         JOptionPane.showMessageDialog(this, "Mã giảm giá không hợp lệ!");
@@ -929,26 +931,24 @@ private void thanhToan() {
                 return -1;
             }
         }
-        System.out.println("MaPhieu: " + (maPhieu != null ? maPhieu : "null"));
-        
+
         HoaDon hoaDon = new HoaDon();
         hoaDon.setMaKH(maKH);
-        hoaDon.setTenDangNhap(tenDangNhap);
+        hoaDon.setTenDangNhap(XAuth.currentTenDangNhap.trim());
         hoaDon.setNgayLap(XDate.now());
         hoaDon.setTongTien(0.0);
         hoaDon.setPhuongThuc(1);
         hoaDon.setNgayThanhToan(XDate.now());
         hoaDon.setTrangThai(0);
         hoaDon.setMaPhieu(maPhieu);
-        
+
         HoaDonDAO dao = new HoaDonDAO();
         try {
             int newMaHD = dao.create(hoaDon);
-            System.out.println("Created MaHD: " + newMaHD);
             if (newMaHD > 0) {
                 maHD = newMaHD;
                 txtMaHD.setText(String.valueOf(newMaHD));
-                txtMaNV.setText(tenDangNhap);
+                txtMaNV.setText(XAuth.currentTenDangNhap.trim());
                 txtNgayLap.setText(XDate.format(XDate.now(), "dd-MM-yyyy"));
                 txtTrangThai.setText("Chờ thanh toán");
                 updateGiamGia();
@@ -956,19 +956,18 @@ private void thanhToan() {
             }
             return -1;
         } catch (SQLException e) {
-            System.out.println("SQL error in createHoaDon: " + e.getMessage());
             JOptionPane.showMessageDialog(this, "Lỗi tạo hóa đơn: " + e.getMessage());
             return -1;
         }
     }
-    
+
     private void updateGiamGia() {
         double tongTien = calculateTongTien();
         double giamGia = calculateGiamGia(tongTien);
         txtGiamGia.setText(String.format("%.2f", giamGia));
         txtTongTien.setText(String.format("%.2f", tongTien - giamGia));
     }
-    
+
     private void clearForm() {
         txtMaSach.setText("");
         txtTenSach.setText("");
