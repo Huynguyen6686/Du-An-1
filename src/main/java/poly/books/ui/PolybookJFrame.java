@@ -48,7 +48,7 @@ public class PolybookJFrame extends javax.swing.JFrame implements poly.books.con
     }
 
     private void showQuanLySachContent() {
-
+        tatCamBanHang();
         // Tạo instance của QuanLySach và lấy nội dung
         QuanLySach quanLySach = new QuanLySach(this, false); // Không cần modal
         JPanel contentPanel = quanLySach.getContentPanel();
@@ -62,8 +62,14 @@ public class PolybookJFrame extends javax.swing.JFrame implements poly.books.con
 
     }
 
-    private void showQuanLyDoiMatKhau() {
+    private void tatCamBanHang() {
+        if (currentBanHang != null) {
+            currentBanHang.stopWebcam(); // Tắt webcam của BanHang hiện tại
+        }
+    }
 
+    private void showQuanLyDoiMatKhau() {
+        tatCamBanHang();
         // Tạo instance của QuanLySach và lấy nội dung
         ChangePasswordJDialog quanLymk = new ChangePasswordJDialog(this, false); // Không cần modal
         JPanel contentPanel = quanLymk.getContentPanel();
@@ -77,7 +83,7 @@ public class PolybookJFrame extends javax.swing.JFrame implements poly.books.con
     }
 
     private void showQuanLyHoaDonContent() {
-
+        tatCamBanHang();
         // Tạo instance của QuanLySach và lấy nội dung
         QuanLyHoaDon QuanLyHD = new QuanLyHoaDon(this, false); // Không cần modal
         JPanel contentPanel = QuanLyHD.getContentPanel();
@@ -89,12 +95,13 @@ public class PolybookJFrame extends javax.swing.JFrame implements poly.books.con
         pnlQuanLyHD.repaint();
         showPanel(QuanLyHoaDon);
     }
+    private BanHang currentBanHang = null;
 
     private void showQuanLyBanHang() {
-
+        currentBanHang = new BanHang(this, false); // Lưu instance BanHang
+        JPanel contentPanel = currentBanHang.getContentPanel();
         // Tạo instance của QuanLySach và lấy nội dung
         BanHang QuanLyBH = new BanHang(this, false); // Không cần modal
-        JPanel contentPanel = QuanLyBH.getContentPanel();
 
         // Thêm nội dung vào mainSach
         pnlBanHang.setLayout(new BorderLayout());
@@ -105,7 +112,7 @@ public class PolybookJFrame extends javax.swing.JFrame implements poly.books.con
     }
 
     private void showThongKe() {
-
+        tatCamBanHang();
         // Tạo instance của QuanLySach và lấy nội dung
         ThongKe QlTK = new ThongKe(this, false); // Không cần modal
         JPanel contentPanel = QlTK.getContentPanel();
@@ -132,6 +139,7 @@ public class PolybookJFrame extends javax.swing.JFrame implements poly.books.con
 
         // Hiển thị panel được chọn
         panelToShow.setVisible(true);
+
     }
 
     /**
@@ -357,7 +365,7 @@ public class PolybookJFrame extends javax.swing.JFrame implements poly.books.con
                 .addComponent(lbDoiMk, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbDangXuat, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addContainerGap(138, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout mainLayout = new javax.swing.GroupLayout(main);
@@ -370,7 +378,7 @@ public class PolybookJFrame extends javax.swing.JFrame implements poly.books.con
         );
         mainLayout.setVerticalGroup(
             mainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(menu, javax.swing.GroupLayout.DEFAULT_SIZE, 726, Short.MAX_VALUE)
+            .addComponent(menu, javax.swing.GroupLayout.DEFAULT_SIZE, 825, Short.MAX_VALUE)
         );
 
         getContentPane().add(main, java.awt.BorderLayout.LINE_START);
@@ -398,7 +406,7 @@ public class PolybookJFrame extends javax.swing.JFrame implements poly.books.con
         );
         pnlBanHangLayout.setVerticalGroup(
             pnlBanHangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 676, Short.MAX_VALUE)
+            .addGap(0, 775, Short.MAX_VALUE)
         );
 
         BanHang.add(pnlBanHang, java.awt.BorderLayout.CENTER);
@@ -426,7 +434,7 @@ public class PolybookJFrame extends javax.swing.JFrame implements poly.books.con
         );
         mainSachLayout.setVerticalGroup(
             mainSachLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 676, Short.MAX_VALUE)
+            .addGap(0, 775, Short.MAX_VALUE)
         );
 
         QuanLySach.add(mainSach, java.awt.BorderLayout.CENTER);
@@ -454,7 +462,7 @@ public class PolybookJFrame extends javax.swing.JFrame implements poly.books.con
         );
         pnlQuanLyHDLayout.setVerticalGroup(
             pnlQuanLyHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 676, Short.MAX_VALUE)
+            .addGap(0, 775, Short.MAX_VALUE)
         );
 
         QuanLyHoaDon.add(pnlQuanLyHD, java.awt.BorderLayout.CENTER);
@@ -482,7 +490,7 @@ public class PolybookJFrame extends javax.swing.JFrame implements poly.books.con
         );
         pnlTaiKhoanLayout.setVerticalGroup(
             pnlTaiKhoanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 676, Short.MAX_VALUE)
+            .addGap(0, 775, Short.MAX_VALUE)
         );
 
         TaiKhoan.add(pnlTaiKhoan, java.awt.BorderLayout.CENTER);
@@ -510,7 +518,7 @@ public class PolybookJFrame extends javax.swing.JFrame implements poly.books.con
         );
         pnlQuanLyKHLayout.setVerticalGroup(
             pnlQuanLyKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 676, Short.MAX_VALUE)
+            .addGap(0, 775, Short.MAX_VALUE)
         );
 
         KhachHang.add(pnlQuanLyKH, java.awt.BorderLayout.CENTER);
@@ -538,7 +546,7 @@ public class PolybookJFrame extends javax.swing.JFrame implements poly.books.con
         );
         pnlGiamGiaLayout.setVerticalGroup(
             pnlGiamGiaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 676, Short.MAX_VALUE)
+            .addGap(0, 775, Short.MAX_VALUE)
         );
 
         GiamGia.add(pnlGiamGia, java.awt.BorderLayout.CENTER);
@@ -566,7 +574,7 @@ public class PolybookJFrame extends javax.swing.JFrame implements poly.books.con
         );
         pnlThongKeLayout.setVerticalGroup(
             pnlThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 676, Short.MAX_VALUE)
+            .addGap(0, 775, Short.MAX_VALUE)
         );
 
         ThongKe.add(pnlThongKe, java.awt.BorderLayout.CENTER);
@@ -594,7 +602,7 @@ public class PolybookJFrame extends javax.swing.JFrame implements poly.books.con
         );
         pnlLichSuLayout.setVerticalGroup(
             pnlLichSuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 676, Short.MAX_VALUE)
+            .addGap(0, 775, Short.MAX_VALUE)
         );
 
         LichSu.add(pnlLichSu, java.awt.BorderLayout.CENTER);
@@ -622,7 +630,7 @@ public class PolybookJFrame extends javax.swing.JFrame implements poly.books.con
         );
         pnlDoiMatKhauLayout.setVerticalGroup(
             pnlDoiMatKhauLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 676, Short.MAX_VALUE)
+            .addGap(0, 775, Short.MAX_VALUE)
         );
 
         DoiMatKhau.add(pnlDoiMatKhau, java.awt.BorderLayout.CENTER);

@@ -65,10 +65,14 @@ public class BanHang extends javax.swing.JDialog implements poly.books.controlle
     }
 
     public void dispose() {
-        isbnScanner.stopScanning(); // Dừng quét khi đóng dialog
+        stopWebcam(); // Dừng quét khi đóng dialog
         super.dispose();
     }
-
+  public void stopWebcam() {
+        if (isbnScanner != null) {
+            isbnScanner.stopScanning();
+        }
+    }
       private void displayBookByISBN(String isbn) {
         try {
             Sach sach = sachDAO.findByISBN(isbn);
@@ -148,7 +152,7 @@ public class BanHang extends javax.swing.JDialog implements poly.books.controlle
         QLBanHang.setLayout(new java.awt.BorderLayout());
 
         TaoHD.setBackground(new java.awt.Color(255, 255, 255));
-        TaoHD.setPreferredSize(new java.awt.Dimension(900, 160));
+        TaoHD.setPreferredSize(new java.awt.Dimension(900, 170));
 
         jLabel9.setText("Mã Hóa đơn:");
 
@@ -217,17 +221,14 @@ public class BanHang extends javax.swing.JDialog implements poly.books.controlle
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(TaoHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(TaoHDLayout.createSequentialGroup()
-                        .addGroup(TaoHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(TaoHDLayout.createSequentialGroup()
-                                .addComponent(jLabel12)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtMaNV, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(TaoHDLayout.createSequentialGroup()
-                                .addGap(17, 17, 17)
-                                .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtMaNV, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(TaoHDLayout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(TaoHDLayout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -235,19 +236,16 @@ public class BanHang extends javax.swing.JDialog implements poly.books.controlle
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnChonKH, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnTaoHD, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
-                        .addComponent(lbQuetISBN, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(83, 83, 83))))
+                        .addComponent(btnTaoHD, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(54, 54, 54)
+                .addComponent(lbQuetISBN, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(67, 67, 67))
         );
         TaoHDLayout.setVerticalGroup(
             TaoHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(TaoHDLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(TaoHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(TaoHDLayout.createSequentialGroup()
-                        .addComponent(lbQuetISBN, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(TaoHDLayout.createSequentialGroup()
                         .addGroup(TaoHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel9)
@@ -272,7 +270,10 @@ public class BanHang extends javax.swing.JDialog implements poly.books.controlle
                             .addComponent(txtMaPhieu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnChonGG)
                             .addComponent(btnTaoHD, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(60, 67, Short.MAX_VALUE))))
+                        .addGap(60, 77, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, TaoHDLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lbQuetISBN, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         QLBanHang.add(TaoHD, java.awt.BorderLayout.PAGE_START);
@@ -508,7 +509,7 @@ public class BanHang extends javax.swing.JDialog implements poly.books.controlle
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(QLBanHang, javax.swing.GroupLayout.PREFERRED_SIZE, 629, Short.MAX_VALUE)
+            .addComponent(QLBanHang, javax.swing.GroupLayout.PREFERRED_SIZE, 644, Short.MAX_VALUE)
         );
 
         pack();

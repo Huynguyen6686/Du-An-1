@@ -14,6 +14,7 @@ import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.function.Consumer;
 
@@ -28,9 +29,6 @@ public class ISBNScanner {
         this.videoLabel = videoLabel;
         this.isbnCallback = isbnCallback;
         this.webcam = Webcam.getDefault();
-        if (webcam != null) {
-            webcam.setViewSize(new java.awt.Dimension(320, 240));
-        }
     }
 
     public void startScanning() {
@@ -47,16 +45,18 @@ public class ISBNScanner {
                 try {
                     BufferedImage image = webcam.getImage();
                     if (image != null) {
-                        videoLabel.setIcon(new ImageIcon(image));
+                        // Scale ảnh theo kích thước của label
+                        Image scaledImage = image.getScaledInstance(videoLabel.getWidth(), videoLabel.getHeight(), Image.SCALE_SMOOTH);
+                        videoLabel.setIcon(new ImageIcon(scaledImage));
                         LuminanceSource source = new BufferedImageLuminanceSource(image);
                         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
                         try {
                             Result result = reader.decode(bitmap);
                             String isbn = result.getText();
                             java.awt.EventQueue.invokeLater(() -> isbnCallback.accept(isbn));
-                            Thread.sleep(1000); // Đợi 1 giây trước khi quét tiếp
+                            Thread.sleep(1000); // Đợi 1 giây
                         } catch (Exception e) {
-                            // Không tìm thấy mã, tiếp tục quét
+                            // Không tìm thấy mã
                         }
                     }
                     Thread.sleep(100); // Cập nhật video
