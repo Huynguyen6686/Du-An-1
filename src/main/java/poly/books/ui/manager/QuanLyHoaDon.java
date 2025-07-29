@@ -154,17 +154,17 @@ public class QuanLyHoaDon extends javax.swing.JDialog implements poly.books.cont
 
         tblHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Mã hoá đơn", "Ngày lập", "Mã khách hàng", "Tên đăng nhập", "Mã phiếu", "Tổng tiền", "Phương thức", "Ngày thanh toán"
+                "Mã hoá đơn", "Ngày lập", "Mã khách hàng", "Tên đăng nhập", "Mã phiếu", "Tổng tiền", "Phương thức", "Ngày thanh toán", "Trạng thái"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -452,21 +452,25 @@ public class QuanLyHoaDon extends javax.swing.JDialog implements poly.books.cont
         int totalOfQuantity = 0;
         int totalOfPrice = 0;
         for (HoaDon hoaDon : hoaDonList) {
-            Object[] rowData = {
-                hoaDon.getMaHD(),
-                hoaDon.getNgayLap(),
-                hoaDon.getMaKH(),
-                hoaDon.getTenDangNhap(),
-                hoaDon.getMaPhieu(),
-                hoaDon.getTongTien(),
-                hoaDon.getPhuongThuc() == 1 ? "Tiền mặt" : "Chuyển khoản",
-                hoaDon.getNgayThanhToan()
-            };
-            totalOfQuantity++;
-            totalOfPrice += (hoaDon.getTongTien());
-            defaultTableModel.addRow(rowData);
-            txtSoLuongHoaDon.setText(String.valueOf(totalOfQuantity));
-            txtTongTienHoaDon.setText(String.valueOf(totalOfPrice));
+            // Chỉ lấy hóa đơn có trạng thái = 1 (Đã thanh toán)
+            if (hoaDon.getTrangThai() == 1) {
+                Object[] rowData = {
+                    hoaDon.getMaHD(),
+                    hoaDon.getNgayLap(),
+                    hoaDon.getMaKH(),
+                    hoaDon.getTenDangNhap(),
+                    hoaDon.getMaPhieu(),
+                    hoaDon.getTongTien(),
+                    hoaDon.getPhuongThuc() == 1 ? "Tiền mặt" : "Chuyển khoản",
+                    hoaDon.getNgayThanhToan(),
+                    "Đã thanh toán"
+                };
+                totalOfQuantity++;
+                totalOfPrice += (hoaDon.getTongTien());
+                defaultTableModel.addRow(rowData);
+                txtSoLuongHoaDon.setText(String.valueOf(totalOfQuantity));
+                txtTongTienHoaDon.setText(String.valueOf(totalOfPrice));
+            }
         }
     }
 
