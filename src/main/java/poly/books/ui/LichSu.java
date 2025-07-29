@@ -43,7 +43,7 @@ public class LichSu extends javax.swing.JDialog implements poly.books.controller
                 thongTinSanPham.getThanhTien(),
                 thongTinSanPham.getGiamGia(),
                 thongTinSanPham.getTong(),
-                thongTinSanPham.getTrangThai()
+                thongTinSanPham.getTrangThai()  == 1 ? "Thanh toán" : "Chưa thanh toán"
             };
             defaultTableModel.addRow(rowData);
         }
@@ -398,8 +398,8 @@ public class LichSu extends javax.swing.JDialog implements poly.books.controller
         lblManager.setText(entity.isQuanLy()? "Quản lý" : "Nhân viên");
         lblCustomerName.setText(entity.getTenKH());
         lblPaymentDay.setText(String.valueOf(entity.getNgayThanhToan()));
-        lblPayment.setText(String.valueOf(entity.getPhuongThuc()));
-        lblStatus.setText(String.valueOf(entity.getTrangThai()));
+        lblPayment.setText(String.valueOf(entity.getPhuongThuc()  == 2 ? "Chuyển khoản" : "Tiền mặt"));
+        lblStatus.setText(String.valueOf(entity.getTrangThai() == 1 ? "Thanh toán" : "Chưa thanh toán" ));
     }
 
     @Override
