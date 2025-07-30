@@ -1,33 +1,33 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package poly.books.ui.manager;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.RowFilter;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import poly.books.dao.ChiTietHoaDonDAO;
 import poly.books.dao.HoaDonDAO;
 import poly.books.entity.ChiTietHoaDon;
 import poly.books.entity.HoaDon;
-import poly.books.entity.NgonNgu;
+import poly.books.ui.Book;
+import poly.books.util.XDate;
 import poly.books.util.XDialog;
 
 /**
  *
  * @author LAPTOP
  */
-public class QuanLyHoaDon extends javax.swing.JDialog implements poly.books.controller.QLHoaDonController {
+public class QuanLyHoaDon extends javax.swing.JPanel implements poly.books.controller.QLHoaDonController {
 
     List<HoaDon> hoaDonList = new ArrayList<>();
     HoaDonDAO hoaDonDAO = new HoaDonDAO();
@@ -37,24 +37,52 @@ public class QuanLyHoaDon extends javax.swing.JDialog implements poly.books.cont
     /**
      * Creates new form QuanLyHoaDon
      */
-    public QuanLyHoaDon(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public QuanLyHoaDon() {
         initComponents();
-        fillToTable();
-        init();
-    }
 
+        init();
+
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                fillToTable();
+            }
+
+        });
+    }
     private boolean ViewAllHDCT = false;
 
     public void init() {
-        tblHoaDon.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                if (!e.getValueIsAdjusting()) {
+        tblHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                if (evt.getClickCount() == 1) {
+                    // Xử lý single-click
+                    ViewAllHDCT = false;
+                    loadHDCT();
+                } else if (evt.getClickCount() == 2) {
+                    // Xử lý double-click (giữ nguyên mã hiện tại)
                     int selectedRow = tblHoaDon.getSelectedRow();
                     if (selectedRow != -1) {
                         int maHD = (int) tblHoaDon.getValueAt(selectedRow, 0);
                         ViewAllHDCT = false;
                         loadHDCT();
+
+                        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(QuanLyHoaDon.this);
+                        if (frame instanceof Book) {
+                            Book bookFrame = (Book) frame;
+                            if (bookFrame.cardLayout != null && bookFrame.QuanLy != null && bookFrame.banHang != null) {
+                                bookFrame.cardLayout.show(bookFrame.QuanLy, "card2");
+                                HoaDonDAO dao = new HoaDonDAO();
+                                HoaDon hoaDon = dao.findById(maHD);
+                                if (hoaDon != null) {
+                                    bookFrame.banHang.setHoaDon(hoaDon);
+                                } else {
+                                    JOptionPane.showMessageDialog(QuanLyHoaDon.this, "Hóa đơn không tồn tại: " + maHD);
+                                }
+                            } else {
+                                JOptionPane.showMessageDialog(QuanLyHoaDon.this, "Lỗi: Một hoặc nhiều thành phần null.");
+                            }
+                        }
                     }
                 }
             }
@@ -63,6 +91,10 @@ public class QuanLyHoaDon extends javax.swing.JDialog implements poly.books.cont
 
     public void formHDCT() {
         initComponents();
+    }
+
+    public void refreshTable() {
+        fillToTable();
     }
 
     public JPanel getContentPanel() {
@@ -115,17 +147,14 @@ public class QuanLyHoaDon extends javax.swing.JDialog implements poly.books.cont
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
         QuanLyHD = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         txtTimKiemHoaDon = new javax.swing.JTextField();
         btnTimKiemHoaDon = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblHoaDon = new javax.swing.JTable();
         jLabel19 = new javax.swing.JLabel();
         txtSoLuongHoaDon = new javax.swing.JTextField();
         txtTongTienCacHoaDon = new javax.swing.JLabel();
-        txtTongTienHoaDon = new javax.swing.JTextField();
+        txtNgayTT = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
@@ -136,11 +165,21 @@ public class QuanLyHoaDon extends javax.swing.JDialog implements poly.books.cont
         jScrollPane2 = new javax.swing.JScrollPane();
         tblHDCT = new javax.swing.JTable();
         btnTatCaChiTietHoaDon = new javax.swing.JButton();
+        btnHuy = new javax.swing.JButton();
+        btnThanhToan = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblHoaDon = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(1123, 773));
+        setPreferredSize(new java.awt.Dimension(1123, 773));
+        setLayout(new java.awt.BorderLayout());
 
         QuanLyHD.setBackground(new java.awt.Color(255, 255, 255));
+        QuanLyHD.setMinimumSize(new java.awt.Dimension(1123, 773));
+        QuanLyHD.setPreferredSize(new java.awt.Dimension(1123, 773));
 
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Tìm kiếm hoá đơn", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 14))); // NOI18N
 
         btnTimKiemHoaDon.setBackground(new java.awt.Color(102, 102, 255));
@@ -152,32 +191,6 @@ public class QuanLyHoaDon extends javax.swing.JDialog implements poly.books.cont
             }
         });
 
-        tblHoaDon.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "Mã hoá đơn", "Ngày lập", "Mã khách hàng", "Tên đăng nhập", "Mã phiếu", "Tổng tiền", "Phương thức", "Ngày thanh toán", "Trạng thái"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        tblHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblHoaDonMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(tblHoaDon);
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -187,8 +200,7 @@ public class QuanLyHoaDon extends javax.swing.JDialog implements poly.books.cont
                 .addComponent(txtTimKiemHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 466, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnTimKiemHoaDon)
-                .addContainerGap(186, Short.MAX_VALUE))
-            .addComponent(jScrollPane1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -197,15 +209,14 @@ public class QuanLyHoaDon extends javax.swing.JDialog implements poly.books.cont
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtTimKiemHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnTimKiemHoaDon))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         jLabel19.setText("Số lượng hoá đơn");
 
-        txtTongTienCacHoaDon.setText("Tổng tiền hoá đơn");
+        txtTongTienCacHoaDon.setText("Ngày Thanh toán");
 
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Chi tiết hoá đơn", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 14))); // NOI18N
 
         jLabel21.setText("Mã Hoá đơn");
@@ -262,7 +273,7 @@ public class QuanLyHoaDon extends javax.swing.JDialog implements poly.books.cont
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtTongTienHDCT, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(46, 46, 46)
-                        .addComponent(btnTatCaChiTietHoaDon, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE))
+                        .addComponent(btnTatCaChiTietHoaDon, javax.swing.GroupLayout.DEFAULT_SIZE, 274, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
                         .addGap(17, 17, 17)
                         .addComponent(jScrollPane2)
@@ -272,7 +283,7 @@ public class QuanLyHoaDon extends javax.swing.JDialog implements poly.books.cont
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
+                .addContainerGap(43, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel21)
                     .addComponent(jLabel22)
@@ -285,78 +296,112 @@ public class QuanLyHoaDon extends javax.swing.JDialog implements poly.books.cont
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        btnHuy.setText("Hủy");
+        btnHuy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHuyActionPerformed(evt);
+            }
+        });
+
+        btnThanhToan.setText("Thanh Toán");
+        btnThanhToan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnThanhToanActionPerformed(evt);
+            }
+        });
+
+        tblHoaDon.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Mã hoá đơn", "Ngày lập", "Mã khách hàng", "Tên đăng nhập", "Mã phiếu", "Tổng tiền", "Phương thức", "Ngày thanh toán", "Trạng thái"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblHoaDonMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblHoaDon);
+
+        jLabel1.setBackground(new java.awt.Color(51, 153, 255));
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Quản Lý Hóa Đơn");
+        jLabel1.setOpaque(true);
+
         javax.swing.GroupLayout QuanLyHDLayout = new javax.swing.GroupLayout(QuanLyHD);
         QuanLyHD.setLayout(QuanLyHDLayout);
         QuanLyHDLayout.setHorizontalGroup(
             QuanLyHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(QuanLyHDLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(QuanLyHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(QuanLyHDLayout.createSequentialGroup()
-                        .addGap(93, 93, 93)
+                        .addGap(90, 90, 90)
                         .addComponent(jLabel19)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(txtSoLuongHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(txtTongTienCacHoaDon)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtTongTienHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtTongTienCacHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtNgayTT, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(80, 80, 80)
+                        .addComponent(btnHuy, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39)
+                        .addComponent(btnThanhToan, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(104, 104, 104))
                     .addGroup(QuanLyHDLayout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addGroup(QuanLyHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(202, Short.MAX_VALUE))
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addComponent(jScrollPane1)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         QuanLyHDLayout.setVerticalGroup(
             QuanLyHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(QuanLyHDLayout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, QuanLyHDLayout.createSequentialGroup()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(QuanLyHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel19)
                     .addComponent(txtSoLuongHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtTongTienCacHoaDon)
-                    .addComponent(txtTongTienHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(txtNgayTT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnHuy)
+                    .addComponent(btnThanhToan))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1221, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(QuanLyHD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 635, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(QuanLyHD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
-
-        pack();
+        add(QuanLyHD, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tblHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMouseClicked
-        int index = tblHoaDon.getSelectedRow();
-        if (index >= 0 && index < hoaDonList.size()) {
-            HoaDon entity = hoaDonList.get(index);
-
-        }
-    }//GEN-LAST:event_tblHoaDonMouseClicked
-
     private void btnTimKiemHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemHoaDonActionPerformed
+
         String timkiem = txtTimKiemHoaDon.getText().trim().toLowerCase();
+        if (timkiem.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập tên thể loại để tìm kiếm!");
+            fillToTable();
+            return;
+        }
         DefaultTableModel defaultTableModel = (DefaultTableModel) tblHoaDon.getModel();
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(defaultTableModel);
         tblHoaDon.setRowSorter(sorter);
@@ -367,59 +412,33 @@ public class QuanLyHoaDon extends javax.swing.JDialog implements poly.books.cont
         sorter.setRowFilter(RowFilter.regexFilter("(?i)" + timkiem, 0));
     }//GEN-LAST:event_btnTimKiemHoaDonActionPerformed
 
+    private void tblHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMouseClicked
+        ViewAllHDCT = false;
+        loadHDCT();
+    }//GEN-LAST:event_tblHoaDonMouseClicked
+
     private void btnTatCaChiTietHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTatCaChiTietHoaDonActionPerformed
         ViewAllHDCT = true;
         loadHDCT();
     }//GEN-LAST:event_btnTatCaChiTietHoaDonActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(QuanLyHoaDon.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(QuanLyHoaDon.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(QuanLyHoaDon.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(QuanLyHoaDon.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
+    private void btnHuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyActionPerformed
+        huyHD();
+    }//GEN-LAST:event_btnHuyActionPerformed
 
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                QuanLyHoaDon dialog = new QuanLyHoaDon(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
+    private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
+        // TODO add your code here:
+        ThanhToan();
+    }//GEN-LAST:event_btnThanhToanActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel QuanLyHD;
+    private javax.swing.JButton btnHuy;
     private javax.swing.JButton btnTatCaChiTietHoaDon;
+    private javax.swing.JButton btnThanhToan;
     private javax.swing.JButton btnTimKiemHoaDon;
-    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
@@ -431,16 +450,63 @@ public class QuanLyHoaDon extends javax.swing.JDialog implements poly.books.cont
     private javax.swing.JTable tblHDCT;
     private javax.swing.JTable tblHoaDon;
     private javax.swing.JTextField txtMaHDCT;
+    private javax.swing.JTextField txtNgayTT;
     private javax.swing.JTextField txtSoLuongHoaDon;
     private javax.swing.JTextField txtTimKiemHoaDon;
     private javax.swing.JTextField txtTongSoSanPham;
     private javax.swing.JLabel txtTongTienCacHoaDon;
     private javax.swing.JTextField txtTongTienHDCT;
-    private javax.swing.JTextField txtTongTienHoaDon;
     // End of variables declaration//GEN-END:variables
+
+    public void huyHD() {
+        int selectedRow = tblHoaDon.getSelectedRow();
+        if (selectedRow == -1) {
+            XDialog.alert("Vui lòng chọn hóa đơn để hủy!");
+            return;
+        }
+        int maHD = (int) tblHoaDon.getValueAt(selectedRow, 0);
+        if (XDialog.confirm("Bạn có chắc muốn hủy hóa đơn này?")) {
+            chiTietHoaDonDAO.delete(maHD);
+            hoaDonDAO.delete(maHD);
+            XDialog.alert("Hủy hóa đơn thành công!");
+            fillToTable();
+            loadHDCT();
+        }
+    }
+
+    public void ThanhToan() {
+        int selectedRow = tblHoaDon.getSelectedRow();
+        if (selectedRow == -1) {
+            XDialog.alert("Vui lòng chọn hóa đơn để thanh toán!");
+            return;
+        }
+        int maHD = (int) tblHoaDon.getValueAt(selectedRow, 0);
+        HoaDon hoaDon = hoaDonDAO.findById(maHD);
+        if (hoaDon != null && hoaDon.getTrangThai() == 0) {
+            hoaDon.setTrangThai(1);
+            hoaDon.setNgayThanhToan(new java.util.Date());
+            hoaDonDAO.update(hoaDon);
+            txtNgayTT.setText(XDate.format(XDate.now(), "dd-MM-yyyy HH:mm:ss"));
+            XDialog.alert("Thanh toán hóa đơn thành công!");
+            fillToTable();
+            loadHDCT();
+        } else {
+            XDialog.alert("Hóa đơn không hợp lệ hoặc đã thanh toán!");
+        }
+    }
 
     @Override
     public void open() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void setForm(HoaDon entity) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public HoaDon getForm() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
@@ -452,8 +518,8 @@ public class QuanLyHoaDon extends javax.swing.JDialog implements poly.books.cont
         int totalOfQuantity = 0;
         int totalOfPrice = 0;
         for (HoaDon hoaDon : hoaDonList) {
-            // Chỉ lấy hóa đơn có trạng thái = 1 (Đã thanh toán)
-            if (hoaDon.getTrangThai() == 1) {
+            // Chỉ lấy hóa đơn có trạng thái = 0 (chưa thanh toán)
+            if (hoaDon.getTrangThai() == 0) {
                 Object[] rowData = {
                     hoaDon.getMaHD(),
                     hoaDon.getNgayLap(),
@@ -463,50 +529,39 @@ public class QuanLyHoaDon extends javax.swing.JDialog implements poly.books.cont
                     hoaDon.getTongTien(),
                     hoaDon.getPhuongThuc() == 1 ? "Tiền mặt" : "Chuyển khoản",
                     hoaDon.getNgayThanhToan(),
-                    "Đã thanh toán"
+                    "Chờ thanh toán"
                 };
                 totalOfQuantity++;
                 totalOfPrice += (hoaDon.getTongTien());
                 defaultTableModel.addRow(rowData);
                 txtSoLuongHoaDon.setText(String.valueOf(totalOfQuantity));
-                txtTongTienHoaDon.setText(String.valueOf(totalOfPrice));
+
             }
         }
     }
 
     @Override
     public void create() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void update() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void delete() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void clear() {
-
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void setEditable(boolean editable) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    public void setForm() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void setForm(HoaDon entity) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public HoaDon getForm() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

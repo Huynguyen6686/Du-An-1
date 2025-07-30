@@ -4,6 +4,8 @@
  */
 package poly.books.ui.manager;
 
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -32,7 +34,13 @@ public class QuanLyLinhVuc extends javax.swing.JDialog implements poly.books.con
         super(parent, modal);
         this.quanLySach = sql;
         initComponents();
-        fillToTable();
+      addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                fillToTable();
+            }
+
+        });
         txtMaLinhVuc.setEditable(false);
     }
 

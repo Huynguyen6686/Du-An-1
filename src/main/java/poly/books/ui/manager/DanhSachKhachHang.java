@@ -4,6 +4,8 @@
  */
 package poly.books.ui.manager;
 
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
@@ -20,22 +22,32 @@ import poly.books.ui.BanHang;
  * @author HuyNguyen
  */
 public class DanhSachKhachHang extends javax.swing.JDialog {
-List<KhachHang> ListKH = new ArrayList<>();
+
+    List<KhachHang> ListKH = new ArrayList<>();
     KhachHangDAO KHdao = new KhachHangDAO();
-     private BanHang parentBanHang;
+    private BanHang parentBanHang;
+
     /**
      * Creates new form DanhSachKhachHang
      */
-    public DanhSachKhachHang(java.awt.Frame parent, boolean modal,BanHang banHang) {
+    public DanhSachKhachHang(java.awt.Frame parent, boolean modal, BanHang banHang) {
         super(parent, modal);
+
         initComponents();
-         this.parentBanHang = banHang;
-         fillToTable();
+        this.parentBanHang = banHang;
+       addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                fillToTable();
+            }
+
+        });
     }
- public void fillToTable() {
+
+    public void fillToTable() {
         DefaultTableModel model = (DefaultTableModel) tbKhachHang.getModel();
         model.setRowCount(0);
-         ListKH= KHdao.getAll();
+        ListKH = KHdao.getAll();
         for (KhachHang Kh : ListKH) {
             Object[] rowData = {
                 Kh.getMaKH(),
@@ -45,7 +57,9 @@ List<KhachHang> ListKH = new ArrayList<>();
                 Kh.getDiaChi()
             };
             model.addRow(rowData);
-        }    }
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -173,15 +187,15 @@ List<KhachHang> ListKH = new ArrayList<>();
     }// </editor-fold>//GEN-END:initComponents
 
     private void tbKhachHangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbKhachHangMouseClicked
-    
+
     }//GEN-LAST:event_tbKhachHangMouseClicked
 
     private void btnDongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDongActionPerformed
-          this.dispose();
+        this.dispose();
     }//GEN-LAST:event_btnDongActionPerformed
 
     private void btnXacNhanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXacNhanActionPerformed
-      int selectedRow = tbKhachHang.getSelectedRow();
+        int selectedRow = tbKhachHang.getSelectedRow();
         if (selectedRow >= 0) {
             KhachHang khachHang = KHdao.getAll().get(selectedRow);
             parentBanHang.setSelectedKhachHang(khachHang);
@@ -192,7 +206,7 @@ List<KhachHang> ListKH = new ArrayList<>();
     }//GEN-LAST:event_btnXacNhanActionPerformed
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
-         String timkiem = txtTimKiem.getText().trim().toLowerCase();
+        String timkiem = txtTimKiem.getText().trim().toLowerCase();
         if (timkiem.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập tên khách hàng trước khi tìm kiếm");
             return;
@@ -233,8 +247,9 @@ List<KhachHang> ListKH = new ArrayList<>();
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                JFrame frame = new javax.swing.JFrame();
-                BanHang banHang = new BanHang(frame, true); // Tạo instance BanHang
+                JFrame frame = new JFrame();
+            BanHang banHang = new BanHang();
+            banHang.setParentFrame((JFrame) frame);
                 DanhSachKhachHang dialog = new DanhSachKhachHang(frame, true, banHang);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override

@@ -1,36 +1,42 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package poly.books.ui.manager;
 
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
-import poly.books.controller.PhieuGiamGiaController;
 import poly.books.dao.PhieuGiamGiaDAO;
 import poly.books.entity.PhieuGiamGia;
 import poly.books.util.XDialog;
 
 /**
  *
- * @author HuyNguyen
+ * @author LAPTOP
  */
-public class QuanLyPhieuGiamGia extends javax.swing.JDialog implements poly.books.controller.PhieuGiamGiaController {
+public class QuanLyPhieuGiamGia extends javax.swing.JPanel implements poly.books.controller.PhieuGiamGiaController {
 
     List<PhieuGiamGia> phieuGiamGiaList = new ArrayList<>();
     PhieuGiamGiaDAO phieuGiamGiaDAO = new PhieuGiamGiaDAO();
 
     /**
-     * Creates new form QuanLyPhiêuGiamGia
+     * Creates new form QuanLyGiamGia1
      */
-    public QuanLyPhieuGiamGia(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public QuanLyPhieuGiamGia() {
         initComponents();
-        fillToTable();
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                fillToTable();
+            }
+
+        });
     }
 
     /**
@@ -42,7 +48,9 @@ public class QuanLyPhieuGiamGia extends javax.swing.JDialog implements poly.book
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
+        GiamGia = new javax.swing.JPanel();
+        jLabel16 = new javax.swing.JLabel();
+        pnlGiamGia = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtVoucherID = new javax.swing.JTextField();
@@ -53,9 +61,6 @@ public class QuanLyPhieuGiamGia extends javax.swing.JDialog implements poly.book
         txtValue = new javax.swing.JTextField();
         rdoAvailable = new javax.swing.JRadioButton();
         rdoUnavailable = new javax.swing.JRadioButton();
-        jPanel2 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblPhieuGiamGia = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         txtSearch = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
@@ -64,9 +69,35 @@ public class QuanLyPhieuGiamGia extends javax.swing.JDialog implements poly.book
         btnRefresh = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblPhieuGiamGia = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
+        setMinimumSize(new java.awt.Dimension(1123, 773));
+        setPreferredSize(new java.awt.Dimension(1123, 773));
+        setLayout(new java.awt.BorderLayout());
 
+        GiamGia.setBackground(new java.awt.Color(255, 255, 255));
+        GiamGia.setMinimumSize(new java.awt.Dimension(1123, 773));
+        GiamGia.setPreferredSize(new java.awt.Dimension(1123, 773));
+        GiamGia.setLayout(new java.awt.BorderLayout());
+
+        jLabel16.setBackground(new java.awt.Color(0, 144, 193));
+        jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel16.setText("Giảm Giá");
+        jLabel16.setMaximumSize(new java.awt.Dimension(1123, 25));
+        jLabel16.setMinimumSize(new java.awt.Dimension(1123, 25));
+        jLabel16.setOpaque(true);
+        jLabel16.setPreferredSize(new java.awt.Dimension(1123, 50));
+        GiamGia.add(jLabel16, java.awt.BorderLayout.PAGE_START);
+
+        pnlGiamGia.setBackground(new java.awt.Color(255, 255, 255));
+        pnlGiamGia.setMinimumSize(new java.awt.Dimension(1123, 775));
+        pnlGiamGia.setPreferredSize(new java.awt.Dimension(1123, 775));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Chương trình khuyến mại", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 14))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -81,11 +112,9 @@ public class QuanLyPhieuGiamGia extends javax.swing.JDialog implements poly.book
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel5.setText("Trạng thái");
 
-        buttonGroup1.add(rdoAvailable);
         rdoAvailable.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         rdoAvailable.setText("Có hiệu lực");
 
-        buttonGroup1.add(rdoUnavailable);
         rdoUnavailable.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         rdoUnavailable.setText("Đã hết hạn");
 
@@ -142,50 +171,7 @@ public class QuanLyPhieuGiamGia extends javax.swing.JDialog implements poly.book
                 .addContainerGap(101, Short.MAX_VALUE))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Danh sách khuyến mại", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 14))); // NOI18N
-
-        tblPhieuGiamGia.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Mã Phiếu", "Giá trị", "Điều kiện áp dụng", "Trạng thái"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        tblPhieuGiamGia.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblPhieuGiamGiaMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(tblPhieuGiamGia);
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE))
-        );
-
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Tìm kiếm ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
 
         btnSearch.setBackground(new java.awt.Color(102, 102, 255));
@@ -203,10 +189,10 @@ public class QuanLyPhieuGiamGia extends javax.swing.JDialog implements poly.book
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtSearch)
+                .addGap(18, 18, 18)
                 .addComponent(btnSearch)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -217,6 +203,8 @@ public class QuanLyPhieuGiamGia extends javax.swing.JDialog implements poly.book
                     .addComponent(btnSearch))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
+
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
         btnAdd.setBackground(new java.awt.Color(255, 153, 153));
         btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_add_25px_5.png"))); // NOI18N
@@ -259,15 +247,15 @@ public class QuanLyPhieuGiamGia extends javax.swing.JDialog implements poly.book
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(84, 84, 84)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(78, 78, 78)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(117, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(128, 128, 128)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnUpdate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRefresh, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(130, 130, 130))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -283,38 +271,83 @@ public class QuanLyPhieuGiamGia extends javax.swing.JDialog implements poly.book
                 .addContainerGap(77, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Danh sách khuyến mại", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 14))); // NOI18N
+
+        tblPhieuGiamGia.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Mã Phiếu", "Giá trị", "Điều kiện áp dụng", "Trạng thái"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblPhieuGiamGia.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblPhieuGiamGiaMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblPhieuGiamGia);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addComponent(jScrollPane1)
                 .addContainerGap())
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(42, 42, 42)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
-        pack();
+        javax.swing.GroupLayout pnlGiamGiaLayout = new javax.swing.GroupLayout(pnlGiamGia);
+        pnlGiamGia.setLayout(pnlGiamGiaLayout);
+        pnlGiamGiaLayout.setHorizontalGroup(
+            pnlGiamGiaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlGiamGiaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlGiamGiaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        pnlGiamGiaLayout.setVerticalGroup(
+            pnlGiamGiaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlGiamGiaLayout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(pnlGiamGiaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(pnlGiamGiaLayout.createSequentialGroup()
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(53, Short.MAX_VALUE))
+        );
+
+        GiamGia.add(pnlGiamGia, java.awt.BorderLayout.CENTER);
+
+        add(GiamGia, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
@@ -329,6 +362,22 @@ public class QuanLyPhieuGiamGia extends javax.swing.JDialog implements poly.book
         sorter.setRowFilter(RowFilter.regexFilter("(?i)" + search, 0));
     }//GEN-LAST:event_btnSearchActionPerformed
 
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        this.create();
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        this.clear();
+    }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        this.delete();
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        this.update();
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
     private void tblPhieuGiamGiaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPhieuGiamGiaMouseClicked
         int index = tblPhieuGiamGia.getSelectedRow();
         if (index >= 0 && index < phieuGiamGiaList.size()) {
@@ -337,73 +386,16 @@ public class QuanLyPhieuGiamGia extends javax.swing.JDialog implements poly.book
         }
     }//GEN-LAST:event_tblPhieuGiamGiaMouseClicked
 
-    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        this.create();
-    }//GEN-LAST:event_btnAddActionPerformed
-
-    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-       this.update();
-    }//GEN-LAST:event_btnUpdateActionPerformed
-
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        this.delete();
-    }//GEN-LAST:event_btnDeleteActionPerformed
-
-    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-       this.clear();
-    }//GEN-LAST:event_btnRefreshActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(QuanLyPhieuGiamGia.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(QuanLyPhieuGiamGia.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(QuanLyPhieuGiamGia.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(QuanLyPhieuGiamGia.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                QuanLyPhieuGiamGia dialog = new QuanLyPhieuGiamGia(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel GiamGia;
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdate;
-    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -412,6 +404,7 @@ public class QuanLyPhieuGiamGia extends javax.swing.JDialog implements poly.book
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel pnlGiamGia;
     private javax.swing.JRadioButton rdoAvailable;
     private javax.swing.JRadioButton rdoUnavailable;
     private javax.swing.JTable tblPhieuGiamGia;
@@ -428,7 +421,7 @@ public class QuanLyPhieuGiamGia extends javax.swing.JDialog implements poly.book
 
     @Override
     public void setForm(PhieuGiamGia entity) {
-        txtVoucherID.setText(String.valueOf(entity.getMaPhieu()));
+         txtVoucherID.setText(String.valueOf(entity.getMaPhieu()));
         txtValue.setText(String.valueOf(entity.getGiaTri()));
         txtCondition.setText(String.valueOf(entity.getDieuKienApDung()));
         rdoAvailable.setSelected(entity.getTrangThai() == 1);
@@ -437,7 +430,7 @@ public class QuanLyPhieuGiamGia extends javax.swing.JDialog implements poly.book
 
     @Override
     public PhieuGiamGia getForm() {
-        PhieuGiamGia phieuGiamGia = new PhieuGiamGia();
+         PhieuGiamGia phieuGiamGia = new PhieuGiamGia();
         phieuGiamGia.setMaPhieu(Integer.valueOf(txtVoucherID.getText()));
         phieuGiamGia.setGiaTri(Integer.valueOf(txtValue.getText()));
         phieuGiamGia.setDieuKienApDung(Integer.valueOf(txtCondition.getText()));
@@ -447,7 +440,7 @@ public class QuanLyPhieuGiamGia extends javax.swing.JDialog implements poly.book
 
     @Override
     public void fillToTable() {
-        DefaultTableModel defaultTableModel = (DefaultTableModel) tblPhieuGiamGia.getModel();
+          DefaultTableModel defaultTableModel = (DefaultTableModel) tblPhieuGiamGia.getModel();
         defaultTableModel.setRowCount(0);
         phieuGiamGiaList = phieuGiamGiaDAO.getAll();
         for (PhieuGiamGia phieuGiamGia : phieuGiamGiaList) {
@@ -463,7 +456,7 @@ public class QuanLyPhieuGiamGia extends javax.swing.JDialog implements poly.book
 
     @Override
     public void create() {
-        if (txtValue.getText().trim().isEmpty() || txtCondition.getText().trim().isEmpty()) {
+         if (txtValue.getText().trim().isEmpty() || txtCondition.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Giá trị và điều kiện áp dụng không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -480,7 +473,7 @@ public class QuanLyPhieuGiamGia extends javax.swing.JDialog implements poly.book
 
     @Override
     public void update() {
-        int selectedRow = tblPhieuGiamGia.getSelectedRow();
+         int selectedRow = tblPhieuGiamGia.getSelectedRow();
         if (selectedRow < 0 || selectedRow >= phieuGiamGiaList.size()) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một phiếu giảm giá để sửa!", "Lỗi", JOptionPane.WARNING_MESSAGE);
             return;
@@ -502,7 +495,7 @@ public class QuanLyPhieuGiamGia extends javax.swing.JDialog implements poly.book
 
     @Override
     public void delete() {
-        if (XDialog.confirm("Bạn thực sự muốn xóa?")) {
+         if (XDialog.confirm("Bạn thực sự muốn xóa?")) {
             int selectedRow = tblPhieuGiamGia.getSelectedRow();
             if (selectedRow >= 0 && selectedRow < phieuGiamGiaList.size()) {
                 PhieuGiamGia entity = phieuGiamGiaList.get(selectedRow);
@@ -523,7 +516,7 @@ public class QuanLyPhieuGiamGia extends javax.swing.JDialog implements poly.book
 
     @Override
     public void clear() {
-        int confirm = JOptionPane.showConfirmDialog(this, "Bạn có muốn làm mới không ?", "Confirm question", JOptionPane.YES_OPTION);
+         int confirm = JOptionPane.showConfirmDialog(this, "Bạn có muốn làm mới không ?", "Confirm question", JOptionPane.YES_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             txtVoucherID.setText("");
             txtValue.setText("");

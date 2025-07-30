@@ -5,6 +5,8 @@
 package poly.books.ui.manager;
 
 
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -31,7 +33,13 @@ private QuanLySach quanLySach;
         super(parent, modal);
         this.quanLySach=sql;
         initComponents();
-        fillToTable();
+       addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                fillToTable();
+            }
+
+        });
          txtMaTL.setEditable(false);
     }
 

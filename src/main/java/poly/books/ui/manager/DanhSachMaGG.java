@@ -4,6 +4,8 @@
  */
 package poly.books.ui.manager;
 
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
@@ -31,7 +33,13 @@ public class DanhSachMaGG extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
          this.parentBanHang = banHang;
-         fillToTable();
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                fillToTable();
+            }
+
+        });
     }
 
     public void fillToTable() {
@@ -245,8 +253,9 @@ public class DanhSachMaGG extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                JFrame frame = new javax.swing.JFrame();
-                BanHang banHang = new BanHang(frame, true); // Tạo instance BanHang
+                JFrame frame = new JFrame();
+            BanHang banHang = new BanHang();
+            banHang.setParentFrame((JFrame) frame);
                 DanhSachMaGG dialog = new DanhSachMaGG(frame, true, banHang);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override

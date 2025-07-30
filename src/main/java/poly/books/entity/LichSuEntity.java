@@ -8,7 +8,7 @@ import lombok.*;
 @Data
 @Builder
 public class LichSuEntity {
-    private int STT;
+    private int MaHD;
     private String TenDangNhap;
     private String HoTen;
     private boolean QuanLy;

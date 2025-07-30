@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package poly.books.entity;
 
 import com.github.sarxos.webcam.Webcam;
@@ -12,9 +8,9 @@ import com.google.zxing.Reader;
 import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.function.Consumer;
 
@@ -28,7 +24,17 @@ public class ISBNScanner {
     public ISBNScanner(JLabel videoLabel, Consumer<String> isbnCallback) {
         this.videoLabel = videoLabel;
         this.isbnCallback = isbnCallback;
-        this.webcam = Webcam.getDefault();
+
+        // ✅ Tránh khởi tạo webcam khi đang ở chế độ thiết kế NetBeans
+        if (!java.beans.Beans.isDesignTime()) {
+            this.webcam = Webcam.getDefault();
+            if (webcam != null) {
+                if (webcam.isOpen()) {
+                    webcam.close(); // Đảm bảo webcam chưa mở
+                }
+                webcam.setViewSize(new java.awt.Dimension(320, 240));
+            }
+        }
     }
 
     public void startScanning() {
@@ -36,37 +42,41 @@ public class ISBNScanner {
             videoLabel.setText("Không tìm thấy webcam!");
             return;
         }
+
         scanning = true;
         videoLabel.setText("");
         scanThread = new Thread(() -> {
-            webcam.open();
-            Reader reader = new MultiFormatReader();
-            while (scanning) {
-                try {
+            try {
+                if (!webcam.isOpen()) {
+                    webcam.open();
+                }
+                Reader reader = new MultiFormatReader();
+
+                while (scanning) {
                     BufferedImage image = webcam.getImage();
                     if (image != null) {
-                        // Scale ảnh theo kích thước của label
-                        Image scaledImage = image.getScaledInstance(videoLabel.getWidth(), videoLabel.getHeight(), Image.SCALE_SMOOTH);
-                        videoLabel.setIcon(new ImageIcon(scaledImage));
+                        videoLabel.setIcon(new ImageIcon(image));
                         LuminanceSource source = new BufferedImageLuminanceSource(image);
                         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
                         try {
                             Result result = reader.decode(bitmap);
                             String isbn = result.getText();
                             java.awt.EventQueue.invokeLater(() -> isbnCallback.accept(isbn));
-                            Thread.sleep(1000); // Đợi 1 giây
+                            Thread.sleep(1000);
                         } catch (Exception e) {
-                            // Không tìm thấy mã
+                            // Không tìm thấy mã, tiếp tục quét
                         }
                     }
-                    Thread.sleep(100); // Cập nhật video
-                } catch (Exception e) {
-                    java.awt.EventQueue.invokeLater(() ->
-                        videoLabel.setText("Lỗi: " + e.getMessage()));
-                    break;
+                    Thread.sleep(100);
+                }
+            } catch (Exception e) {
+                java.awt.EventQueue.invokeLater(() ->
+                    videoLabel.setText("Lỗi: " + e.getMessage()));
+            } finally {
+                if (webcam != null && webcam.isOpen()) {
+                    webcam.close();
                 }
             }
-            webcam.close();
         });
         scanThread.start();
     }
@@ -79,7 +89,5 @@ public class ISBNScanner {
         if (webcam != null && webcam.isOpen()) {
             webcam.close();
         }
-        videoLabel.setIcon(null);
-        videoLabel.setText("Đã dừng quét");
     }
 }

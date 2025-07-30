@@ -4,6 +4,8 @@
  */
 package poly.books.ui.manager;
 
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,7 +33,13 @@ public class QuanLyNgonNgu extends javax.swing.JDialog implements poly.books.con
     public QuanLyNgonNgu(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        fillToTable();
+       addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                fillToTable();
+            }
+
+        });
         txtMaNN.setEditable(false);
     }
 

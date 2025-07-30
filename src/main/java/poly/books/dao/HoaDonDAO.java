@@ -30,6 +30,7 @@ public class HoaDonDAO {
                              ,[NgayThanhToan]
                        ,TrangThai
                          FROM [QLNhaSachPro].[dbo].[HoaDon]
+                       where TrangThai = 0
                        """;
     String updateSQL = """
                        UPDATE [dbo].[HoaDon]

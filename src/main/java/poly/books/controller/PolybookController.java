@@ -39,10 +39,5 @@ public interface PolybookController {
         this.showJDialog(new LoginJDialog(frame, true));
     }
 
-    default void showQuanLySach(JFrame frame) {
-        this.showJDialog(new QuanLySach(frame, true));
-    }
-      default void showQuanLyHoaDon(JFrame frame) {
-        this.showJDialog(new QuanLyHoaDon(frame, true));
-    }
+    
 }

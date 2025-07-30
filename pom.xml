@@ -25,7 +25,11 @@
             <version>1.18.34</version> 
             <scope>provided</scope> 
         </dependency>
-
+        <dependency>
+            <groupId>com.nativelibs4java</groupId>
+            <artifactId>bridj</artifactId>
+            <version>0.7.0</version>
+        </dependency>
         <dependency>
             <groupId>org.netbeans.external</groupId>
             <artifactId>AbsoluteLayout</artifactId>
