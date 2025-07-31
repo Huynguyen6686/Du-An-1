@@ -13,6 +13,12 @@ import poly.books.dao.LichSuDAO;
 import poly.books.dao.ThongTinSanPhamDAO;
 import poly.books.entity.LichSuEntity;
 import poly.books.entity.ThongTinSanPham;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -78,6 +84,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblBills = new javax.swing.JTable();
+        btnOutputBill = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -149,6 +156,15 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
         });
         jScrollPane1.setViewportView(tblBills);
 
+        btnOutputBill.setBackground(new java.awt.Color(255, 102, 102));
+        btnOutputBill.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_pdf_25px.png"))); // NOI18N
+        btnOutputBill.setText("Xuất hoá đơn");
+        btnOutputBill.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOutputBillActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -156,11 +172,17 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 12, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 839, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnOutputBill)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(btnOutputBill)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -254,7 +276,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(lblPaymentDay, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(lblPayment, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -326,7 +348,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
 
         LichSu.add(pnlLichSu, java.awt.BorderLayout.CENTER);
@@ -346,9 +368,93 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
         }
     }//GEN-LAST:event_tblBillsMouseClicked
 
+    private void btnOutputBillActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOutputBillActionPerformed
+        int index = tblBills.getSelectedRow();
+        if (index < 0) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn 1 hoá đơn để xuất pdf");
+            return;
+        }
+
+        LichSuEntity lichSuEntity = lichSuList.get(index);
+        int MaHD = lichSuEntity.getMaHD();
+
+        try {
+            // Đường dẫn đầy đủ tới file font .ttf
+            String fontPath = "D:\\\\Du-An-1\\\\src\\\\main\\\\resources\\\\fonts\\\\.ttf\\\\arial-unicode-ms.ttf";
+            File fontFile = new File(fontPath);
+            if (!fontFile.exists()) {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy file font: " + fontPath);
+                return;
+            }
+
+            BaseFont baseFont = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            Font fontTitle = new Font(baseFont, 16, Font.BOLD);
+            Font fontNormal = new Font(baseFont, 12);
+
+            // Đảm bảo thư mục lưu file PDF
+            String folderPath = "D:/ExportBills";
+            File folder = new File(folderPath);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+
+            String filePath = folderPath + "/hoadon_" + MaHD + ".pdf";
+
+            Document document = new Document();
+            PdfWriter.getInstance(document, new FileOutputStream(filePath));
+            document.open();
+
+            Paragraph title = new Paragraph("HÓA ĐƠN BÁN HÀNG", fontTitle);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+            document.add(new Paragraph(" "));
+
+            document.add(new Paragraph("Mã hóa đơn: " + lichSuEntity.getMaHD(), fontNormal));
+            document.add(new Paragraph("Tên đăng nhập: " + lichSuEntity.getTenDangNhap(), fontNormal));
+            document.add(new Paragraph("Họ tên nhân viên: " + lichSuEntity.getHoTen(), fontNormal));
+            document.add(new Paragraph("Quản lý: " + (lichSuEntity.isQuanLy() ? "Quản lý" : "Nhân viên"), fontNormal));
+            document.add(new Paragraph("Tên khách hàng: " + lichSuEntity.getTenKH(), fontNormal));
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            document.add(new Paragraph("Ngày thanh toán: " + sdf.format(lichSuEntity.getNgayThanhToan()), fontNormal));
+            document.add(new Paragraph("Phương thức: " + (lichSuEntity.getPhuongThuc() == 0 ? "Tiền mặt" : "Chuyển khoản"), fontNormal));
+            document.add(new Paragraph("Trạng thái: " + (lichSuEntity.getTrangThai() == 1 ? "Đã thanh toán" : "Chưa thanh toán"), fontNormal));
+            document.add(new Paragraph(" "));
+
+            PdfPTable table = new PdfPTable(6);
+            table.setWidthPercentage(100);
+            table.setWidths(new float[]{2, 4, 2, 2, 2, 2});
+            table.addCell(new PdfPCell(new Phrase("Tên sách", fontNormal)));
+            table.addCell(new PdfPCell(new Phrase("Giá bán", fontNormal)));
+            table.addCell(new PdfPCell(new Phrase("Số lượng", fontNormal)));
+            table.addCell(new PdfPCell(new Phrase("Thành tiền", fontNormal)));
+            table.addCell(new PdfPCell(new Phrase("Giảm giá", fontNormal)));
+            table.addCell(new PdfPCell(new Phrase("Tổng", fontNormal)));
+
+            List<ThongTinSanPham> dsSanPham = thongTinSanPhamDAO.findByID(MaHD);
+            for (ThongTinSanPham sp : dsSanPham) {
+                table.addCell(new Phrase(sp.getTenSach(), fontNormal));
+                table.addCell(new Phrase(String.valueOf(sp.getGiaBan()), fontNormal));
+                table.addCell(new Phrase(String.valueOf(sp.getSoLuong()), fontNormal));
+                table.addCell(new Phrase(String.valueOf(sp.getThanhTien()), fontNormal));
+                table.addCell(new Phrase(String.valueOf(sp.getGiamGia()), fontNormal));
+                table.addCell(new Phrase(String.valueOf(sp.getTong()), fontNormal));
+            }
+
+            document.add(table);
+            document.close();
+
+            JOptionPane.showMessageDialog(this, "Xuất hoá đơn PDF thành công:\n" + filePath);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Xuất PDF thất bại!");
+        }
+    }//GEN-LAST:event_btnOutputBillActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel LichSu;
+    private javax.swing.JButton btnOutputBill;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
