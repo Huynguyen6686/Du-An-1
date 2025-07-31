@@ -51,11 +51,6 @@
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="cc" green="cc" red="0" type="rgb"/>
             </Property>
-            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-              <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                <LineBorder/>
-              </Border>
-            </Property>
             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[200, 700]"/>
             </Property>
@@ -78,20 +73,22 @@
                   <Component id="lbBanHang" alignment="1" max="32767" attributes="0"/>
                   <Component id="lbQLSach" alignment="0" max="32767" attributes="0"/>
                   <Component id="lbTaiKhoan" alignment="0" max="32767" attributes="0"/>
-                  <Component id="lbQuanLyKH" alignment="0" max="32767" attributes="0"/>
+                  <Component id="lbQuanLyKH" alignment="0" pref="200" max="32767" attributes="0"/>
                   <Component id="lbThongKe" alignment="0" max="32767" attributes="0"/>
                   <Component id="lbgiamgia" alignment="0" max="32767" attributes="0"/>
                   <Component id="lbQuanLyHD" alignment="0" max="32767" attributes="0"/>
-                  <Component id="lblHoTen" alignment="0" max="32767" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
-                      <Component id="lblAnh" min="-2" pref="112" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="43" max="32767" attributes="0"/>
-                  </Group>
-                  <Component id="lblChucVu" alignment="0" max="32767" attributes="0"/>
                   <Component id="lbDoiMk" alignment="0" max="32767" attributes="0"/>
                   <Component id="lbLichSu" alignment="1" max="32767" attributes="0"/>
                   <Component id="lbDangXuat" alignment="1" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="lblChucVu" min="-2" pref="161" max="-2" attributes="0"/>
+                          <Component id="lblHoTen" min="-2" pref="164" max="-2" attributes="0"/>
+                          <Component id="lblAnh" min="-2" pref="152" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
+                  </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -123,7 +120,7 @@
                       <Component id="lbDoiMk" min="-2" pref="43" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="lbDangXuat" min="-2" pref="43" max="-2" attributes="0"/>
-                      <EmptySpace pref="93" max="32767" attributes="0"/>
+                      <EmptySpace pref="95" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -230,6 +227,7 @@
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="33" red="33" type="rgb"/>
                 </Property>
+                <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/images/user.png"/>
                 </Property>
@@ -331,6 +329,9 @@
               <Dimension value="[1213, 773]"/>
             </Property>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout$JSplitPaneConstraintsDescription">
               <JSplitPaneConstraints position="right"/>
@@ -340,6 +341,9 @@
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignCardLayout"/>
           <SubComponents>
             <Component class="poly.books.ui.BanHang" name="banHang">
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+              </AuxValues>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
                   <CardConstraints cardName="card2"/>
@@ -374,7 +378,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="poly.books.ui.manager.QuanLySach1" name="quanLySach11">
+            <Component class="poly.books.ui.manager.QuanLySach" name="quanLySach11">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
                   <CardConstraints cardName="card8"/>

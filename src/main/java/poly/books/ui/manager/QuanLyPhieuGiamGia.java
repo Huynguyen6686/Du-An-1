@@ -88,7 +88,7 @@ public class QuanLyPhieuGiamGia extends javax.swing.JPanel implements poly.books
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel16.setText("Giảm Giá");
         jLabel16.setMaximumSize(new java.awt.Dimension(1123, 25));
-        jLabel16.setMinimumSize(new java.awt.Dimension(1123, 25));
+        jLabel16.setMinimumSize(new java.awt.Dimension(1123, 50));
         jLabel16.setOpaque(true);
         jLabel16.setPreferredSize(new java.awt.Dimension(1123, 50));
         GiamGia.add(jLabel16, java.awt.BorderLayout.PAGE_START);

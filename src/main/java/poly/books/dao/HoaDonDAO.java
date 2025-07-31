@@ -74,7 +74,11 @@ public class HoaDonDAO {
             }
             ps.setDouble(5, hoaDon.getTongTien());
             ps.setInt(6, hoaDon.getPhuongThuc());
-            ps.setTimestamp(7, new java.sql.Timestamp(hoaDon.getNgayThanhToan().getTime()));
+            if (hoaDon.getNgayThanhToan() != null) {
+                ps.setTimestamp(7, new java.sql.Timestamp(hoaDon.getNgayThanhToan().getTime()));
+            } else {
+                ps.setNull(7, java.sql.Types.TIMESTAMP);
+            }
             ps.setInt(8, hoaDon.getTrangThai());
             ps.executeUpdate();
             try (ResultSet rs = ps.getGeneratedKeys()) {

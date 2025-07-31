@@ -265,7 +265,7 @@ public class QuanLyKhachHang extends javax.swing.JPanel implements poly.books.co
 
         add(jPanel2, java.awt.BorderLayout.CENTER);
 
-        jLabel1.setBackground(new java.awt.Color(51, 153, 255));
+        jLabel1.setBackground(new java.awt.Color(0, 144, 193));
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Quản Lý Khách Hàng");

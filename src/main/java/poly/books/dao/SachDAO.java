@@ -102,17 +102,21 @@ public class SachDAO {
     public List<Sach> getAllDanhSachSP() {
         return XQuery.getBeanList(Sach.class, gallDanhSachSP);
     }
-public Sach findByISBN(String isbn) {
-    String sql = getAllSQL + " WHERE ISBN = ?";
-    return XQuery.getSingleBean(Sach.class, sql, isbn);
-}
+
+    public Sach findByISBN(String isbn) {
+        String sql = getAllSQL + " WHERE ISBN = ?";
+        return XQuery.getSingleBean(Sach.class, sql, isbn);
+    }
+
     public List<Sach> getAll() {
         return XQuery.getBeanList(Sach.class, getAllSQL);
     }
-public Sach findByID(int maSach) {
+
+    public Sach findByID(int maSach) {
         String sql = gallDanhSachSP + " WHERE s.MaSach = ?";
         return XQuery.getSingleBean(Sach.class, sql, maSach);
     }
+
     /**
      * Tạo sách mới (không bao gồm lĩnh vực và loại sách)
      */
@@ -310,6 +314,19 @@ public Sach findByID(int maSach) {
             // Cập nhật loại sách
             if (danhSachLoaiSach != null) {
                 updateLoaiSach(sach.getMaSach(), danhSachLoaiSach);
+            }
+
+            // Cập nhật số lượng trong bảng Kho
+            String checkKhoSQL = "SELECT COUNT(*) FROM Kho WHERE MaSach = ?";
+            int count = (int) XJdbc.getValue(checkKhoSQL, sach.getMaSach());
+            if (count > 0) {
+                // Nếu bản ghi tồn tại, cập nhật số lượng
+                String updateKhoSQL = "UPDATE Kho SET SoLuong = ? WHERE MaSach = ?";
+                XJdbc.executeUpdate(updateKhoSQL, sach.getSoLuong(), sach.getMaSach());
+            } else {
+                // Nếu bản ghi không tồn tại, thêm mới
+                String insertKhoSQL = "INSERT INTO Kho (MaSach, SoLuong) VALUES (?, ?)";
+                XJdbc.executeUpdate(insertKhoSQL, sach.getMaSach(), sach.getSoLuong());
             }
 
             return result;

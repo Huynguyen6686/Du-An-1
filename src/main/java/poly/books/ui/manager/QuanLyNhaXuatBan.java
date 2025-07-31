@@ -24,20 +24,16 @@ public class QuanLyNhaXuatBan extends javax.swing.JDialog implements poly.books.
 
     List<NhaXuatBan> nxbList = new ArrayList<>();
     NhaXuatBanDAO nhaXuatBanDAO = new NhaXuatBanDAO();
-
+  private QuanLySach quanLySach;
     /**
      * Creates new form QuanLyNhaXuatBan
      */
-    public QuanLyNhaXuatBan(java.awt.Frame parent, boolean modal) {
+    public QuanLyNhaXuatBan(java.awt.Frame parent, boolean modal,QuanLySach sql) {
         super(parent, modal);
         initComponents();
-      addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentShown(ComponentEvent e) {
-                fillToTable();
-            }
-
-        });
+        fillToTable();
+          this.quanLySach=sql;
+   
     }
 
     /**
@@ -320,7 +316,7 @@ public class QuanLyNhaXuatBan extends javax.swing.JDialog implements poly.books.
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                QuanLyNhaXuatBan dialog = new QuanLyNhaXuatBan(new javax.swing.JFrame(), true);
+                QuanLyNhaXuatBan dialog = new QuanLyNhaXuatBan(new javax.swing.JFrame(), true,null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

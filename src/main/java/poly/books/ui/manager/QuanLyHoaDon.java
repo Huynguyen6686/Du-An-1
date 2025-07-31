@@ -6,6 +6,9 @@ package poly.books.ui.manager;
 
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
@@ -22,6 +25,7 @@ import poly.books.entity.HoaDon;
 import poly.books.ui.Book;
 import poly.books.util.XDate;
 import poly.books.util.XDialog;
+import poly.books.util.XJdbc;
 
 /**
  *
@@ -61,6 +65,7 @@ public class QuanLyHoaDon extends javax.swing.JPanel implements poly.books.contr
                     loadHDCT();
                 } else if (evt.getClickCount() == 2) {
                     // Xử lý double-click (giữ nguyên mã hiện tại)
+
                     int selectedRow = tblHoaDon.getSelectedRow();
                     if (selectedRow != -1) {
                         int maHD = (int) tblHoaDon.getValueAt(selectedRow, 0);
@@ -72,6 +77,7 @@ public class QuanLyHoaDon extends javax.swing.JPanel implements poly.books.contr
                             Book bookFrame = (Book) frame;
                             if (bookFrame.cardLayout != null && bookFrame.QuanLy != null && bookFrame.banHang != null) {
                                 bookFrame.cardLayout.show(bookFrame.QuanLy, "card2");
+
                                 HoaDonDAO dao = new HoaDonDAO();
                                 HoaDon hoaDon = dao.findById(maHD);
                                 if (hoaDon != null) {
@@ -97,16 +103,12 @@ public class QuanLyHoaDon extends javax.swing.JPanel implements poly.books.contr
         fillToTable();
     }
 
-    public JPanel getContentPanel() {
-        return QuanLyHD;
-    }
-
     public void loadHDCT() {
         DefaultTableModel defaultTableModel = (DefaultTableModel) tblHDCT.getModel();
         defaultTableModel.setRowCount(0);
 
         int totalQuantity = 0;
-        int totalPrice = 0;
+        double totalPrice = 0;
 
         if (ViewAllHDCT) {
             chiTietHoaDonList = chiTietHoaDonDAO.getAll();
@@ -123,19 +125,49 @@ public class QuanLyHoaDon extends javax.swing.JPanel implements poly.books.contr
         }
 
         for (ChiTietHoaDon chiTietHoaDon : chiTietHoaDonList) {
+            // Lấy thông tin giảm giá từ HoaDon
+            HoaDon hoaDon = hoaDonDAO.findById(chiTietHoaDon.getMaHD());
+            Double giamGia = 0.0;
+            if (hoaDon != null && hoaDon.getMaPhieu() != null) {
+                String sql = "SELECT GiaTri FROM PhieuGiamGia WHERE MaPhieu = ?";
+                try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+                    ps.setInt(1, hoaDon.getMaPhieu());
+                    ResultSet rs = ps.executeQuery();
+                    if (rs.next()) {
+                        giamGia = rs.getDouble("GiaTri");
+                    }
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, "Lỗi khi lấy giảm giá: " + e.getMessage());
+                }
+            }
+
             defaultTableModel.addRow(new Object[]{
                 chiTietHoaDon.getMaHD(),
                 chiTietHoaDon.getMaSach(),
                 chiTietHoaDon.getSoLuong(),
-                chiTietHoaDon.getDonGia()
+                chiTietHoaDon.getDonGia(),
+                String.format("%.2f", giamGia)
             });
 
             totalQuantity += chiTietHoaDon.getSoLuong();
-            totalPrice += chiTietHoaDon.getSoLuong() * chiTietHoaDon.getDonGia();
+            // Không tính totalPrice từ ChiTietHoaDon, lấy trực tiếp từ HoaDon
+            if (!ViewAllHDCT && hoaDon != null) {
+                totalPrice = hoaDon.getTongTien(); // Lấy TongTien từ HoaDon (đã trừ giảm giá)
+            }
+        }
+
+        // Nếu ViewAllHDCT, tính tổng tiền từ tất cả hóa đơn
+        if (ViewAllHDCT) {
+            for (ChiTietHoaDon chiTiet : chiTietHoaDonList) {
+                HoaDon hoaDon = hoaDonDAO.findById(chiTiet.getMaHD());
+                if (hoaDon != null) {
+                    totalPrice += hoaDon.getTongTien();
+                }
+            }
         }
 
         txtTongSoSanPham.setText(String.valueOf(totalQuantity));
-        txtTongTienHDCT.setText(String.valueOf(totalPrice));
+        txtTongTienHDCT.setText(String.format("%.2f", totalPrice));
     }
 
     /**
@@ -227,17 +259,17 @@ public class QuanLyHoaDon extends javax.swing.JPanel implements poly.books.contr
 
         tblHDCT.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Mã hoá đơn", "Mã Sách", "Số lượng ", "Đơn giá"
+                "Mã hoá đơn", "Mã Sách", "Số lượng ", "Đơn giá", "Giảm giá"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -258,27 +290,25 @@ public class QuanLyHoaDon extends javax.swing.JPanel implements poly.books.contr
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtMaHDCT, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel22)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtTongSoSanPham, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtTongTienHDCT, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(46, 46, 46)
-                        .addComponent(btnTatCaChiTietHoaDon, javax.swing.GroupLayout.DEFAULT_SIZE, 274, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addComponent(jScrollPane2)
-                        .addGap(113, 113, 113)))
+                .addGap(27, 27, 27)
+                .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtMaHDCT, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel22)
+                .addGap(18, 18, 18)
+                .addComponent(txtTongSoSanPham, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtTongTienHDCT, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(46, 46, 46)
+                .addComponent(btnTatCaChiTietHoaDon, javax.swing.GroupLayout.DEFAULT_SIZE, 274, Short.MAX_VALUE)
                 .addGap(66, 66, 66))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 984, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -336,11 +366,14 @@ public class QuanLyHoaDon extends javax.swing.JPanel implements poly.books.contr
         });
         jScrollPane1.setViewportView(tblHoaDon);
 
-        jLabel1.setBackground(new java.awt.Color(51, 153, 255));
+        jLabel1.setBackground(new java.awt.Color(0, 144, 193));
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Quản Lý Hóa Đơn");
+        jLabel1.setMaximumSize(new java.awt.Dimension(150, 50));
+        jLabel1.setMinimumSize(new java.awt.Dimension(150, 50));
         jLabel1.setOpaque(true);
+        jLabel1.setPreferredSize(new java.awt.Dimension(150, 50));
 
         javax.swing.GroupLayout QuanLyHDLayout = new javax.swing.GroupLayout(QuanLyHD);
         QuanLyHD.setLayout(QuanLyHDLayout);

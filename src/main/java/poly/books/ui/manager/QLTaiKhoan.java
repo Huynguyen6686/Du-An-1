@@ -75,7 +75,8 @@ public class QLTaiKhoan extends javax.swing.JPanel implements poly.books.control
         jLabel1.setBackground(new java.awt.Color(0, 144, 193));
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("QUẢN LÝ TÀI KHOẢN");
+        jLabel1.setText("Quản Lý Tài Khoản");
+        jLabel1.setMinimumSize(new java.awt.Dimension(214, 50));
         jLabel1.setOpaque(true);
         jLabel1.setPreferredSize(new java.awt.Dimension(246, 50));
         jPanel1.add(jLabel1, java.awt.BorderLayout.PAGE_START);
@@ -150,6 +151,11 @@ public class QLTaiKhoan extends javax.swing.JPanel implements poly.books.control
                 "Tên đăng nhập", "Mật khẩu", "Họ và tên", "Trạng thái", "Quản lý", "Hình ảnh"
             }
         ));
+        tblTaiKhoan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblTaiKhoanMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblTaiKhoan);
 
         txtMatKhau.addActionListener(new java.awt.event.ActionListener() {
@@ -276,7 +282,7 @@ public class QLTaiKhoan extends javax.swing.JPanel implements poly.books.control
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             String fileName = selectedFile.getName();
-            File destDir = new File("src/main/resources/New folder (2)"); // Thư mục tài nguyên
+            File destDir = new File("src/main/resources/imgTaiKhoan"); // Thư mục tài nguyên
             if (!destDir.exists()) {
                 destDir.mkdirs();
             }
@@ -291,7 +297,7 @@ public class QLTaiKhoan extends javax.swing.JPanel implements poly.books.control
             lblAnh.setText("");
 
             // Tải và thu nhỏ ảnh theo kích thước của lblanh
-            java.net.URL imageUrl = getClass().getResource("/New folder (2)/" + fileName);
+            java.net.URL imageUrl = getClass().getResource("/imgTaiKhoan/" + fileName);
             if (imageUrl != null) {
                 ImageIcon icon = new ImageIcon(imageUrl);
                 Image img = icon.getImage().getScaledInstance(lblAnh.getWidth(), lblAnh.getHeight(), Image.SCALE_SMOOTH);
@@ -321,6 +327,14 @@ public class QLTaiKhoan extends javax.swing.JPanel implements poly.books.control
     private void txtMatKhauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMatKhauActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtMatKhauActionPerformed
+
+    private void tblTaiKhoanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTaiKhoanMouseClicked
+        int index = tblTaiKhoan.getSelectedRow();
+        if (index >= 0 && index < listndsd.size()) {
+            NguoiDungSD entity = listndsd.get(index);
+            this.setForm(entity);
+        }
+    }//GEN-LAST:event_tblTaiKhoanMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -378,7 +392,7 @@ public class QLTaiKhoan extends javax.swing.JPanel implements poly.books.control
             lblAnh.setText("");
             if (ndsd.getHinhAnh() != null && !ndsd.getHinhAnh().isEmpty()) {
                 lblAnh.setToolTipText(ndsd.getHinhAnh());
-                java.net.URL imageUrl = getClass().getResource("/New folder (2)/" + ndsd.getHinhAnh());
+                java.net.URL imageUrl = getClass().getResource("/imgTaiKhoan/" + ndsd.getHinhAnh());
                 if (imageUrl != null) {
                     ImageIcon icon = new ImageIcon(imageUrl);
                     Image img = icon.getImage().getScaledInstance(lblAnh.getWidth(), lblAnh.getHeight(), Image.SCALE_SMOOTH);

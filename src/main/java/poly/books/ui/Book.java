@@ -6,6 +6,8 @@ package poly.books.ui;
 
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,6 +23,7 @@ import poly.books.util.XIcon;
  * @author HuyNguyen
  */
 public class Book extends javax.swing.JFrame implements poly.books.controller.PolybookController {
+
 
     public CardLayout cardLayout;
 
@@ -77,7 +80,7 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
         qLTaiKhoan1 = new poly.books.ui.manager.QLTaiKhoan();
         quanLyHoaDon1 = new poly.books.ui.manager.QuanLyHoaDon();
         quanLyPhieuGiamGia1 = new poly.books.ui.manager.QuanLyPhieuGiamGia();
-        quanLySach11 = new poly.books.ui.manager.QuanLySach1();
+        quanLySach11 = new poly.books.ui.manager.QuanLySach();
         quanLyKhachHang1 = new poly.books.ui.manager.QuanLyKhachHang();
         changePassword1 = new poly.books.ui.ChangePassword();
 
@@ -91,7 +94,6 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
         Book.setPreferredSize(new java.awt.Dimension(1413, 780));
 
         menu.setBackground(new java.awt.Color(0, 204, 204));
-        menu.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         menu.setMinimumSize(new java.awt.Dimension(200, 700));
         menu.setPreferredSize(new java.awt.Dimension(200, 700));
 
@@ -158,6 +160,7 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
         });
 
         lblAnh.setBackground(new java.awt.Color(51, 51, 255));
+        lblAnh.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblAnh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/user.png"))); // NOI18N
 
         lblHoTen.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -215,19 +218,20 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
             .addComponent(lbBanHang, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(lbQLSach, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(lbTaiKhoan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(lbQuanLyKH, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(lbQuanLyKH, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
             .addComponent(lbThongKe, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(lbgiamgia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(lbQuanLyHD, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(lblHoTen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(menuLayout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addComponent(lblAnh, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 43, Short.MAX_VALUE))
-            .addComponent(lblChucVu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(lbDoiMk, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(lbLichSu, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(lbDangXuat, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(menuLayout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addGroup(menuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblChucVu, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblHoTen, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblAnh, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         menuLayout.setVerticalGroup(
             menuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -258,7 +262,7 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
                 .addComponent(lbDoiMk, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbDangXuat, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(93, Short.MAX_VALUE))
+                .addContainerGap(95, Short.MAX_VALUE))
         );
 
         Book.setLeftComponent(menu);
@@ -285,26 +289,32 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
 
     private void lbQLSachMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_lbQLSachMouseClicked
         cardLayout.show(QuanLy, "card8");
+
     }// GEN-LAST:event_lbQLSachMouseClicked
 
     private void lbTaiKhoanMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_lbTaiKhoanMouseClicked
         cardLayout.show(QuanLy, "card4");
+
     }// GEN-LAST:event_lbTaiKhoanMouseClicked
 
     private void lbQuanLyKHMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_lbQuanLyKHMouseClicked
         cardLayout.show(QuanLy, "card9");
+
     }// GEN-LAST:event_lbQuanLyKHMouseClicked
 
     private void lbQuanLyHDMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_lbQuanLyHDMouseClicked
         cardLayout.show(QuanLy, "card5");
+
     }// GEN-LAST:event_lbQuanLyHDMouseClicked
 
     private void lbThongKeMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_lbThongKeMouseClicked
         cardLayout.show(QuanLy, "card4");
+
     }// GEN-LAST:event_lbThongKeMouseClicked
 
     private void lbgiamgiaMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_lbgiamgiaMouseClicked
         cardLayout.show(QuanLy, "card7");
+
     }// GEN-LAST:event_lbgiamgiaMouseClicked
 
     private void lbDangXuatMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_lbDangXuatMouseClicked
@@ -314,10 +324,12 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
 
     private void lbDoiMkMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_lbDoiMkMouseClicked
         cardLayout.show(QuanLy, "card10");
+
     }// GEN-LAST:event_lbDoiMkMouseClicked
 
     private void lbLichSuMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_lbLichSuMouseClicked
         cardLayout.show(QuanLy, "card6");
+
     }// GEN-LAST:event_lbLichSuMouseClicked
 
     private void lbBanHangMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_lbBanHangMouseClicked
@@ -386,10 +398,10 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    public javax.swing.JSplitPane Book;
+    private javax.swing.JSplitPane Book;
     public javax.swing.JPanel QuanLy;
     public poly.books.ui.BanHang banHang;
-    public poly.books.ui.ChangePassword changePassword1;
+    private poly.books.ui.ChangePassword changePassword1;
     private javax.swing.JLabel lbBanHang;
     private javax.swing.JLabel lbDangXuat;
     private javax.swing.JLabel lbDoiMk;
@@ -404,12 +416,12 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
     private javax.swing.JLabel lblChucVu;
     private javax.swing.JLabel lblHoTen;
     private poly.books.ui.LichSu lichSu1;
-    public javax.swing.JPanel menu;
-    public poly.books.ui.manager.QLTaiKhoan qLTaiKhoan1;
-    public poly.books.ui.manager.QuanLyHoaDon quanLyHoaDon1;
-    public poly.books.ui.manager.QuanLyKhachHang quanLyKhachHang1;
-    public poly.books.ui.manager.QuanLyPhieuGiamGia quanLyPhieuGiamGia1;
-    public poly.books.ui.manager.QuanLySach1 quanLySach11;
+    private javax.swing.JPanel menu;
+    private poly.books.ui.manager.QLTaiKhoan qLTaiKhoan1;
+    private poly.books.ui.manager.QuanLyHoaDon quanLyHoaDon1;
+    private poly.books.ui.manager.QuanLyKhachHang quanLyKhachHang1;
+    private poly.books.ui.manager.QuanLyPhieuGiamGia quanLyPhieuGiamGia1;
+    private poly.books.ui.manager.QuanLySach quanLySach11;
     // End of variables declaration//GEN-END:variables
     @Override
     public void init() {
@@ -430,14 +442,22 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
         System.out.println("Initializing user: " + tenDangNhap);
         NguoiDungSD user = userDAO.findById(tenDangNhap);
         if (user != null) {
-            XIcon.setIcon(lblAnh, "images/" + (user.getHinhAnh() != null ? user.getHinhAnh() : "user.png"));
+            lblAnh.setIcon(null);
+            lblAnh.setText("");
+            if (user.getHinhAnh() != null && !user.getHinhAnh().isEmpty()) {
+                lblAnh.setToolTipText(user.getHinhAnh());
+                java.net.URL imageUrl = getClass().getResource("/imgTaiKhoan/" + user.getHinhAnh());
+                if (imageUrl != null) {
+                    ImageIcon icon = new ImageIcon(imageUrl);
+                    Image img = icon.getImage().getScaledInstance(lblAnh.getWidth(), lblAnh.getHeight(), Image.SCALE_SMOOTH);
+                    lblAnh.setIcon(new ImageIcon(img));
+                }
+            }
             lblHoTen.setText(user.getHoTen());
             lblChucVu.setText(user.isQuanLy() ? "Quản lý" : "Nhân viên");
 
             if (!user.isQuanLy()) {
                 lbQLSach.setVisible(false);
-                lbQuanLyHD.setVisible(false);
-                lbQuanLyKH.setVisible(false);
                 lbTaiKhoan.setVisible(false);
                 lbgiamgia.setVisible(false);
                 lbThongKe.setVisible(false);

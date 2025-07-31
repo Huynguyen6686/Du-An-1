@@ -48,7 +48,6 @@ public class ChangePassword extends javax.swing.JPanel implements poly.books.con
         txtNewpass = new javax.swing.JPasswordField();
         txtConfirm = new javax.swing.JPasswordField();
         btnSave = new javax.swing.JButton();
-        btnClose = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
 
         QuanLyMatKhau.setBackground(new java.awt.Color(255, 255, 255));
@@ -78,18 +77,14 @@ public class ChangePassword extends javax.swing.JPanel implements poly.books.con
             }
         });
 
-        btnClose.setText("Đóng");
-        btnClose.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCloseActionPerformed(evt);
-            }
-        });
-
         jLabel5.setBackground(new java.awt.Color(0, 144, 193));
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("Đổi mật khẩu");
+        jLabel5.setMaximumSize(new java.awt.Dimension(114, 50));
+        jLabel5.setMinimumSize(new java.awt.Dimension(114, 50));
         jLabel5.setOpaque(true);
+        jLabel5.setPreferredSize(new java.awt.Dimension(114, 50));
 
         javax.swing.GroupLayout QuanLyMatKhauLayout = new javax.swing.GroupLayout(QuanLyMatKhau);
         QuanLyMatKhau.setLayout(QuanLyMatKhauLayout);
@@ -98,10 +93,7 @@ public class ChangePassword extends javax.swing.JPanel implements poly.books.con
             .addGroup(QuanLyMatKhauLayout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addGroup(QuanLyMatKhauLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(QuanLyMatKhauLayout.createSequentialGroup()
-                        .addComponent(btnSave)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnClose))
+                    .addComponent(btnSave)
                     .addComponent(txtNewpass, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -116,7 +108,7 @@ public class ChangePassword extends javax.swing.JPanel implements poly.books.con
         QuanLyMatKhauLayout.setVerticalGroup(
             QuanLyMatKhauLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(QuanLyMatKhauLayout.createSequentialGroup()
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(46, 46, 46)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -134,10 +126,8 @@ public class ChangePassword extends javax.swing.JPanel implements poly.books.con
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(QuanLyMatKhauLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnClose)
-                    .addComponent(btnSave))
-                .addContainerGap(170, Short.MAX_VALUE))
+                .addComponent(btnSave)
+                .addContainerGap(182, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -160,14 +150,9 @@ public class ChangePassword extends javax.swing.JPanel implements poly.books.con
         this.save();
     }//GEN-LAST:event_btnSaveActionPerformed
 
-    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
-
-    }//GEN-LAST:event_btnCloseActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel QuanLyMatKhau;
-    private javax.swing.JButton btnClose;
     private javax.swing.JButton btnSave;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

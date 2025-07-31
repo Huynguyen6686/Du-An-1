@@ -34,13 +34,8 @@ public class QuanLyLinhVuc extends javax.swing.JDialog implements poly.books.con
         super(parent, modal);
         this.quanLySach = sql;
         initComponents();
-      addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentShown(ComponentEvent e) {
-                fillToTable();
-            }
-
-        });
+        fillToTable();
+       
         txtMaLinhVuc.setEditable(false);
     }
 

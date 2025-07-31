@@ -25,7 +25,7 @@ public class QuanLyTheLoai extends javax.swing.JDialog implements poly.books.con
 LoaiSachDAO lSachDAO = new LoaiSachDAO();
 List<LoaiSach> listLSach = new ArrayList<>();
 private QuanLySach quanLySach;
-
+  
     /**
      * Creates new form QuanLyTheLoai
      */
@@ -33,13 +33,8 @@ private QuanLySach quanLySach;
         super(parent, modal);
         this.quanLySach=sql;
         initComponents();
-       addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentShown(ComponentEvent e) {
-                fillToTable();
-            }
-
-        });
+        fillToTable();
+       
          txtMaTL.setEditable(false);
     }
 

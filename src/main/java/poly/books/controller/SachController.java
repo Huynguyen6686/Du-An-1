@@ -30,7 +30,7 @@ public interface SachController extends CrudController<Sach> {
     }
 
     default void showQuanLyTacGia(JFrame frame) {
-        this.showJDialog(new QuanLyTacGia(frame, true));
+        this.showJDialog(new QuanLyTacGia(frame, true,null));
     }
 
     default void showQuanLyTheLoai(JFrame frame) {
@@ -38,11 +38,11 @@ public interface SachController extends CrudController<Sach> {
     }
 
     default void showQuanLyNgonNgu(JFrame frame) {
-        this.showJDialog(new QuanLyNgonNgu(frame, true));
+        this.showJDialog(new QuanLyNgonNgu(frame, true,null));
     }
 
     default void showQuanLyNhaXuatBan(JFrame frame) {
-        this.showJDialog(new QuanLyNhaXuatBan(frame, true));
+        this.showJDialog(new QuanLyNhaXuatBan(frame, true,null));
     }
 
     default void showDanhSachSanPham(JFrame frame, BanHang banHang) {

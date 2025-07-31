@@ -29,16 +29,11 @@ public class QuanLyTacGia extends javax.swing.JDialog implements poly.books.cont
     /**
      * Creates new form QuanLyTacGia
      */
-    public QuanLyTacGia(java.awt.Frame parent, boolean modal) {
+    public QuanLyTacGia(java.awt.Frame parent, boolean modal,QuanLySach sql) {
         super(parent, modal);
         initComponents();
-      addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentShown(ComponentEvent e) {
-                fillToTable();
-            }
-
-        });
+         fillToTable();
+           
     }
 
     /**
@@ -330,7 +325,7 @@ public class QuanLyTacGia extends javax.swing.JDialog implements poly.books.cont
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                QuanLyTacGia dialog = new QuanLyTacGia(new javax.swing.JFrame(), true);
+                QuanLyTacGia dialog = new QuanLyTacGia(new javax.swing.JFrame(), true,null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

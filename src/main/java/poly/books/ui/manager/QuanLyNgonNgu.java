@@ -26,20 +26,16 @@ public class QuanLyNgonNgu extends javax.swing.JDialog implements poly.books.con
 
     List<NgonNgu> listNN = new ArrayList<>();
     NgonNguDAO NNdao = new NgonNguDAO();
-
+  private QuanLySach quanLySach;
     /**
      * Creates new form QuanLyNgoNgu
      */
-    public QuanLyNgonNgu(java.awt.Frame parent, boolean modal) {
+    public QuanLyNgonNgu(java.awt.Frame parent, boolean modal,QuanLySach sql) {
         super(parent, modal);
         initComponents();
-       addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentShown(ComponentEvent e) {
-                fillToTable();
-            }
-
-        });
+        fillToTable();
+          this.quanLySach=sql;
+       
         txtMaNN.setEditable(false);
     }
 
@@ -325,7 +321,7 @@ public class QuanLyNgonNgu extends javax.swing.JDialog implements poly.books.con
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                QuanLyNgonNgu dialog = new QuanLyNgonNgu(new javax.swing.JFrame(), true);
+                QuanLyNgonNgu dialog = new QuanLyNgonNgu(new javax.swing.JFrame(), true,null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

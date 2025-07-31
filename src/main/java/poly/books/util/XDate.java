@@ -14,6 +14,7 @@ public class XDate {
 
     public static Date now() {
         return new Date();
+        
     }
 
     public static Date parse(String dateTime, String pattern) {
