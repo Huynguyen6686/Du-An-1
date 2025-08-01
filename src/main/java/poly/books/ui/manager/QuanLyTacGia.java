@@ -62,6 +62,7 @@ public class QuanLyTacGia extends javax.swing.JDialog implements poly.books.cont
         btnLamMoi = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         txtQueQuan = new javax.swing.JTextField();
+        txtMaTG = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -178,6 +179,12 @@ public class QuanLyTacGia extends javax.swing.JDialog implements poly.books.cont
 
         jLabel3.setText("Quê Quán");
 
+        txtMaTG.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMaTGActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -185,8 +192,11 @@ public class QuanLyTacGia extends javax.swing.JDialog implements poly.books.cont
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel1)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel1)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(txtMaTG))
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addComponent(jLabel2)
                             .addGap(18, 18, 18)
@@ -209,8 +219,10 @@ public class QuanLyTacGia extends javax.swing.JDialog implements poly.books.cont
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addComponent(jLabel1)
+                .addGap(29, 29, 29)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtMaTG, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -272,6 +284,7 @@ public class QuanLyTacGia extends javax.swing.JDialog implements poly.books.cont
         String timkiem = txtTimKiem.getText().trim();
         if (timkiem.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập tên tác giả để tìm kiếm!");
+            fillToTable();
             return;
         }
         DefaultTableModel model = (DefaultTableModel) tbTacGia.getModel();
@@ -295,6 +308,10 @@ public class QuanLyTacGia extends javax.swing.JDialog implements poly.books.cont
             this.setForm(entity);
         }
     }//GEN-LAST:event_tbTacGiaMouseClicked
+
+    private void txtMaTGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaTGActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtMaTGActionPerformed
 
     /**
      * @param args the command line arguments
@@ -352,6 +369,7 @@ public class QuanLyTacGia extends javax.swing.JDialog implements poly.books.cont
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tbTacGia;
+    private javax.swing.JTextField txtMaTG;
     private javax.swing.JTextField txtQueQuan;
     private javax.swing.JTextField txtTacGia;
     private javax.swing.JTextField txtTimKiem;
@@ -364,6 +382,7 @@ public class QuanLyTacGia extends javax.swing.JDialog implements poly.books.cont
 
     @Override
     public void setForm(TacGia entity) {
+        txtMaTG.setText(String.valueOf(entity.getMaTacGia()));
         txtTacGia.setText(entity.getTenTacGia());
         txtQueQuan.setText(entity.getQueQuan());
     }

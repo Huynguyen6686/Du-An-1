@@ -211,6 +211,7 @@ public class DanhSachKhachHang extends javax.swing.JDialog {
         String timkiem = txtTimKiem.getText().trim().toLowerCase();
         if (timkiem.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập tên khách hàng trước khi tìm kiếm");
+            fillToTable();
             return;
         }
         DefaultTableModel defaultTableModel = (DefaultTableModel) tbKhachHang.getModel();

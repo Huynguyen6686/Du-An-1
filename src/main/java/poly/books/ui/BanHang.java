@@ -743,47 +743,45 @@ public class BanHang extends javax.swing.JPanel {
 
     private void themSPvaoHD() {
 
-        if (maHD == -1) {
-            JOptionPane.showMessageDialog(this, "Vui lòng tạo hóa đơn trước!");
+        if (maHD == -1 || tbSanPham.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "Vui lòng tạo hóa đơn hoặc thêm sản phẩm vào giỏ hàng!");
             return;
-        }
-        if (tbSanPham.getRowCount() == 0) {
-            JOptionPane.showMessageDialog(this, "Giỏ hàng trống! Vui lòng thêm sản phẩm.");
-            return;
-        }
+        } else {
 
-        try {
-            double tongTien = calculateTongTien();
-            double giamGia = calculateGiamGia(tongTien);
-            double tongThanhToan = tongTien - giamGia;
+            try {
+                double tongTien = calculateTongTien();
+                double giamGia = calculateGiamGia(tongTien);
+                double tongThanhToan = tongTien - giamGia;
 
-            int phuongThuc = rdoTienMat.isSelected() ? 1 : (rdoTk.isSelected() ? 2 : 1);
+                int phuongThuc = rdoTienMat.isSelected() ? 1 : (rdoTk.isSelected() ? 2 : 1);
 
-            HoaDonDAO dao = new HoaDonDAO();
-            HoaDon hoaDon = dao.findById(maHD);
+                HoaDonDAO dao = new HoaDonDAO();
+                HoaDon hoaDon = dao.findById(maHD);
 
-            if (hoaDon != null) {
-                hoaDon.setTongTien(tongThanhToan);
-                hoaDon.setPhuongThuc(phuongThuc);
+                if (hoaDon != null) {
+                    hoaDon.setTongTien(tongThanhToan);
+                    hoaDon.setPhuongThuc(phuongThuc);
 
-                hoaDon.setTrangThai(0);
-                hoaDon.setMaPhieu(txtMaPhieu.getText().isEmpty() ? null : Integer.parseInt(txtMaPhieu.getText()));
+                    hoaDon.setTrangThai(0);
+                    hoaDon.setMaPhieu(txtMaPhieu.getText().isEmpty() ? null : Integer.parseInt(txtMaPhieu.getText()));
 
-                dao.update(hoaDon);
+                    dao.update(hoaDon);
 
-                txtTongTien.setText(String.format("%.2f", tongThanhToan));
-                txtGiamGia.setText(String.format("%.2f", giamGia));
-                txtTrangThai.setText("Chờ thanh toán");
+                    txtTongTien.setText(String.format("%.2f", tongThanhToan));
+                    txtGiamGia.setText(String.format("%.2f", giamGia));
+                    txtTrangThai.setText("Chờ thanh toán");
 
-                JOptionPane.showMessageDialog(this, "Thêm thành công!");
-                clearForm();
-            } else {
-                JOptionPane.showMessageDialog(this, "Không tìm thấy hóa đơn!");
+                    JOptionPane.showMessageDialog(this, "Thêm thành công!");
+                    clearForm();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Không tìm thấy hóa đơn!");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Lỗi khi thêm sản phẩm: " + e.getMessage());
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Lỗi khi thêm sản phẩm: " + e.getMessage());
         }
+
     }
 
     private void updateThanhTien() {
@@ -1062,13 +1060,14 @@ public class BanHang extends javax.swing.JPanel {
         ((DefaultTableModel) tbSanPham.getModel()).setRowCount(0);
         maHD = -1;
     }
-     private void clear() {
+
+    private void clear() {
         txtMaSach.setText("");
         txtTenSach.setText("");
         txtDonGia.setText("");
         spSoLuong.setValue(0);
         lbAnh.setIcon(null);
-        lbAnh.setText("ảnh");         
+        lbAnh.setText("ảnh");
     }
 
 }

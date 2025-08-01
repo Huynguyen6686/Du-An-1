@@ -282,6 +282,7 @@ public class QuanLyNgonNgu extends javax.swing.JDialog implements poly.books.con
        String timkiem = txtTimKiem.getText().trim();
         if (timkiem.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập thể loại ngôn ngữ để tìm kiếm!");
+            fillToTable();
             return;
         }
         DefaultTableModel model = (DefaultTableModel) tbNgonNgu.getModel();

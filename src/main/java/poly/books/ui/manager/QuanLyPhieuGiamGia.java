@@ -48,6 +48,7 @@ public class QuanLyPhieuGiamGia extends javax.swing.JPanel implements poly.books
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         GiamGia = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
         pnlGiamGia = new javax.swing.JPanel();
@@ -112,9 +113,11 @@ public class QuanLyPhieuGiamGia extends javax.swing.JPanel implements poly.books
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel5.setText("Trạng thái");
 
+        buttonGroup1.add(rdoAvailable);
         rdoAvailable.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         rdoAvailable.setText("Có hiệu lực");
 
+        buttonGroup1.add(rdoUnavailable);
         rdoUnavailable.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         rdoUnavailable.setText("Đã hết hạn");
 
@@ -394,6 +397,7 @@ public class QuanLyPhieuGiamGia extends javax.swing.JPanel implements poly.books
     private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdate;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel3;
@@ -431,7 +435,7 @@ public class QuanLyPhieuGiamGia extends javax.swing.JPanel implements poly.books
     @Override
     public PhieuGiamGia getForm() {
          PhieuGiamGia phieuGiamGia = new PhieuGiamGia();
-        phieuGiamGia.setMaPhieu(Integer.valueOf(txtVoucherID.getText()));
+//        phieuGiamGia.setMaPhieu(Integer.valueOf(txtVoucherID.getText()));
         phieuGiamGia.setGiaTri(Integer.valueOf(txtValue.getText()));
         phieuGiamGia.setDieuKienApDung(Integer.valueOf(txtCondition.getText()));
         phieuGiamGia.setTrangThai(rdoAvailable.isSelected() ? 1 : 0);

@@ -28,7 +28,7 @@ public class PhieuGiamGiaDAO {
                                   ,[DieuKienApDung]
                                   ,[TrangThai])
                             VALUES
-                                  (?,?,?,?)
+                                  (?,?,?)
                        """;
 
     String updateSQL = """

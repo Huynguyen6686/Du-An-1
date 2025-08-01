@@ -282,6 +282,11 @@ public class QuanLyKhachHang extends javax.swing.JPanel implements poly.books.co
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
         String timkiem = txtTimKiem.getText().trim().toLowerCase();
+        if (timkiem.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập thể loại ngôn ngữ để tìm kiếm!");
+            fillToTable();
+            return;
+        }
         DefaultTableModel defaultTableModel = (DefaultTableModel) tbKhachHang.getModel();
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(defaultTableModel);
         tbKhachHang.setRowSorter(sorter);

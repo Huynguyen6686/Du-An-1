@@ -60,6 +60,7 @@ public class QuanLyNhaXuatBan extends javax.swing.JDialog implements poly.books.
         btnSua = new javax.swing.JButton();
         btnXoa = new javax.swing.JButton();
         btnLamMoi = new javax.swing.JButton();
+        txtmaNXB = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -183,8 +184,11 @@ public class QuanLyNhaXuatBan extends javax.swing.JDialog implements poly.books.
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel1)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jLabel1)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(txtmaNXB))
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addComponent(jLabel2)
                                     .addGap(18, 18, 18)
@@ -204,8 +208,10 @@ public class QuanLyNhaXuatBan extends javax.swing.JDialog implements poly.books.
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addComponent(jLabel1)
+                .addGap(29, 29, 29)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtmaNXB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -263,6 +269,7 @@ public class QuanLyNhaXuatBan extends javax.swing.JDialog implements poly.books.
         String timkiem = txtTimKiem.getText().trim();
         if (timkiem.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập tên tác giả để tìm kiếm!");
+            fillToTable();
             return;
         }
         DefaultTableModel model = (DefaultTableModel) tbNhaXuatBan.getModel();
@@ -344,6 +351,7 @@ public class QuanLyNhaXuatBan extends javax.swing.JDialog implements poly.books.
     private javax.swing.JTable tbNhaXuatBan;
     private javax.swing.JTextField txtTacGia;
     private javax.swing.JTextField txtTimKiem;
+    private javax.swing.JTextField txtmaNXB;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -354,6 +362,7 @@ public class QuanLyNhaXuatBan extends javax.swing.JDialog implements poly.books.
     @Override
     public void setForm(NhaXuatBan entity) {
         txtTacGia.setText(entity.getTenNXB());
+        txtmaNXB.setText(String.valueOf(entity.getMaNXB()));
     }
 
     @Override

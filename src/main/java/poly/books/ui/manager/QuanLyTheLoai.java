@@ -275,6 +275,7 @@ public class QuanLyTheLoai extends javax.swing.JDialog implements poly.books.con
         String timkiem = txtTimKiem.getText().trim();
         if (timkiem.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập tên thể loại để tìm kiếm!");
+            fillToTable();
             return;
         }
         DefaultTableModel model = (DefaultTableModel) tbTheLoai.getModel();

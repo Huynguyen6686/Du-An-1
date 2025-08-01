@@ -20,6 +20,8 @@ import javax.swing.JScrollPane;
 import javax.swing.table.*;
 import javax.swing.border.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.text.ParseException;
 import java.util.Date;
 import javax.swing.BorderFactory;
@@ -64,9 +66,22 @@ public class ThongKe extends javax.swing.JDialog {
         jPanel17.setVisible(false);
         jPanel18.setVisible(false);
         jpnngay1.setVisible(false);
-        displayTodayRevenue();
-        displayAnnualRevenue();
 
+        filltableAll();
+
+        jpnngay.setVisible(true);
+
+        updatePanelVisibility("Ngày");
+        jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jTabbedPane1StateChanged(evt);
+            }
+
+        });
+
+    }
+
+    private void filltableAll() {
         loadDoanhThuTheoNgay();
         loadDoanhThuTheoThang();
         loadDoanhThuTheoNam();
@@ -79,7 +94,8 @@ public class ThongKe extends javax.swing.JDialog {
         loadDoanhThuSanPhamHomNay();
         loadDoanhThuSanPhamTheoNam();
         loadDoanhThuSanPhamTheoThang();
-        
+        displayTodayRevenue();
+        displayAnnualRevenue();
         veBieuDoDoanhThu();
         veBieuDoDoanhThuThang();
         veBieuDoDoanhThuNam();
@@ -91,18 +107,6 @@ public class ThongKe extends javax.swing.JDialog {
         veBieuDoDoanhThuSanPhamHomNay();
         veBieuDoDoanhThuSanPhamNamNay();
         veBieuDoDoanhThuSanPhamThangNay();
-        
-
-        jpnngay.setVisible(true);
-
-        updatePanelVisibility("Ngày");
-        jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jTabbedPane1StateChanged(evt);
-            }
-
-        });
-
     }
 
     private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {
@@ -693,6 +697,7 @@ public class ThongKe extends javax.swing.JDialog {
         jPanel17.validate();
         jPanel17.repaint(); // Thêm dòng này để đảm bảo panel được vẽ lại
     }
+
     public void veBieuDoDoanhThuNhanVienTheoKhoangNgay(Date tuNgay, Date denNgay) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         List<DoanhThuNhanVien> list = new DoanhThuDAO().getDoanhThuNhanVienTheoNgay(tuNgay, denNgay);
@@ -853,9 +858,19 @@ public class ThongKe extends javax.swing.JDialog {
         ThongKe.setBackground(new java.awt.Color(255, 255, 255));
         ThongKe.setMinimumSize(new java.awt.Dimension(1123, 773));
         ThongKe.setPreferredSize(new java.awt.Dimension(1123, 773));
+        ThongKe.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ThongKeMouseClicked(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(51, 204, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 144, 193)));
+        jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel1MouseClicked(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -1995,21 +2010,9 @@ public class ThongKe extends javax.swing.JDialog {
             ThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ThongKeLayout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addGroup(ThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(ThongKeLayout.createSequentialGroup()
-                        .addGroup(ThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(ThongKeLayout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cbothoigian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(41, 41, 41)
-                                .addGroup(ThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jpnngay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jpnngay1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jpnngaysp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(59, 59, 59)
-                                .addComponent(btnlammoi))
-                            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 995, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(ThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, ThongKeLayout.createSequentialGroup()
+                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 995, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(105, Short.MAX_VALUE))
                     .addGroup(ThongKeLayout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2017,7 +2020,19 @@ public class ThongKe extends javax.swing.JDialog {
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(114, 114, 114)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(32, 32, 32))))
+                        .addGap(32, 32, 32))
+                    .addGroup(ThongKeLayout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cbothoigian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(41, 41, 41)
+                        .addGroup(ThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jpnngay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jpnngay1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jpnngaysp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(59, 59, 59)
+                        .addComponent(btnlammoi)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         ThongKeLayout.setVerticalGroup(
             ThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2109,6 +2124,7 @@ public class ThongKe extends javax.swing.JDialog {
 
     private void btnlammoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnlammoiActionPerformed
         // TODO add your handling code here:
+        filltableAll();
         txtngaydau.setText("");
         txtngaycuoi.setText("");
         txtngaycuoinv.setText("");
@@ -2139,7 +2155,7 @@ public class ThongKe extends javax.swing.JDialog {
         jPanel20.setVisible(false);
         jPanel21.setVisible(false);
         jPanel22.setVisible(false);
-        
+
         jPanel24.setVisible(false);
         jPanel25.setVisible(false);
         jPanel26.setVisible(false);
@@ -2151,41 +2167,41 @@ public class ThongKe extends javax.swing.JDialog {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        Date ngayBatDau = dateFormat.parse(txtngaydaunv.getText());
-        Date ngayKetThuc = dateFormat.parse(txtngaycuoinv.getText());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            Date ngayBatDau = dateFormat.parse(txtngaydaunv.getText());
+            Date ngayKetThuc = dateFormat.parse(txtngaycuoinv.getText());
 
-        if (ngayBatDau.after(ngayKetThuc)) {
-            JOptionPane.showMessageDialog(this, "Ngày bắt đầu phải nhỏ hơn hoặc bằng ngày kết thúc");
-            return;
+            if (ngayBatDau.after(ngayKetThuc)) {
+                JOptionPane.showMessageDialog(this, "Ngày bắt đầu phải nhỏ hơn hoặc bằng ngày kết thúc");
+                return;
+            }
+
+            // Chọn tab "Chi tiết" (index 1) thay vì "Tổng quan" (index 0)
+            jTabbedPane3.setSelectedIndex(0);
+
+            // Reset tất cả panel
+            resetAllPanels();
+
+            // Hiển thị các panel cần thiết
+            jpnngay1.setVisible(true); // Hiển thị panel nhập ngày
+            jPanel31.setVisible(true); // Hiển thị panel biểu đồ
+            jPanel32.setVisible(true); // Hiển thị panel bảng dữ liệu
+
+            // Gọi phương thức load dữ liệu nhân viên theo khoảng ngày
+            loadDoanhThuNhanVienTheoKhoangNgay(ngayBatDau, ngayKetThuc);
+            veBieuDoDoanhThuNhanVienTheoKhoangNgay(ngayBatDau, ngayKetThuc);
+
+            // Làm mới giao diện
+            jPanel31.revalidate();
+            jPanel31.repaint();
+            jPanel32.revalidate();
+            jPanel32.repaint();
+        } catch (ParseException ex) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập ngày đúng định dạng dd/MM/yyyy");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu: " + e.getMessage());
+            e.printStackTrace();
         }
-
-        // Chọn tab "Chi tiết" (index 1) thay vì "Tổng quan" (index 0)
-        jTabbedPane3.setSelectedIndex(0);
-
-        // Reset tất cả panel
-        resetAllPanels();
-
-        // Hiển thị các panel cần thiết
-        jpnngay1.setVisible(true); // Hiển thị panel nhập ngày
-        jPanel31.setVisible(true); // Hiển thị panel biểu đồ
-        jPanel32.setVisible(true); // Hiển thị panel bảng dữ liệu
-
-        // Gọi phương thức load dữ liệu nhân viên theo khoảng ngày
-        loadDoanhThuNhanVienTheoKhoangNgay(ngayBatDau, ngayKetThuc);
-        veBieuDoDoanhThuNhanVienTheoKhoangNgay(ngayBatDau, ngayKetThuc);
-
-        // Làm mới giao diện
-        jPanel31.revalidate();
-        jPanel31.repaint();
-        jPanel32.revalidate();
-        jPanel32.repaint();
-    } catch (ParseException ex) {
-        JOptionPane.showMessageDialog(this, "Vui lòng nhập ngày đúng định dạng dd/MM/yyyy");
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu: " + e.getMessage());
-        e.printStackTrace();
-    }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -2230,7 +2246,7 @@ public class ThongKe extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu: " + e.getMessage());
             e.printStackTrace();
         }
-        
+
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -2247,6 +2263,15 @@ public class ThongKe extends javax.swing.JDialog {
         jPanel36.setVisible(false);
         jPanel37.setVisible(false);
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jPanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseClicked
+       
+       
+    }//GEN-LAST:event_jPanel1MouseClicked
+
+    private void ThongKeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ThongKeMouseClicked
+       filltableAll();
+    }//GEN-LAST:event_ThongKeMouseClicked
     private void updatePanelVisibility(String selectedOption) {
         resetAllPanels();
 
@@ -2343,8 +2368,7 @@ public class ThongKe extends javax.swing.JDialog {
         // Ẩn tất cả các panel ngày trước
         jpnngay.setVisible(false);
         jpnngay1.setVisible(false);
-        
-        
+
         jPanel11.setVisible(false);
         jPanel12.setVisible(false);
         jPanel13.setVisible(false);
@@ -2370,7 +2394,7 @@ public class ThongKe extends javax.swing.JDialog {
         jPanel33.setVisible(false);
         jPanel34.setVisible(false);
         jPanel35.setVisible(false);
-       jPanel36.setVisible(false);
+        jPanel36.setVisible(false);
         jPanel37.setVisible(false);
 
     }
@@ -2462,6 +2486,7 @@ public class ThongKe extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu doanh thu nhân viên theo tháng");
         }
     }
+
     public void veBieuDoDoanhThuSanPham() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
@@ -2495,6 +2520,7 @@ public class ThongKe extends javax.swing.JDialog {
         jPanel23.add(chartPanel, BorderLayout.CENTER);
         jPanel23.validate();
     }
+
     public void veBieuDoDoanhThuSanPhamHomNay() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
@@ -2528,6 +2554,7 @@ public class ThongKe extends javax.swing.JDialog {
         jPanel24.add(chartPanel, BorderLayout.CENTER);
         jPanel24.validate();
     }
+
     public void veBieuDoDoanhThuSanPhamThangNay() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
@@ -2561,6 +2588,7 @@ public class ThongKe extends javax.swing.JDialog {
         jPanel25.add(chartPanel, BorderLayout.CENTER);
         jPanel25.validate();
     }
+
     public void veBieuDoDoanhThuSanPhamNamNay() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
@@ -2594,6 +2622,7 @@ public class ThongKe extends javax.swing.JDialog {
         jPanel26.add(chartPanel, BorderLayout.CENTER);
         jPanel26.validate();
     }
+
     private void loadDoanhThuSanPhamTheoKhoangNgay(Date tuNgay, Date denNgay) {
         try {
             List<DoanhThuSanPham> list = doanhThuDAO.getDoanhThuSanPhamTheoKhoangNgay(tuNgay, denNgay);
@@ -2615,6 +2644,7 @@ public class ThongKe extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu doanh thu theo khoảng ngày");
         }
     }
+
     public void veBieuDoDoanhThuSanPhamTheoKhoangNgay(Date tuNgay, Date denNgay) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         List<DoanhThuSanPham> list = new DoanhThuDAO().getDoanhThuSanPhamTheoKhoangNgay(tuNgay, denNgay);
@@ -2657,7 +2687,6 @@ public class ThongKe extends javax.swing.JDialog {
         jPanel33.validate();
         jPanel33.repaint(); // Thêm dòng này để đảm bảo panel được vẽ lại
     }
-
 
     /**
      * @param args the command line arguments

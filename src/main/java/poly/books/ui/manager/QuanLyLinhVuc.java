@@ -291,6 +291,7 @@ public class QuanLyLinhVuc extends javax.swing.JDialog implements poly.books.con
         String timkiem = txtTimKiem.getText().trim();
         if (timkiem.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập loại lĩnh vực để tìm kiếm!");
+            fillToTable();
             return;
         }
         DefaultTableModel model = (DefaultTableModel) tbLinhVuc.getModel();

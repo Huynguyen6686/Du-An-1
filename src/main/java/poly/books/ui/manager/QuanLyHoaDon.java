@@ -527,6 +527,12 @@ public class QuanLyHoaDon extends javax.swing.JPanel implements poly.books.contr
     }
 
     public void ThanhToan() {
+        
+        if(tblHDCT.getRowCount()==0){
+            JOptionPane.showMessageDialog(this, "Thêm sản phẩm trước khi thanh toán");
+            return;
+        }
+        
         int selectedRow = tblHoaDon.getSelectedRow();
         if (selectedRow == -1) {
             XDialog.alert("Vui lòng chọn hóa đơn để thanh toán!");
