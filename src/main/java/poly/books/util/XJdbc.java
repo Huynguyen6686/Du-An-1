@@ -27,8 +27,8 @@ public class XJdbc {
     public static Connection openConnection() {
         var driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
        var dburl = "jdbc:sqlserver://localhost:1433;databaseName=QLNhaSachPro;encrypt=true;trustServerCertificate=true;";
-        var username = "sa";
-        var password = "123";
+        var username = "hiep";
+        var password = "123456";
         try {
             if (!XJdbc.isReady()) {
                 Class.forName(driver);
