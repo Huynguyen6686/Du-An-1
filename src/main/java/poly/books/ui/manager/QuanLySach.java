@@ -73,12 +73,18 @@ public class QuanLySach extends javax.swing.JPanel implements poly.books.control
         cboTheLoai.setModel(new DefaultComboBoxModel<>());
         btnxoalv.addActionListener(e -> removeSelectedLinhVuc());
         btnxoatl.addActionListener(e -> removeSelectedTheLoai());
-        fillToTable();
-                fillToTablelv();
-                fillToTabletl();
-                fillToTablenxb();
-                fillToTabletg();
-                fillToTableng();
+        fillToTablelv();
+        fillToTabletl();
+        fillToTablenxb();
+        fillToTabletg();
+        fillToTableng();
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                fillToTable();
+            }
+
+        });
         tbllv.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tbllvMouseClicked(evt);
@@ -1150,7 +1156,7 @@ public class QuanLySach extends javax.swing.JPanel implements poly.books.control
             };
             model.addRow(rowData);
         }
-       
+
     }
 
     public void fillToTabletl() {

@@ -352,6 +352,11 @@ public class BanHang extends javax.swing.JPanel {
                 "Mã Sách", "Tên Sách", "Số Lượng", "Đơn giá"
             }
         ));
+        tbSanPham.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbSanPhamMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbSanPham);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -537,6 +542,91 @@ public class BanHang extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNgayLapActionPerformed
 
+    private void tbSanPhamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbSanPhamMouseClicked
+        int row = tbSanPham.getSelectedRow();
+        if (row == -1 || tbSanPham.getSelectedColumn() != 2 || maHD == -1) {
+            return;
+        }
+
+        DefaultTableModel model = (DefaultTableModel) tbSanPham.getModel();
+        int maSach = Integer.parseInt(model.getValueAt(row, 0).toString());
+        int currentQuantity = Integer.parseInt(model.getValueAt(row, 2).toString());
+
+        String input = JOptionPane.showInputDialog(this, "Nhập số lượng mới:", currentQuantity);
+        if (input == null) {
+            return;
+        }
+
+        try {
+            int newQuantity = Integer.parseInt(input);
+            if (newQuantity < 0) {
+                JOptionPane.showMessageDialog(this, "Số lượng không được âm!");
+                return;
+            }
+
+            // Kiểm tra tồn kho
+            String sqlKhoCheck = "SELECT SoLuong FROM Kho WHERE MaSach = ?";
+            try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sqlKhoCheck)) {
+                ps.setInt(1, maSach);
+                ResultSet rs = ps.executeQuery();
+                if (!rs.next() || newQuantity > rs.getInt(1) + currentQuantity) {
+                    JOptionPane.showMessageDialog(this, "Số lượng vượt quá tồn kho!");
+                    return;
+                }
+            }
+
+            // Cập nhật bảng
+            model.setValueAt(newQuantity, row, 2);
+
+            // Cập nhật ChiTietHoaDon
+            String sqlChiTiet = newQuantity == 0 ? "DELETE FROM ChiTietHoaDon WHERE MaHD = ? AND MaSach = ?"
+                    : "UPDATE ChiTietHoaDon SET SoLuong = ? WHERE MaHD = ? AND MaSach = ?";
+            try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sqlChiTiet)) {
+                if (newQuantity == 0) {
+                    ps.setInt(1, maHD);
+                    ps.setInt(2, maSach);
+                } else {
+                    ps.setInt(1, newQuantity);
+                    ps.setInt(2, maHD);
+                    ps.setInt(3, maSach);
+                }
+                ps.executeUpdate();
+            }
+
+            // Xóa hóa đơn nếu không còn chi tiết
+            if (newQuantity == 0) {
+                String sqlCheck = "SELECT COUNT(*) FROM ChiTietHoaDon WHERE MaHD = ?";
+                try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sqlCheck)) {
+                    ps.setInt(1, maHD);
+                    ResultSet rs = ps.executeQuery();
+                    if (rs.next() && rs.getInt(1) == 0) {
+                        new HoaDonDAO().delete(maHD);
+                        clearForm();
+                    } else {
+                        model.removeRow(row);
+                    }
+                }
+            }
+
+            // Cập nhật Kho
+            String sqlKho = "UPDATE Kho SET SoLuong = SoLuong + ? WHERE MaSach = ?";
+            try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sqlKho)) {
+                ps.setInt(1, currentQuantity - newQuantity);
+                ps.setInt(2, maSach);
+                ps.executeUpdate();
+            }
+
+            updateGiamGia();
+            updateThanhTien();
+            calculateTongTien();
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Số lượng không hợp lệ!");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi cập nhật: " + e.getMessage());
+        }
+
+    }//GEN-LAST:event_tbSanPhamMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton DanhSachSanPham;
@@ -652,8 +742,13 @@ public class BanHang extends javax.swing.JPanel {
     }
 
     private void themSPvaoHD() {
+
         if (maHD == -1) {
             JOptionPane.showMessageDialog(this, "Vui lòng tạo hóa đơn trước!");
+            return;
+        }
+        if (tbSanPham.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "Giỏ hàng trống! Vui lòng thêm sản phẩm.");
             return;
         }
 
@@ -857,7 +952,8 @@ public class BanHang extends javax.swing.JPanel {
             ps.executeUpdate();
         }
 
-        updateGiamGia(); // Tự động cập nhật mã giảm giá
+        updateGiamGia();
+        clear();
     }
 
     private int createHoaDon() {
@@ -965,6 +1061,14 @@ public class BanHang extends javax.swing.JPanel {
         txtGiamGia.setText("");
         ((DefaultTableModel) tbSanPham.getModel()).setRowCount(0);
         maHD = -1;
+    }
+     private void clear() {
+        txtMaSach.setText("");
+        txtTenSach.setText("");
+        txtDonGia.setText("");
+        spSoLuong.setValue(0);
+        lbAnh.setIcon(null);
+        lbAnh.setText("ảnh");         
     }
 
 }

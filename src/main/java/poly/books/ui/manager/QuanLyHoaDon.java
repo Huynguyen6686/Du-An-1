@@ -499,11 +499,30 @@ public class QuanLyHoaDon extends javax.swing.JPanel implements poly.books.contr
         }
         int maHD = (int) tblHoaDon.getValueAt(selectedRow, 0);
         if (XDialog.confirm("Bạn có chắc muốn hủy hóa đơn này?")) {
-            chiTietHoaDonDAO.delete(maHD);
-            hoaDonDAO.delete(maHD);
-            XDialog.alert("Hủy hóa đơn thành công!");
-            fillToTable();
-            loadHDCT();
+            try {
+                // Lấy danh sách chi tiết hóa đơn
+                List<ChiTietHoaDon> chiTietList = chiTietHoaDonDAO.findByID(maHD);
+                Connection conn = XJdbc.openConnection();
+                String sqlKho = "UPDATE Kho SET SoLuong = SoLuong + ? WHERE MaSach = ?";
+
+                // Khôi phục số lượng trong kho
+                for (ChiTietHoaDon chiTiet : chiTietList) {
+                    try (PreparedStatement ps = conn.prepareStatement(sqlKho)) {
+                        ps.setInt(1, chiTiet.getSoLuong());
+                        ps.setInt(2, chiTiet.getMaSach());
+                        ps.executeUpdate();
+                    }
+                }
+
+                // Xóa chi tiết hóa đơn và hóa đơn
+                chiTietHoaDonDAO.delete(maHD);
+                hoaDonDAO.delete(maHD);
+                XDialog.alert("Hủy hóa đơn thành công!");
+                fillToTable();
+                loadHDCT();
+            } catch (Exception e) {
+                XDialog.alert("Lỗi khi hủy hóa đơn: " + e.getMessage());
+            }
         }
     }
 
