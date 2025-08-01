@@ -4,7 +4,6 @@
  */
 package poly.books.ui.manager;
 
-
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
@@ -21,21 +20,22 @@ import poly.books.util.XDialog;
  *
  * @author HuyNguyen
  */
-public class QuanLyTheLoai extends javax.swing.JDialog implements poly.books.controller.QLTheLoaiCotroller{
-LoaiSachDAO lSachDAO = new LoaiSachDAO();
-List<LoaiSach> listLSach = new ArrayList<>();
-private QuanLySach quanLySach;
-  
+public class QuanLyTheLoai extends javax.swing.JDialog implements poly.books.controller.QLTheLoaiCotroller {
+
+    LoaiSachDAO lSachDAO = new LoaiSachDAO();
+    List<LoaiSach> listLSach = new ArrayList<>();
+    private QuanLySach quanLySach;
+
     /**
      * Creates new form QuanLyTheLoai
      */
-    public QuanLyTheLoai(java.awt.Frame parent, boolean modal,QuanLySach sql) {
+    public QuanLyTheLoai(java.awt.Frame parent, boolean modal, QuanLySach sql) {
         super(parent, modal);
-        this.quanLySach=sql;
+        this.quanLySach = sql;
         initComponents();
         fillToTable();
-       
-         txtMaTL.setEditable(false);
+        setLocationRelativeTo(null);
+        txtMaTL.setEditable(false);
     }
 
     /**
@@ -256,7 +256,7 @@ private QuanLySach quanLySach;
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
-       this.update();
+        this.update();
     }//GEN-LAST:event_btnSuaActionPerformed
 
     private void btnLamMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamMoiActionPerformed
@@ -321,7 +321,7 @@ private QuanLySach quanLySach;
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                QuanLyTheLoai dialog = new QuanLyTheLoai(new javax.swing.JFrame(), true,null);
+                QuanLyTheLoai dialog = new QuanLyTheLoai(new javax.swing.JFrame(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -355,9 +355,10 @@ private QuanLySach quanLySach;
     public void open() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-       @Override
+
+    @Override
     public void setForm(LoaiSach entity) {
- txtMaTL.setText(String.valueOf(entity.getMaLoaiSach()));
+        txtMaTL.setText(String.valueOf(entity.getMaLoaiSach()));
         txtTheLoai.setText(entity.getTenLoaiSach());
     }
 
@@ -374,7 +375,7 @@ private QuanLySach quanLySach;
         }
         return n;
     }
- 
+
     @Override
     public void fillToTable() {
         DefaultTableModel model = (DefaultTableModel) tbTheLoai.getModel();
@@ -389,8 +390,6 @@ private QuanLySach quanLySach;
         }
 
     }
-
-  
 
     @Override
     public void create() {
@@ -414,7 +413,7 @@ private QuanLySach quanLySach;
 
     @Override
     public void update() {
-         int selectedRow = tbTheLoai.getSelectedRow();
+        int selectedRow = tbTheLoai.getSelectedRow();
         if (selectedRow < 0 || selectedRow >= listLSach.size()) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một Loại Sách để sửa!", "Lỗi", JOptionPane.WARNING_MESSAGE);
             return;
@@ -449,8 +448,8 @@ private QuanLySach quanLySach;
                     this.fillToTable();
                     this.clear();
                     if (quanLySach != null) {
-                quanLySach.refresLoaiSachTable();
-            }
+                        quanLySach.refresLoaiSachTable();
+                    }
                     XDialog.alert("Xóa Loại Sách thành công!");
                 } catch (RuntimeException ex) {
                     XDialog.alert("Không thể xóa vì Loại Sách này đang được sử dụng trong sách.");
@@ -463,7 +462,7 @@ private QuanLySach quanLySach;
 
     @Override
     public void clear() {
-         txtMaTL.setText("");
+        txtMaTL.setText("");
         txtTheLoai.setText("");
     }
 
@@ -472,5 +471,4 @@ private QuanLySach quanLySach;
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    
 }

@@ -8,6 +8,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
@@ -26,16 +27,17 @@ public class DanhSachKhachHang extends javax.swing.JDialog {
     List<KhachHang> ListKH = new ArrayList<>();
     KhachHangDAO KHdao = new KhachHangDAO();
     private BanHang parentBanHang;
+ 
 
     /**
      * Creates new form DanhSachKhachHang
      */
     public DanhSachKhachHang(java.awt.Frame parent, boolean modal, BanHang banHang) {
         super(parent, modal);
-
         initComponents();
+        setLocationRelativeTo(null);
         this.parentBanHang = banHang;
-       addComponentListener(new ComponentAdapter() {
+        addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent e) {
                 fillToTable();
@@ -84,7 +86,7 @@ public class DanhSachKhachHang extends javax.swing.JDialog {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        jLabel1.setBackground(new java.awt.Color(0, 153, 255));
+        jLabel1.setBackground(new java.awt.Color(0, 144, 193));
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Danh Sách Khách Hàng");
@@ -248,8 +250,8 @@ public class DanhSachKhachHang extends javax.swing.JDialog {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 JFrame frame = new JFrame();
-            BanHang banHang = new BanHang();
-            banHang.setParentFrame((JFrame) frame);
+                BanHang banHang = new BanHang();
+                banHang.setParentFrame((JFrame) frame);
                 DanhSachKhachHang dialog = new DanhSachKhachHang(frame, true, banHang);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override

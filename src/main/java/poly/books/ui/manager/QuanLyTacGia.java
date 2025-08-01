@@ -29,11 +29,12 @@ public class QuanLyTacGia extends javax.swing.JDialog implements poly.books.cont
     /**
      * Creates new form QuanLyTacGia
      */
-    public QuanLyTacGia(java.awt.Frame parent, boolean modal,QuanLySach sql) {
+    public QuanLyTacGia(java.awt.Frame parent, boolean modal, QuanLySach sql) {
         super(parent, modal);
         initComponents();
-         fillToTable();
-           
+        fillToTable();
+        setLocationRelativeTo(null);
+        
     }
 
     /**
@@ -325,7 +326,7 @@ public class QuanLyTacGia extends javax.swing.JDialog implements poly.books.cont
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                QuanLyTacGia dialog = new QuanLyTacGia(new javax.swing.JFrame(), true,null);
+                QuanLyTacGia dialog = new QuanLyTacGia(new javax.swing.JFrame(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -402,8 +403,6 @@ public class QuanLyTacGia extends javax.swing.JDialog implements poly.books.cont
         }
     }
 
- 
-
     @Override
     public void create() {
         if (txtTacGia.getText().trim().isEmpty()) {
@@ -474,6 +473,5 @@ public class QuanLyTacGia extends javax.swing.JDialog implements poly.books.cont
     public void setEditable(boolean editable) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
 
 }

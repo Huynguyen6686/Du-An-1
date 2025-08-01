@@ -56,6 +56,7 @@ public class DanhSachSanPham extends javax.swing.JDialog implements poly.books.c
     public DanhSachSanPham(java.awt.Frame parent, boolean modal, BanHang banHang) {
         super(parent, modal);
         initComponents();
+        setLocationRelativeTo(null);
        addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent e) {
@@ -180,7 +181,7 @@ public class DanhSachSanPham extends javax.swing.JDialog implements poly.books.c
                 .addGap(11, 11, 11))
         );
 
-        jLabel7.setBackground(new java.awt.Color(0, 102, 255));
+        jLabel7.setBackground(new java.awt.Color(0, 114, 193));
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("Danh Sách Sản Phẩm");
@@ -308,8 +309,7 @@ public class DanhSachSanPham extends javax.swing.JDialog implements poly.books.c
                         .addGap(16, 16, 16)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtNamSX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel13))
-                        .addContainerGap(18, Short.MAX_VALUE))
+                            .addComponent(jLabel13)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtMaSach, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -333,8 +333,8 @@ public class DanhSachSanPham extends javax.swing.JDialog implements poly.books.c
                         .addGap(16, 16, 16)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtNhaXuatBan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(jLabel6))))
+                .addContainerGap(18, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(lbAnh, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)

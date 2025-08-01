@@ -35,7 +35,7 @@ public class QuanLyNgonNgu extends javax.swing.JDialog implements poly.books.con
         initComponents();
         fillToTable();
           this.quanLySach=sql;
-       
+       setLocationRelativeTo(null);
         txtMaNN.setEditable(false);
     }
 

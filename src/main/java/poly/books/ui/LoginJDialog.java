@@ -44,7 +44,6 @@ public class LoginJDialog extends javax.swing.JDialog implements poly.books.cont
         txtPassword = new javax.swing.JPasswordField();
         btnDangnhap = new javax.swing.JButton();
         btnKetThuc = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Đăng nhập");
@@ -111,9 +110,6 @@ public class LoginJDialog extends javax.swing.JDialog implements poly.books.cont
             }
         });
 
-        jLabel4.setForeground(new java.awt.Color(51, 51, 255));
-        jLabel4.setText("Quên mật khẩu?");
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -127,8 +123,7 @@ public class LoginJDialog extends javax.swing.JDialog implements poly.books.cont
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(btnDangnhap)
                         .addGap(18, 18, 18)
-                        .addComponent(btnKetThuc))
-                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addComponent(btnKetThuc)))
                 .addGap(33, 33, 33))
         );
         jPanel2Layout.setVerticalGroup(
@@ -138,9 +133,7 @@ public class LoginJDialog extends javax.swing.JDialog implements poly.books.cont
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(13, 13, 13)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(41, 41, 41)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnKetThuc)
                             .addComponent(btnDangnhap)))
@@ -223,7 +216,6 @@ public class LoginJDialog extends javax.swing.JDialog implements poly.books.cont
     private javax.swing.JLabel icon;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPasswordField txtPassword;

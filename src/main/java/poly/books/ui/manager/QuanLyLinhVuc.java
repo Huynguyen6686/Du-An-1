@@ -35,7 +35,7 @@ public class QuanLyLinhVuc extends javax.swing.JDialog implements poly.books.con
         this.quanLySach = sql;
         initComponents();
         fillToTable();
-       
+       setLocationRelativeTo(null);
         txtMaLinhVuc.setEditable(false);
     }
 
