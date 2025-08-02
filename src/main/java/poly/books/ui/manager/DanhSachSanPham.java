@@ -58,7 +58,7 @@ public class DanhSachSanPham extends javax.swing.JDialog implements poly.books.c
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
-       addComponentListener(new ComponentAdapter() {
+        addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent e) {
                 fillToTable();
@@ -441,7 +441,7 @@ public class DanhSachSanPham extends javax.swing.JDialog implements poly.books.c
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
         String timkiem = txtTimKiem.getText().trim().toLowerCase();
         if (timkiem.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập thể loại ngôn ngữ để tìm kiếm!");
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập Danh sách để tìm kiếm!");
             fillToTable();
             return;
         }
@@ -466,11 +466,11 @@ public class DanhSachSanPham extends javax.swing.JDialog implements poly.books.c
     public void xacNhap() {
         int selectedRow = tbDanhSachSP.getSelectedRow();
         if (selectedRow >= 0) {
-            Sach sach = sachDAO.getAllDanhSachSP().get(selectedRow);
+            Sach sach = sachDAO.getAll().get(selectedRow);
             parentBanHang.setSelectedSach(sach);
             this.dispose();
         } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm trước khi xác nhận!");
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm trước khi xác nhận!");
         }
     }
 
@@ -505,8 +505,8 @@ public class DanhSachSanPham extends javax.swing.JDialog implements poly.books.c
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 JFrame frame = new JFrame();
-            BanHang banHang = new BanHang();
-            banHang.setParentFrame((JFrame) frame);
+                BanHang banHang = new BanHang();
+                banHang.setParentFrame((JFrame) frame);
                 DanhSachSanPham dialog = new DanhSachSanPham(frame, true, banHang);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override

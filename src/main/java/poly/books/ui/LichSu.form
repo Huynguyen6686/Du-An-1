@@ -36,6 +36,9 @@
           <Dimension value="[1123, 773]"/>
         </Property>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+      </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
           <BorderConstraints direction="Center"/>
@@ -152,8 +155,8 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="btnOutputBill" min="-2" max="-2" attributes="0"/>
                           <EmptySpace pref="12" max="32767" attributes="0"/>
-                          <Component id="jScrollPane1" min="-2" pref="391" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jScrollPane1" min="-2" pref="144" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="253" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -173,7 +176,7 @@
                             <Column editable="false" title="M&#xe3; H&#xf3;a &#x111;&#x1a1;n" type="java.lang.Object"/>
                             <Column editable="false" title="T&#xea;n &#x111;&#x103;ng nh&#x1ead;p" type="java.lang.Object"/>
                             <Column editable="false" title="H&#x1ecd; T&#xea;n" type="java.lang.Object"/>
-                            <Column editable="false" title="Qu&#x1ea3;n l&#xfd;" type="java.lang.Object"/>
+                            <Column editable="false" title="Ch&#x1ee9;c V&#x1ee5;" type="java.lang.Object"/>
                             <Column editable="false" title="T&#xea;n Kh&#xe1;ch h&#xe0;ng " type="java.lang.Object"/>
                             <Column editable="false" title="Ng&#xe0;y thanh to&#xe1;n" type="java.lang.Object"/>
                             <Column editable="false" title="Thanh to&#xe1;n" type="java.lang.Object"/>

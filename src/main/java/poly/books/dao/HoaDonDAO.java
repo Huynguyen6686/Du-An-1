@@ -49,9 +49,10 @@ public class HoaDonDAO {
                              WHERE MaHD = ?
                        """;
 
-    public HoaDon findById(int maHD) {
+      public HoaDon findById(int maHD) {
         String sql = "SELECT * FROM HoaDon WHERE MaHD = ?";
-        return XQuery.getSingleBean(HoaDon.class, sql, maHD);
+        List<HoaDon> list = XQuery.getBeanList(HoaDon.class, sql, maHD);
+        return list.isEmpty() ? null : list.get(0);
     }
 
     public List<HoaDon> getAll() {

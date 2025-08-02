@@ -1081,7 +1081,7 @@ public class QuanLySach extends javax.swing.JPanel implements poly.books.control
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel Quanlysach;
+    public javax.swing.JPanel Quanlysach;
     private javax.swing.JButton btnLinhVuc2;
     private javax.swing.JButton btnNXB2;
     private javax.swing.JButton btnNgonNgu2;

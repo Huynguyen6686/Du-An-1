@@ -41,7 +41,7 @@ public class QLTaiKhoan extends javax.swing.JPanel implements poly.books.control
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
-        jPanel1 = new javax.swing.JPanel();
+        Tk = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         QLTK = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -70,7 +70,7 @@ public class QLTaiKhoan extends javax.swing.JPanel implements poly.books.control
         setPreferredSize(new java.awt.Dimension(1123, 773));
         setLayout(new java.awt.BorderLayout());
 
-        jPanel1.setLayout(new java.awt.BorderLayout());
+        Tk.setLayout(new java.awt.BorderLayout());
 
         jLabel1.setBackground(new java.awt.Color(0, 144, 193));
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -79,7 +79,7 @@ public class QLTaiKhoan extends javax.swing.JPanel implements poly.books.control
         jLabel1.setMinimumSize(new java.awt.Dimension(214, 50));
         jLabel1.setOpaque(true);
         jLabel1.setPreferredSize(new java.awt.Dimension(246, 50));
-        jPanel1.add(jLabel1, java.awt.BorderLayout.PAGE_START);
+        Tk.add(jLabel1, java.awt.BorderLayout.PAGE_START);
 
         QLTK.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -272,9 +272,9 @@ public class QLTaiKhoan extends javax.swing.JPanel implements poly.books.control
                 .addGap(66, 66, 66))
         );
 
-        jPanel1.add(QLTK, java.awt.BorderLayout.CENTER);
+        Tk.add(QLTK, java.awt.BorderLayout.CENTER);
 
-        add(jPanel1, java.awt.BorderLayout.CENTER);
+        add(Tk, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
     private void lblAnhMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblAnhMouseClicked
@@ -339,6 +339,7 @@ public class QLTaiKhoan extends javax.swing.JPanel implements poly.books.control
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel QLTK;
+    public javax.swing.JPanel Tk;
     private javax.swing.JButton btnLamMoi;
     private javax.swing.JButton btnSuaTaiKhoan;
     private javax.swing.JButton btnThemTaiKhoan;
@@ -352,7 +353,6 @@ public class QLTaiKhoan extends javax.swing.JPanel implements poly.books.control
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAnh;
     private javax.swing.JRadioButton rdoConLam;

@@ -138,7 +138,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
                 {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Mã Hóa đơn", "Tên đăng nhập", "Họ Tên", "Quản lý", "Tên Khách hàng ", "Ngày thanh toán", "Thanh toán", "Trạng thái"
+                "Mã Hóa đơn", "Tên đăng nhập", "Họ Tên", "Chức Vụ", "Tên Khách hàng ", "Ngày thanh toán", "Thanh toán", "Trạng thái"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -183,8 +183,8 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
                 .addContainerGap()
                 .addComponent(btnOutputBill)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(253, 253, 253))
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -453,7 +453,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel LichSu;
+    public javax.swing.JPanel LichSu;
     private javax.swing.JButton btnOutputBill;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel18;
@@ -496,7 +496,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
         lblCustomerName.setText(entity.getTenKH());
         lblPaymentDay.setText(String.valueOf(entity.getNgayThanhToan()));
         lblPayment.setText(String.valueOf(entity.getPhuongThuc() == 2 ? "Chuyển khoản" : "Tiền mặt"));
-        lblStatus.setText(String.valueOf(entity.getTrangThai() == 1 ? "Thanh toán" : "Chưa thanh toán"));
+        lblStatus.setText(String.valueOf(entity.getTrangThai() == 1 ? "Đã Thanh toán" : "Chưa thanh toán"));
     }
 
     @Override
@@ -518,7 +518,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
                 lichSuEntity.getTenKH(),
                 lichSuEntity.getNgayThanhToan(),
                 lichSuEntity.getPhuongThuc() == 2 ? "Chuyển khoản" : "Tiền mặt",
-                lichSuEntity.getTrangThai() == 1 ? "Thanh toán" : "Chưa thanh toán"
+                lichSuEntity.getTrangThai() == 1 ? "Đã Thanh toán" : "Chưa thanh toán"
             };
             defaultTableModel.addRow(rowData);
         }

@@ -14,7 +14,8 @@ import poly.books.util.XQuery;
  * @author LAPTOP
  */
 public class ChiTietHoaDonDAO {
-       String getAllSQL = """
+
+    String getAllSQL = """
                        SELECT TOP (1000) [MaHD]
                              ,[MaSach]
                              ,[SoLuong]
@@ -36,22 +37,41 @@ public class ChiTietHoaDonDAO {
     String findBySQL = """
                        SELECT * FROM [QLNhaSachPro].[dbo].[ChiTietHoaDon] where MaHD = ?
                        """;
-        public List<ChiTietHoaDon> getAll() {
-         return XQuery.getBeanList(ChiTietHoaDon.class, getAllSQL);
+
+    public List<ChiTietHoaDon> getAll() {
+        return XQuery.getBeanList(ChiTietHoaDon.class, getAllSQL);
     }
-        public List<ChiTietHoaDon> findByID(int MaHD) {
+
+    public List<ChiTietHoaDon> findByID(int MaHD) {
         return XQuery.getBeanList(ChiTietHoaDon.class, findBySQL, MaHD);
     }
+
     public int update(ChiTietHoaDon chiTietHoaDon) {
         Object[] values = {
-           chiTietHoaDon.getMaSach(),
+            chiTietHoaDon.getMaSach(),
             chiTietHoaDon.getSoLuong(),
             chiTietHoaDon.getDonGia(),
             chiTietHoaDon.getMaHD()
         };
         return XJdbc.executeUpdate(updateSQL, values);
     }
+
     public int delete(int MaHD) {
         return XJdbc.executeUpdate(deleteSQL, MaHD);
+    }
+
+    public int Delete(int maHD, int maSach) {
+        String deleteSQL = """
+                      DELETE FROM [dbo].[ChiTietHoaDon]
+                      WHERE MaHD = ? AND MaSach = ?
+                      """;
+        try {
+            int rowsAffected = XJdbc.executeUpdate(deleteSQL, maHD, maSach);
+            System.out.println("Deleted ChiTietHoaDon: maHD=" + maHD + ", maSach=" + maSach + ", rowsAffected=" + rowsAffected);
+            return rowsAffected;
+        } catch (Exception e) {
+            System.out.println("Error deleting ChiTietHoaDon: " + e.getMessage());
+            throw e;
+        }
     }
 }
