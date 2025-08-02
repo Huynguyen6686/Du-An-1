@@ -905,8 +905,9 @@ public class BanHang extends javax.swing.JPanel {
                     "Sản phẩm: %s\n"
                     + "Số lượng hiện tại trong giỏ: %d\n"
                     + "Tồn kho hiện tại: %d\n"
+                    + "Tồn kho khả dụng: %d\n\n"
                     + "Nhập số lượng mới (0 = xóa khỏi giỏ):",
-                    tenSach, soLuongCu, tonKhoHienTai
+                    tenSach, soLuongCu, tonKhoHienTai, tonKhoHienTai + soLuongCu
             );
 
             String newQtyStr = JOptionPane.showInputDialog(this, message, soLuongCu);
