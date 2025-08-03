@@ -31,6 +31,7 @@ import poly.books.dao.ChiTietHoaDonDAO;
 import poly.books.dao.HoaDonDAO;
 import poly.books.dao.KhachHangDAO;
 import poly.books.dao.KhoDAO;
+import poly.books.dao.PhieuGiamGiaDAO;
 import poly.books.dao.SachDAO;
 import poly.books.entity.ChiTietHoaDon;
 import poly.books.entity.HoaDon;
@@ -56,6 +57,7 @@ public class BanHang extends javax.swing.JPanel {
     private HoaDonDAO hoaDonDAO = new HoaDonDAO();
     private ChiTietHoaDonDAO chiTietHoaDonDAO = new ChiTietHoaDonDAO();
     private KhoDAO khoDAO = new KhoDAO();
+    private PhieuGiamGiaDAO phieugiamgiaDAO=new PhieuGiamGiaDAO();
     private JFrame parentFrame;
     private int maHD = -1;
     private ISBNScanner isbnScanner;
@@ -1076,9 +1078,11 @@ public class BanHang extends javax.swing.JPanel {
         DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
         model.setRowCount(0);
         try {
-            String sql = "SELECT hd.MaHD, hd.NgayLap, kh.TenKH, hd.TenDangNhap, hd.MaPhieu, "
-                    + "hd.TongTien, hd.PhuongThuc, hd.NgayThanhToan, hd.TrangThai "
-                    + "FROM HoaDon hd JOIN KhachHang kh ON hd.MaKH = kh.MaKH "
+            String sql = "SELECT hd.MaHD, hd.NgayLap, kh.TenKH, hd.TenDangNhap, "
+                    + "pg.TenPhieu, hd.TongTien, hd.PhuongThuc, hd.NgayThanhToan, hd.TrangThai "
+                    + "FROM HoaDon hd "
+                    + "JOIN KhachHang kh ON hd.MaKH = kh.MaKH "
+                    + "LEFT JOIN PhieuGiamGia pg ON hd.MaPhieu = pg.MaPhieu "
                     + "WHERE hd.TrangThai = 0";
             try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -1087,12 +1091,13 @@ public class BanHang extends javax.swing.JPanel {
                         XDate.format(rs.getDate("NgayLap"), "dd-MM-yyyy"),
                         rs.getString("TenKH"),
                         rs.getString("TenDangNhap"),
-                        rs.getInt("MaPhieu") == 0 ? "" : rs.getInt("MaPhieu"),
+                        rs.getString("TenPhieu") != null ? rs.getString("TenPhieu") : "", // dùng TenPhieu thay cho MaPhieu
                         rs.getDouble("TongTien"),
                         rs.getInt("PhuongThuc") == 1 ? "Tiền mặt" : "Chuyển khoản",
                         rs.getDate("NgayThanhToan") != null ? XDate.format(rs.getDate("NgayThanhToan"), "dd-MM-yyyy") : "",
                         rs.getInt("TrangThai") == 0 ? "Chờ thanh toán" : "Đã thanh toán"
                     });
+
                 }
             }
         } catch (SQLException e) {
@@ -1139,6 +1144,22 @@ public class BanHang extends javax.swing.JPanel {
         txtMaHD.setText(String.valueOf(hoaDon.getMaHD()));
         txtMaNV.setText(hoaDon.getTenDangNhap());
         txtNgayLap.setText(XDate.format(hoaDon.getNgayLap(), "dd-MM-yyyy"));
+        txtMaPhieu.setText(hoaDon.getMaPhieu() != null ? String.valueOf(hoaDon.getMaPhieu()) : "");
+        if (hoaDon.getMaPhieu() != null) {
+            try {
+                PhieuGiamGia phieu = phieugiamgiaDAO.findByID(hoaDon.getMaPhieu());
+                if (phieu != null) {
+                    txtTenMaGG.setText(phieu.getTenPhieu());
+                } else {
+                    txtTenMaGG.setText("");
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi lấy tên phiếu giảm giá: " + e.getMessage());
+                txtTenMaGG.setText("");
+            }
+        } else {
+            txtTenMaGG.setText("");
+        }
         try {
             KhachHang kh = khachHangDAO.findbyID(hoaDon.getMaKH());
             if (kh != null) {
@@ -1412,8 +1433,8 @@ public class BanHang extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Lỗi kiểm tra khách hàng: " + e.getMessage());
             return -1;
         }
-        
-    // kiểm tra xem trong bảng hòa đơn chờ có khách hàng đã tạo chưa    
+
+        // kiểm tra xem trong bảng hòa đơn chờ có khách hàng đã tạo chưa    
         try {
             String sqlCheckPending = "SELECT COUNT(*) FROM HoaDon WHERE MaKH = ? AND TrangThai = 0";
             try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sqlCheckPending)) {
@@ -1428,7 +1449,7 @@ public class BanHang extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Lỗi khi kiểm tra hóa đơn chờ của khách hàng: " + e.getMessage());
             return -1;
         }
-        
+
         Integer maPhieu = null;
         String maPhieuText = txtMaPhieu.getText().trim();
         if (!maPhieuText.isEmpty()) {

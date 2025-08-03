@@ -61,7 +61,7 @@ public class PhieuGiamGiaDAO {
 
     public int create(PhieuGiamGia phieuGiamGia) {
         Object[] values = {
-            phieuGiamGia.getTenPhieu(), 
+            phieuGiamGia.getTenPhieu(),
             phieuGiamGia.getGiaTri(),
             phieuGiamGia.getDieuKienApDung(),
             phieuGiamGia.getNgayBatDau(),
@@ -88,7 +88,9 @@ public class PhieuGiamGiaDAO {
         return XJdbc.executeUpdate(deleteSQL, MaPhieu);
     }
 
-    public List<PhieuGiamGia> findByID(int MaPhieu) {
-        return XQuery.getBeanList(PhieuGiamGia.class, findBySQL, MaPhieu);
+    public PhieuGiamGia findByID(int maPhieu) {
+        String sql = "SELECT * FROM PhieuGiamGia WHERE MaPhieu = ?";
+        List<PhieuGiamGia> list = XQuery.getBeanList(PhieuGiamGia.class, sql, maPhieu);
+        return list.isEmpty() ? null : list.get(0);
     }
 }

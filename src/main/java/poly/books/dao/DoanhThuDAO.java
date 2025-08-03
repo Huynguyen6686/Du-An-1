@@ -28,13 +28,13 @@ public class DoanhThuDAO {
     // 1. Tổng doanh thu theo ngày
     String doanhThuTheoNgaySQL = """
                               SELECT 
-                                  CONVERT(DATE, NgayThanhToan) AS Ngay,
-                                  SUM(TongTien) AS TongDoanhThu,
-                                  COUNT(MaHD) AS SoHoaDon
-                              FROM HoaDon
-                              WHERE TrangThai = 1 -- Đã thanh toán
-                              GROUP BY CONVERT(DATE, NgayThanhToan)
-                              ORDER BY Ngay DESC;
+                                                                CONVERT(DATE, NgayThanhToan) AS Ngay,
+                                                                SUM(TongTien) AS TongDoanhThu,
+                                                                COUNT(MaHD) AS SoHoaDon
+                                                            FROM HoaDon
+                                                            WHERE TrangThai = 1 -- Đã thanh toán
+                                                            GROUP BY CONVERT(DATE, NgayThanhToan)
+                                                            ORDER BY Ngay DESC;
                               """;
     String doanhThuTheoKhoangNgaySQL = """
                           SELECT 
@@ -51,11 +51,11 @@ public class DoanhThuDAO {
     // 2. Tổng hóa đơn và doanh thu hôm nay
     String thongKeHomNaySQL = """
                               SELECT 
-                                  COUNT(MaHD) AS SoHoaDonHomNay,
-                                  SUM(TongTien) AS DoanhThuHomNay
-                              FROM HoaDon
-                              WHERE CONVERT(DATE, NgayThanhToan) = CONVERT(DATE, GETDATE())
-                              AND TrangThai = 1;
+                                                                COUNT(MaHD) AS SoHoaDonHomNay,
+                                                                SUM(TongTien) AS DoanhThuHomNay
+                                                            FROM HoaDon
+                                                            WHERE CONVERT(DATE, NgayThanhToan) = CONVERT(DATE, GETDATE())
+                                                            AND TrangThai = 1;
                               """;
 
     // 3. Lợi nhuận năm nay
