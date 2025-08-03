@@ -89,7 +89,6 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
         QuanLy = new javax.swing.JPanel();
         banHang = new poly.books.ui.BanHang();
         quanLyKhachHang1 = new poly.books.ui.manager.QuanLyKhachHang();
-        quanLyPhieuGiamGia1 = new poly.books.ui.manager.QuanLyPhieuGiamGia();
         lichSu1 = new poly.books.ui.LichSu();
         qLTaiKhoan1 = new poly.books.ui.manager.QLTaiKhoan();
         quanLySach1 = new poly.books.ui.manager.QuanLySach();
@@ -97,6 +96,7 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
         qlThongKe = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         pnlThongke = new javax.swing.JPanel();
+        quanLyPhieuGiamGia1 = new poly.books.ui.manager.QuanLyPhieuGiamGia();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1323, 800));
@@ -274,7 +274,6 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
         QuanLy.setLayout(new java.awt.CardLayout());
         QuanLy.add(banHang, "card2");
         QuanLy.add(quanLyKhachHang1, "card3");
-        QuanLy.add(quanLyPhieuGiamGia1, "card4");
         QuanLy.add(lichSu1, "card5");
         QuanLy.add(qLTaiKhoan1, "card6");
         QuanLy.add(quanLySach1, "card7");
@@ -307,6 +306,7 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
         qlThongKe.add(pnlThongke, java.awt.BorderLayout.CENTER);
 
         QuanLy.add(qlThongKe, "card9");
+        QuanLy.add(quanLyPhieuGiamGia1, "card4");
 
         Book.setRightComponent(QuanLy);
 
@@ -445,7 +445,7 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
     public poly.books.ui.manager.QLTaiKhoan qLTaiKhoan1;
     public javax.swing.JPanel qlThongKe;
     public poly.books.ui.manager.QuanLyKhachHang quanLyKhachHang1;
-    public poly.books.ui.manager.QuanLyPhieuGiamGia quanLyPhieuGiamGia1;
+    private poly.books.ui.manager.QuanLyPhieuGiamGia quanLyPhieuGiamGia1;
     public poly.books.ui.manager.QuanLySach quanLySach1;
     // End of variables declaration//GEN-END:variables
     @Override

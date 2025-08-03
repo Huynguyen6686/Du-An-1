@@ -11,16 +11,17 @@ import lombok.*;
 @NoArgsConstructor
 @Data
 @Builder
+@Getter
 /**
  *
  * @author HuyNguyen
  */
 public class PhieuGiamGia {
-    private int MaPhieu;
+     private int MaPhieu;
     private String TenPhieu;
     private int GiaTri;
     private int DieuKienApDung;
     private int TrangThai;
     private Date NgayBatDau;
-    private Date NgayHetHan;
+    private Date NgayKetThuc;
 }

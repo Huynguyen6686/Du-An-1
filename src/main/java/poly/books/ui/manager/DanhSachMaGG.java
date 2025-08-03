@@ -49,6 +49,7 @@ public class DanhSachMaGG extends javax.swing.JDialog {
         for (PhieuGiamGia phieuGiamGia : phieuGiamGiaList) {
             Object[] rowData = {
                 phieuGiamGia.getMaPhieu(),
+                phieuGiamGia.getTenPhieu(),
                 phieuGiamGia.getGiaTri(),
                 phieuGiamGia.getDieuKienApDung(),
                 phieuGiamGia.getTrangThai() == 1 ? "Có hiệu lực" : "Đã hết hạn"
@@ -92,17 +93,17 @@ public class DanhSachMaGG extends javax.swing.JDialog {
 
         tblPhieuGiamGia.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Mã Phiếu", "Giá trị", "Điều kiện áp dụng", "Trạng thái"
+                "Mã Phiếu", "Tên Mã GG", "Giá trị", "Điều kiện áp dụng", "Trạng thái"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {

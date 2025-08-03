@@ -16,25 +16,34 @@ import poly.books.util.XQuery;
 public class PhieuGiamGiaDAO {
 
     String getAllSQL = """
-                       SELECT  [MaPhieu]
-                             ,[GiaTri]
-                             ,[DieuKienApDung]
-                             ,[TrangThai]
-                         FROM [QLNhaSachPro].[dbo].[PhieuGiamGia]
+                       SELECT [MaPhieu]
+                                 ,[TenPhieu]      
+                                 ,[GiaTri]
+                                 ,[DieuKienApDung]
+                                 ,[NgayBatDau]
+                                 ,[NgayKetThuc]
+                                 ,[TrangThai]
+                             FROM [dbo].[PhieuGiamGia]
                        """;
     String createSQL = """
                        INSERT INTO [dbo].[PhieuGiamGia]
-                                  ([GiaTri]
+                                   ([TenPhieu]
+                                  ,[GiaTri]
                                   ,[DieuKienApDung]
+                                  ,[NgayBatDau]
+                                  ,[NgayKetThuc]
                                   ,[TrangThai])
                             VALUES
-                                  (?,?,?)
+                                  (?,?,?,?,?,?)
                        """;
 
     String updateSQL = """
                        UPDATE [dbo].[PhieuGiamGia]
-                          SET [GiaTri] = ?
+                          SET [TenPhieu] = ?
+                             ,[GiaTri] = ?
                              ,[DieuKienApDung] = ?
+                             ,[NgayBatDau] = ?
+                             ,[NgayKetThuc] = ?
                              ,[TrangThai] = ?
                         WHERE MaPhieu = ?
                        """;
@@ -52,8 +61,11 @@ public class PhieuGiamGiaDAO {
 
     public int create(PhieuGiamGia phieuGiamGia) {
         Object[] values = {
+            phieuGiamGia.getTenPhieu(), 
             phieuGiamGia.getGiaTri(),
             phieuGiamGia.getDieuKienApDung(),
+            phieuGiamGia.getNgayBatDau(),
+            phieuGiamGia.getNgayKetThuc(),
             phieuGiamGia.getTrangThai()
         };
         return XJdbc.executeUpdate(createSQL, values);
@@ -61,8 +73,11 @@ public class PhieuGiamGiaDAO {
 
     public int update(PhieuGiamGia phieuGiamGia) {
         Object[] values = {
+            phieuGiamGia.getTenPhieu(),
             phieuGiamGia.getGiaTri(),
             phieuGiamGia.getDieuKienApDung(),
+            phieuGiamGia.getNgayBatDau(),
+            phieuGiamGia.getNgayKetThuc(),
             phieuGiamGia.getTrangThai(),
             phieuGiamGia.getMaPhieu()
         };

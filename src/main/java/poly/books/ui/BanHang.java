@@ -140,6 +140,8 @@ public class BanHang extends javax.swing.JPanel {
         txtSDT = new javax.swing.JTextField();
         btnDungQuet = new javax.swing.JButton();
         btnQuetISBN = new javax.swing.JButton();
+        jLabel20 = new javax.swing.JLabel();
+        txtTenMaGG = new javax.swing.JTextField();
         jPanel7 = new javax.swing.JPanel();
         HoaDon = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -260,6 +262,8 @@ public class BanHang extends javax.swing.JPanel {
             }
         });
 
+        jLabel20.setText("Tên Mã GG:");
+
         javax.swing.GroupLayout TaoHDLayout = new javax.swing.GroupLayout(TaoHD);
         TaoHD.setLayout(TaoHDLayout);
         TaoHDLayout.setHorizontalGroup(
@@ -268,24 +272,15 @@ public class BanHang extends javax.swing.JPanel {
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btnTaoHD, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, TaoHDLayout.createSequentialGroup()
+            .addGroup(TaoHDLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(TaoHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(TaoHDLayout.createSequentialGroup()
                         .addGroup(TaoHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(TaoHDLayout.createSequentialGroup()
-                                .addGroup(TaoHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel13)
-                                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(TaoHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtNgayLap, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(TaoHDLayout.createSequentialGroup()
-                                        .addComponent(txtMaPhieu, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(22, 22, 22)
-                                        .addComponent(btnMaGG, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(txtMaHD, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(txtNgayLap, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(TaoHDLayout.createSequentialGroup()
                                 .addGroup(TaoHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING)
@@ -299,7 +294,7 @@ public class BanHang extends javax.swing.JPanel {
                                     .addGroup(TaoHDLayout.createSequentialGroup()
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(txtMaNV, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addGap(20, 20, 20))
+                        .addGap(14, 14, 14))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, TaoHDLayout.createSequentialGroup()
                         .addGroup(TaoHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel19)
@@ -309,10 +304,22 @@ public class BanHang extends javax.swing.JPanel {
                             .addGroup(TaoHDLayout.createSequentialGroup()
                                 .addComponent(txtTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(5, 5, 5))
-                            .addComponent(txtSDT))
-                        .addContainerGap())))
+                            .addComponent(txtSDT))))
+                .addContainerGap())
             .addGroup(TaoHDLayout.createSequentialGroup()
                 .addGroup(TaoHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(TaoHDLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(TaoHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel13)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(13, 13, 13)
+                        .addGroup(TaoHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(TaoHDLayout.createSequentialGroup()
+                                .addComponent(txtMaPhieu, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(22, 22, 22)
+                                .addComponent(btnMaGG, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtMaHD, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(TaoHDLayout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addComponent(lbQuetISBN, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -323,7 +330,12 @@ public class BanHang extends javax.swing.JPanel {
                         .addGap(29, 29, 29)
                         .addComponent(btnQuetISBN, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnDungQuet)))
+                        .addComponent(btnDungQuet))
+                    .addGroup(TaoHDLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtTenMaGG, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         TaoHDLayout.setVerticalGroup(
@@ -348,6 +360,10 @@ public class BanHang extends javax.swing.JPanel {
                     .addComponent(btnMaGG))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(TaoHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel20)
+                    .addComponent(txtTenMaGG, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(9, 9, 9)
+                .addGroup(TaoHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
                     .addComponent(txtNgayLap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -367,7 +383,7 @@ public class BanHang extends javax.swing.JPanel {
                 .addGroup(TaoHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel16))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
                 .addComponent(btnTaoHD, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(95, 95, 95))
         );
@@ -392,7 +408,7 @@ public class BanHang extends javax.swing.JPanel {
                 {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Mã hoá đơn", "Ngày lập", "Tên khách hàng", "Tên đăng nhập", "Mã phiếu", "Tổng tiền", "Phương thức", "Ngày thanh toán", "Trạng thái"
+                "Mã hoá đơn", "Ngày lập", "Tên khách hàng", "Tên đăng nhập", "Tên phiếu GG", "Tổng tiền", "Phương thức", "Ngày thanh toán", "Trạng thái"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -416,11 +432,11 @@ public class BanHang extends javax.swing.JPanel {
         HoaDon.setLayout(HoaDonLayout);
         HoaDonLayout.setHorizontalGroup(
             HoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 912, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 871, Short.MAX_VALUE)
         );
         HoaDonLayout.setVerticalGroup(
             HoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 402, Short.MAX_VALUE)
         );
 
         jPanel7.add(HoaDon, java.awt.BorderLayout.PAGE_START);
@@ -472,6 +488,8 @@ public class BanHang extends javax.swing.JPanel {
                 "Mã Sách", "ISBN", "Tên Sách", "Số Lượng", "Đơn giá"
             }
         ));
+        tbSanPham.setGridColor(new java.awt.Color(204, 204, 204));
+        tbSanPham.setSelectionBackground(new java.awt.Color(204, 204, 204));
         tbSanPham.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tbSanPhamMouseClicked(evt);
@@ -545,7 +563,7 @@ public class BanHang extends javax.swing.JPanel {
                                     .addGroup(TTHDLayout.createSequentialGroup()
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(spSoLuong, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 100, Short.MAX_VALUE))
+                                        .addGap(0, 59, Short.MAX_VALUE))
                                     .addGroup(TTHDLayout.createSequentialGroup()
                                         .addGap(5, 5, 5)
                                         .addComponent(txtDonGia))))
@@ -1016,6 +1034,7 @@ public class BanHang extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1044,6 +1063,7 @@ public class BanHang extends javax.swing.JPanel {
     private javax.swing.JTextField txtNgayLap;
     private javax.swing.JTextField txtSDT;
     private javax.swing.JTextField txtTenKH;
+    private javax.swing.JTextField txtTenMaGG;
     private javax.swing.JTextField txtTenSach;
     private javax.swing.JTextField txtThanhTien;
     private javax.swing.JLabel txtTieuDe;
@@ -1109,7 +1129,9 @@ public class BanHang extends javax.swing.JPanel {
     public void setSelectedMaGG(PhieuGiamGia maGG) {
         txtMaPhieu.setText(String.valueOf(maGG.getMaPhieu()));
         txtGiamGia.setText(String.format("%.2f", (double) maGG.getGiaTri()));
+        txtTenMaGG.setText(maGG.getTenPhieu());
         updateGiamGia();
+
     }
 
     public void setHoaDon(HoaDon hoaDon) {
@@ -1347,6 +1369,21 @@ public class BanHang extends javax.swing.JPanel {
     }
 
     private int createHoaDon() {
+        try {
+            String sqlCount = "SELECT COUNT(*) FROM HoaDon WHERE TrangThai = 0";
+            try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sqlCount); ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int pendingCount = rs.getInt(1);
+                    if (pendingCount >= 10) {
+                        JOptionPane.showMessageDialog(this, "Đã đạt giới hạn 10 hóa đơn đang chờ thanh toán!");
+                        return -1;
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi kiểm tra số lượng hóa đơn: " + e.getMessage());
+            return -1;
+        }
         if (XAuth.user == null || XAuth.currentTenDangNhap == null) {
             JOptionPane.showMessageDialog(this, "Người dùng chưa đăng nhập!");
             return -1;
@@ -1375,7 +1412,23 @@ public class BanHang extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Lỗi kiểm tra khách hàng: " + e.getMessage());
             return -1;
         }
-
+        
+    // kiểm tra xem trong bảng hòa đơn chờ có khách hàng đã tạo chưa    
+        try {
+            String sqlCheckPending = "SELECT COUNT(*) FROM HoaDon WHERE MaKH = ? AND TrangThai = 0";
+            try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sqlCheckPending)) {
+                ps.setInt(1, maKH);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next() && rs.getInt(1) > 0) {
+                    JOptionPane.showMessageDialog(this, "Khách hàng này đã có một hóa đơn đang chờ thanh toán!");
+                    return -1;
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi kiểm tra hóa đơn chờ của khách hàng: " + e.getMessage());
+            return -1;
+        }
+        
         Integer maPhieu = null;
         String maPhieuText = txtMaPhieu.getText().trim();
         if (!maPhieuText.isEmpty()) {
@@ -1462,6 +1515,7 @@ public class BanHang extends javax.swing.JPanel {
         txtTongTien.setText("");
         txtGiamGia.setText("0");
         txtSDT.setText("");
+        txtTenMaGG.setText("");
         ((DefaultTableModel) tbSanPham.getModel()).setRowCount(0);
         maHD = -1;
     }
