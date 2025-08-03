@@ -105,6 +105,7 @@ public class BanHang extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         BanHang = new javax.swing.JPanel();
         txtTieuDe = new javax.swing.JLabel();
         TaoHD = new javax.swing.JPanel();
@@ -490,8 +491,10 @@ public class BanHang extends javax.swing.JPanel {
 
         jLabel18.setText("Phương thức thanh toán:");
 
+        buttonGroup1.add(rdoTienMat);
         rdoTienMat.setText("Tiền mặt");
 
+        buttonGroup1.add(rdoTk);
         rdoTk.setText("Chuyển khoản");
 
         btnThanhToan.setText("Thanh Toán");
@@ -876,6 +879,7 @@ public class BanHang extends javax.swing.JPanel {
     private javax.swing.JButton btnTaoHD;
     private javax.swing.JButton btnThanhToan;
     private javax.swing.JButton btnThemSP;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
