@@ -793,7 +793,7 @@ public class BanHang extends javax.swing.JPanel {
 
                 for (int i = 0; i < tbSanPham.getRowCount(); i++) {
                     int maSach = (int) tbSanPham.getValueAt(i, 0);
-                    int soLuong = (int) tbSanPham.getValueAt(i, 3);
+                    int soLuong = Integer.parseInt(tbSanPham.getValueAt(i, 3).toString());
                     khoDAO.updateSoLuong(maSach, -soLuong); // Trừ tồn kho
                 }
 
