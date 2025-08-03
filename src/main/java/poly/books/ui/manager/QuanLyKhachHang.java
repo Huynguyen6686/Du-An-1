@@ -464,19 +464,45 @@ public class QuanLyKhachHang extends javax.swing.JPanel implements poly.books.co
 
     @Override
     public KhachHang getForm() {
-        KhachHang Kh = new KhachHang();
-        Kh.setSDT(txtSDT.getText().trim());
-        Kh.setTenKH(txtTenKH.getText().trim());
-        Kh.setEmail(txtEmail.getText().trim());
-        Kh.setDiaChi(txtDiaChi.getText().trim());
+        String tenKH = txtTenKH.getText().trim();
+        String sdt = txtSDT.getText().trim();
+        String email = txtEmail.getText().trim();
+        String diaChi = txtDiaChi.getText().trim();
+
+        String regexEmail = "^[\\w-\\.]+@gmail\\.com$";
+        String regexSDT = "^0\\d{9}$";
+
+        if (tenKH.isEmpty() || sdt.isEmpty() || email.isEmpty() || diaChi.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
+        if (!sdt.matches(regexSDT)) {
+            JOptionPane.showMessageDialog(this, "Số điện thoại không hợp lệ!\nVD: 0383854485", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
+        if (!email.matches(regexEmail)) {
+            JOptionPane.showMessageDialog(this, "Email phải đúng định dạng Gmail!\nVD: ten@gmail.com", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
+        KhachHang kh = new KhachHang();
+        kh.setTenKH(tenKH);
+        kh.setSDT(sdt);
+        kh.setEmail(email);
+        kh.setDiaChi(diaChi);
+
         if (!txtMaKH.getText().isEmpty()) {
             try {
-                Kh.setMaKH(Integer.parseInt(txtMaKH.getText()));
+                kh.setMaKH(Integer.parseInt(txtMaKH.getText()));
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Mã khách hàng không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return null;
             }
         }
-        return Kh;
+
+        return kh;
     }
 
     @Override
