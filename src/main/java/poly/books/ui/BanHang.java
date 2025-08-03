@@ -4,6 +4,8 @@
  */
 package poly.books.ui;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Image;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,9 +15,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTable;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
 import poly.books.dao.ChiTietHoaDonDAO;
 import poly.books.dao.HoaDonDAO;
@@ -860,9 +870,123 @@ public class BanHang extends javax.swing.JPanel {
     }//GEN-LAST:event_btnHuyActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
+        int row = tbSanPham.getSelectedRow();
+        if (row == -1 || maHD == -1) {
+            JOptionPane.showMessageDialog(this, "mời chọn sản phẩm để sửa");
+            return;
 
+        }
+
+        DefaultTableModel model = (DefaultTableModel) tbSanPham.getModel();
+        int maSach = Integer.parseInt(model.getValueAt(row, 0).toString());
+
+        try {
+            Sach sach = sachDAO.findByID(maSach);
+            if (sach != null) {
+                // Cập nhật thông tin sản phẩm lên form
+                setSelectedSach(sach);
+                int soLuongTrongGio = Integer.parseInt(model.getValueAt(row, 3).toString());
+                spSoLuong.setValue(soLuongTrongGio);
+            }
+            editProductQuantity(row, maSach, model);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi khi hiển thị thông tin sản phẩm: " + ex.getMessage());
+        }
     }//GEN-LAST:event_btnSuaActionPerformed
+    private void editProductQuantity(int row, int maSach, DefaultTableModel model) {
+        try {
+            int soLuongCu = Integer.parseInt(model.getValueAt(row, 3).toString());
+            String tenSach = model.getValueAt(row, 2).toString();
+            int tonKhoHienTai = khoDAO.getSoLuong(maSach);
 
+            String message = String.format(
+                    "Sản phẩm: %s\n"
+                    + "Số lượng hiện tại trong giỏ: %d\n"
+                    + "Tồn kho hiện tại: %d\n"
+                    + "Tồn kho khả dụng: %d\n\n"
+                    + "Nhập số lượng mới (0 = xóa khỏi giỏ):",
+                    tenSach, soLuongCu, tonKhoHienTai, tonKhoHienTai + soLuongCu
+            );
+
+            String newQtyStr = JOptionPane.showInputDialog(this, message, soLuongCu);
+            if (newQtyStr == null) {
+                return;
+            }
+
+            int soLuongMoi = Integer.parseInt(newQtyStr);
+            if (soLuongMoi < 0) {
+                JOptionPane.showMessageDialog(this, "Số lượng không được âm!");
+                return;
+            }
+
+            // Kiểm tra tồn kho nếu tăng số lượng
+            if (soLuongMoi > soLuongCu) {
+                int canThem = soLuongMoi - soLuongCu;
+                if (canThem > tonKhoHienTai) {
+                    JOptionPane.showMessageDialog(this,
+                            "Không đủ tồn kho!\n"
+                            + "Tồn kho hiện tại: " + tonKhoHienTai + "\n"
+                            + "Cần thêm: " + canThem);
+                    return;
+                }
+            }
+
+            // Cập nhật
+            if (soLuongMoi == 0) {
+                // Xóa sản phẩm khỏi giỏ hàng
+                khoDAO.updateSoLuong(maSach, soLuongCu); // Hoàn lại kho
+
+                String sqlDelete = "DELETE FROM ChiTietHoaDon WHERE MaHD = ? AND MaSach = ?";
+                try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sqlDelete)) {
+                    ps.setInt(1, maHD);
+                    ps.setInt(2, maSach);
+                    ps.executeUpdate();
+                }
+
+                model.removeRow(row);
+                JOptionPane.showMessageDialog(this, "Đã xóa sản phẩm khỏi giỏ hàng!");
+
+                // Clear form nếu sản phẩm vừa xóa đang được hiển thị
+                if (Integer.parseInt(txtMaSach.getText().trim()) == maSach) {
+                    clear();
+                }
+
+            } else {
+                // Cập nhật số lượng
+                int chenhLech = soLuongMoi - soLuongCu;
+                khoDAO.updateSoLuong(maSach, -chenhLech);
+
+                String sqlUpdate = "UPDATE ChiTietHoaDon SET SoLuong = ? WHERE MaHD = ? AND MaSach = ?";
+                try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sqlUpdate)) {
+                    ps.setInt(1, soLuongMoi);
+                    ps.setInt(2, maHD);
+                    ps.setInt(3, maSach);
+                    ps.executeUpdate();
+                }
+
+                model.setValueAt(soLuongMoi, row, 3);
+
+                // Cập nhật form nếu sản phẩm này đang được hiển thị
+                if (!txtMaSach.getText().trim().isEmpty()
+                        && Integer.parseInt(txtMaSach.getText().trim()) == maSach) {
+                    spSoLuong.setValue(soLuongMoi);
+                    txtTonKho.setText(String.valueOf(khoDAO.getSoLuong(maSach)));
+                }
+
+                JOptionPane.showMessageDialog(this, "Đã cập nhật số lượng!");
+            }
+
+            updateGiamGia();
+            calculateTongTien();
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập số hợp lệ!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JPanel BanHang;
@@ -927,7 +1051,8 @@ public class BanHang extends javax.swing.JPanel {
     private javax.swing.JTextField txtTongTien;
     private javax.swing.JTextField txtTrangThai;
     // End of variables declaration//GEN-END:variables
-public void fillToTableHoaDon() {
+
+    public void fillToTableHoaDon() {
         DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
         model.setRowCount(0);
         try {
