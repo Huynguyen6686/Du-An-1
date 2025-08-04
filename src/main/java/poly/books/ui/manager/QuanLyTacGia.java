@@ -34,7 +34,7 @@ public class QuanLyTacGia extends javax.swing.JDialog implements poly.books.cont
         initComponents();
         fillToTable();
         setLocationRelativeTo(null);
-        
+
     }
 
     /**
@@ -281,15 +281,19 @@ public class QuanLyTacGia extends javax.swing.JDialog implements poly.books.cont
     }//GEN-LAST:event_btnLamMoiActionPerformed
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
-        String timkiem = txtTimKiem.getText().trim();
+        String timkiem = txtTimKiem.getText().trim().toLowerCase();
+        DefaultTableModel defaultTableModel = (DefaultTableModel) tbTacGia.getModel();
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(defaultTableModel);
+        tbTacGia.setRowSorter(sorter);
+
         if (timkiem.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập tên tác giả để tìm kiếm!");
-            fillToTable();
+            // Nếu chuỗi tìm kiếm trống, reset bộ lọc và làm mới bảng
+            sorter.setRowFilter(null);
+            fillToTable(); // Gọi lại dữ liệu ban đầu (nếu bạn có phương thức này)
             return;
         }
-        DefaultTableModel model = (DefaultTableModel) tbTacGia.getModel();
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
-        tbTacGia.setRowSorter(sorter);
+
+        // Áp dụng lọc theo cột 1 (ví dụ: cột thể loại)
         sorter.setRowFilter(RowFilter.regexFilter("(?i)" + timkiem, 1));
     }//GEN-LAST:event_btnTimKiemActionPerformed
 

@@ -27,7 +27,6 @@ public class DanhSachKhachHang extends javax.swing.JDialog {
     List<KhachHang> ListKH = new ArrayList<>();
     KhachHangDAO KHdao = new KhachHangDAO();
     private BanHang parentBanHang;
- 
 
     /**
      * Creates new form DanhSachKhachHang
@@ -209,14 +208,18 @@ public class DanhSachKhachHang extends javax.swing.JDialog {
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
         String timkiem = txtTimKiem.getText().trim().toLowerCase();
-        if (timkiem.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập tên khách hàng trước khi tìm kiếm");
-            fillToTable();
-            return;
-        }
         DefaultTableModel defaultTableModel = (DefaultTableModel) tbKhachHang.getModel();
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(defaultTableModel);
         tbKhachHang.setRowSorter(sorter);
+
+        if (timkiem.isEmpty()) {
+            // Nếu chuỗi tìm kiếm trống, reset bộ lọc và làm mới bảng
+            sorter.setRowFilter(null);
+            fillToTable(); // Gọi lại dữ liệu ban đầu (nếu bạn có phương thức này)
+            return;
+        }
+
+        // Áp dụng lọc theo cột 1 (ví dụ: cột thể loại)
         sorter.setRowFilter(RowFilter.regexFilter("(?i)" + timkiem, 1));
     }//GEN-LAST:event_btnTimKiemActionPerformed
 

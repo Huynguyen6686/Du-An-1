@@ -115,7 +115,6 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
         lbBanHang.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lbBanHang.setForeground(new java.awt.Color(255, 255, 255));
         lbBanHang.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbBanHang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8-shopping-cart-50.png"))); // NOI18N
         lbBanHang.setText("Bán Hàng");
         lbBanHang.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -126,7 +125,6 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
         lbQLSach.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lbQLSach.setForeground(new java.awt.Color(255, 255, 255));
         lbQLSach.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbQLSach.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8-bookstore-50.png"))); // NOI18N
         lbQLSach.setText("Quản lý sách");
         lbQLSach.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -137,7 +135,6 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
         lbTaiKhoan.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lbTaiKhoan.setForeground(new java.awt.Color(255, 255, 255));
         lbTaiKhoan.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbTaiKhoan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8-account-50.png"))); // NOI18N
         lbTaiKhoan.setText("Tài khoản");
         lbTaiKhoan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -148,7 +145,6 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
         lbQuanLyKH.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lbQuanLyKH.setForeground(new java.awt.Color(255, 255, 255));
         lbQuanLyKH.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbQuanLyKH.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8-customer-50.png"))); // NOI18N
         lbQuanLyKH.setText("Quản lý khách hàng");
         lbQuanLyKH.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -159,7 +155,6 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
         lbThongKe.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lbThongKe.setForeground(new java.awt.Color(255, 255, 255));
         lbThongKe.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbThongKe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8-revenue-50.png"))); // NOI18N
         lbThongKe.setText("Thống kê");
         lbThongKe.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -182,7 +177,6 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
         lbgiamgia.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lbgiamgia.setForeground(new java.awt.Color(255, 255, 255));
         lbgiamgia.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbgiamgia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8-discount-50.png"))); // NOI18N
         lbgiamgia.setText("Giảm giá");
         lbgiamgia.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -193,7 +187,6 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
         lbDangXuat.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lbDangXuat.setForeground(new java.awt.Color(255, 255, 255));
         lbDangXuat.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbDangXuat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8-sign-out-50.png"))); // NOI18N
         lbDangXuat.setText("Đăng xuất");
         lbDangXuat.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -204,7 +197,6 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
         lbDoiMk.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lbDoiMk.setForeground(new java.awt.Color(255, 255, 255));
         lbDoiMk.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbDoiMk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8-password-50.png"))); // NOI18N
         lbDoiMk.setText("Đổi Mật Khẩu");
         lbDoiMk.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -215,7 +207,6 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
         lbLichSu.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lbLichSu.setForeground(new java.awt.Color(255, 255, 255));
         lbLichSu.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbLichSu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8-history-50.png"))); // NOI18N
         lbLichSu.setText("Lịch Sử");
         lbLichSu.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {

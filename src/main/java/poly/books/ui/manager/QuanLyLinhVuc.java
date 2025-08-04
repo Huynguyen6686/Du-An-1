@@ -288,16 +288,20 @@ public class QuanLyLinhVuc extends javax.swing.JDialog implements poly.books.con
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
         // TODO add your handling code here:
-        String timkiem = txtTimKiem.getText().trim();
-        if (timkiem.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập loại lĩnh vực để tìm kiếm!");
-            fillToTable();
-            return;
-        }
-        DefaultTableModel model = (DefaultTableModel) tbLinhVuc.getModel();
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
-        tbLinhVuc.setRowSorter(sorter);
-        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + timkiem, 1));
+         String timkiem = txtTimKiem.getText().trim().toLowerCase();
+    DefaultTableModel defaultTableModel = (DefaultTableModel) tbLinhVuc.getModel();
+    TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(defaultTableModel);
+    tbLinhVuc.setRowSorter(sorter);
+
+    if (timkiem.isEmpty()) {
+        // Nếu chuỗi tìm kiếm trống, reset bộ lọc và làm mới bảng
+        sorter.setRowFilter(null);
+        fillToTable(); // Gọi lại dữ liệu ban đầu (nếu bạn có phương thức này)
+        return;
+    }
+
+    // Áp dụng lọc theo cột 1 (ví dụ: cột thể loại)
+    sorter.setRowFilter(RowFilter.regexFilter("(?i)" + timkiem, 1));
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
     /**

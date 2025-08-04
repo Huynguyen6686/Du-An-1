@@ -281,20 +281,20 @@ public class QuanLyKhachHang extends javax.swing.JPanel implements poly.books.co
     }//GEN-LAST:event_txtTenKHActionPerformed
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
-        String timkiem = txtTimKiem.getText().trim().toLowerCase();
-        if (timkiem.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập thể loại ngôn ngữ để tìm kiếm!");
-            fillToTable();
-            return;
-        }
-        DefaultTableModel defaultTableModel = (DefaultTableModel) tbKhachHang.getModel();
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(defaultTableModel);
-        tbKhachHang.setRowSorter(sorter);
-        if (timkiem.isEmpty()) {
-            sorter.setRowFilter(null);
-            return;
-        }
-        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + timkiem, 1));
+           String timkiem = txtTimKiem.getText().trim().toLowerCase();
+    DefaultTableModel defaultTableModel = (DefaultTableModel) tbKhachHang.getModel();
+    TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(defaultTableModel);
+    tbKhachHang.setRowSorter(sorter);
+
+    if (timkiem.isEmpty()) {
+        // Nếu chuỗi tìm kiếm trống, reset bộ lọc và làm mới bảng
+        sorter.setRowFilter(null);
+        fillToTable(); // Gọi lại dữ liệu ban đầu (nếu bạn có phương thức này)
+        return;
+    }
+
+    // Áp dụng lọc theo cột 1 (ví dụ: cột thể loại)
+    sorter.setRowFilter(RowFilter.regexFilter("(?i)" + timkiem, 1));
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

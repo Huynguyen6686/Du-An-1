@@ -732,9 +732,7 @@ public class QuanLySach extends javax.swing.JPanel implements poly.books.control
                                 .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(txtgia, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(QuanlysachLayout.createSequentialGroup()
-                        .addGap(0, 0, 0)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(QuanlysachLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(QuanlysachLayout.createSequentialGroup()
@@ -942,18 +940,18 @@ public class QuanLySach extends javax.swing.JPanel implements poly.books.control
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
         String timkiem = txtTimKiem.getText().trim().toLowerCase();
-        if (timkiem.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập thể loại ngôn ngữ để tìm kiếm!");
-            fillToTable();
-            return;
-        }
         DefaultTableModel defaultTableModel = (DefaultTableModel) tbSach.getModel();
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(defaultTableModel);
         tbSach.setRowSorter(sorter);
+
         if (timkiem.isEmpty()) {
+            // Nếu chuỗi tìm kiếm trống, reset bộ lọc và làm mới bảng
             sorter.setRowFilter(null);
+            fillToTable(); // Gọi lại dữ liệu ban đầu (nếu bạn có phương thức này)
             return;
         }
+
+        // Áp dụng lọc theo cột 1 (ví dụ: cột thể loại)
         sorter.setRowFilter(RowFilter.regexFilter("(?i)" + timkiem, 1));
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
@@ -1580,38 +1578,38 @@ public class QuanLySach extends javax.swing.JPanel implements poly.books.control
 
     @Override
     public void delete() {
-       if (XDialog.confirm("Bạn thực sự muốn xóa?")) {
-        int selectedRow = tbSach.getSelectedRow();
-        if (selectedRow >= 0 && selectedRow < sachList.size()) {
-            Sach entity = sachList.get(selectedRow);
-            int id = entity.getMaSach();
-            try {
-                // Kiểm tra xem sách có trong hóa đơn không
-                String sql = "SELECT COUNT(*) FROM ChiTietHoaDon WHERE MaSach = ?";
-                int count = (int) XJdbc.getValue(sql, id);
-                if (count > 0) {
-                    XDialog.alert("Không thể xóa sách vì đã tồn tại trong hóa đơn!");
-                    return;
+        if (XDialog.confirm("Bạn thực sự muốn xóa?")) {
+            int selectedRow = tbSach.getSelectedRow();
+            if (selectedRow >= 0 && selectedRow < sachList.size()) {
+                Sach entity = sachList.get(selectedRow);
+                int id = entity.getMaSach();
+                try {
+                    // Kiểm tra xem sách có trong hóa đơn không
+                    String sql = "SELECT COUNT(*) FROM ChiTietHoaDon WHERE MaSach = ?";
+                    int count = (int) XJdbc.getValue(sql, id);
+                    if (count > 0) {
+                        XDialog.alert("Không thể xóa sách vì đã tồn tại trong hóa đơn!");
+                        return;
+                    }
+
+                    // Xóa các bản ghi liên quan
+                    XJdbc.executeUpdate("DELETE FROM Sach_LinhVuc WHERE MaSach = ?", id);
+                    XJdbc.executeUpdate("DELETE FROM Sach_LoaiSach WHERE MaSach = ?", id);
+                    XJdbc.executeUpdate("DELETE FROM Kho WHERE MaSach = ?", id);
+
+                    // Xóa sách
+                    sachDAO.delete(id);
+                    this.fillToTable();
+                    this.clear();
+                    XDialog.alert("Xóa sách thành công!");
+                } catch (RuntimeException ex) {
+                    XDialog.alert("Lỗi: " + ex.getMessage());
+                    ex.printStackTrace();
                 }
-
-                // Xóa các bản ghi liên quan
-                XJdbc.executeUpdate("DELETE FROM Sach_LinhVuc WHERE MaSach = ?", id);
-                XJdbc.executeUpdate("DELETE FROM Sach_LoaiSach WHERE MaSach = ?", id);
-                XJdbc.executeUpdate("DELETE FROM Kho WHERE MaSach = ?", id);
-
-                // Xóa sách
-                sachDAO.delete(id);
-                this.fillToTable();
-                this.clear();
-                XDialog.alert("Xóa sách thành công!");
-            } catch (RuntimeException ex) {
-                XDialog.alert("Lỗi: " + ex.getMessage());
-                ex.printStackTrace();
+            } else {
+                XDialog.alert("Vui lòng chọn một sách để xóa!");
             }
-        } else {
-            XDialog.alert("Vui lòng chọn một sách để xóa!");
         }
-    }
     }
 
     @Override

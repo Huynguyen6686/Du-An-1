@@ -198,15 +198,20 @@ public class DanhSachMaGG extends javax.swing.JDialog {
     }//GEN-LAST:event_tblPhieuGiamGiaMouseClicked
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
-        String search = txtTimKiem.getText().trim().toLowerCase();
+        String timkiem = txtTimKiem.getText().trim().toLowerCase();
         DefaultTableModel defaultTableModel = (DefaultTableModel) tblPhieuGiamGia.getModel();
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(defaultTableModel);
         tblPhieuGiamGia.setRowSorter(sorter);
-        if (search.isEmpty()) {
+
+        if (timkiem.isEmpty()) {
+            // Nếu chuỗi tìm kiếm trống, reset bộ lọc và làm mới bảng
             sorter.setRowFilter(null);
+            fillToTable(); // Gọi lại dữ liệu ban đầu (nếu bạn có phương thức này)
             return;
         }
-        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + search, 0));
+
+        // Áp dụng lọc theo cột 1 (ví dụ: cột thể loại)
+        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + timkiem, 2));
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
     private void btnXacNhanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXacNhanActionPerformed
