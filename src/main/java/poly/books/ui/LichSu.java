@@ -132,17 +132,17 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
 
         tblBills.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Mã Hóa đơn", "Tên đăng nhập", "Họ Tên", "Chức Vụ", "Tên Khách hàng ", "Ngày thanh toán", "Thanh toán", "Trạng thái"
+                "Mã Hóa đơn", "Tên đăng nhập", "Họ Tên", "Chức Vụ", "Tên Khách hàng ", "Ngày thanh toán", "Thanh toán", "Tổng tiền", "Trạng thái"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, true, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -292,17 +292,17 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
 
         tblProductDetails.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Mã hoá đơn", "Tên sách ", "Giá bán", "Số lượng ", "Thành tiền", "Giảm giá", "Tổng ", "Trạng thái"
+                "Mã hoá đơn", "Tên sách ", "Giá bán", "Số lượng ", "Thành tiền"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
