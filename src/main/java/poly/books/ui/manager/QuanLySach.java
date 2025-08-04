@@ -662,10 +662,6 @@ public class QuanLySach extends javax.swing.JPanel implements poly.books.control
         Quanlysach.setLayout(QuanlysachLayout);
         QuanlysachLayout.setHorizontalGroup(
             QuanlysachLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, QuanlysachLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1016, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
             .addGroup(QuanlysachLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(QuanlysachLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -706,7 +702,7 @@ public class QuanLySach extends javax.swing.JPanel implements poly.books.control
                         .addGroup(QuanlysachLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnxoalv, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnxoatl, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(19, 19, 19)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(QuanlysachLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(QuanlysachLayout.createSequentialGroup()
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -737,9 +733,9 @@ public class QuanLySach extends javax.swing.JPanel implements poly.books.control
                                 .addGap(18, 18, 18)
                                 .addComponent(txtgia, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(QuanlysachLayout.createSequentialGroup()
-                        .addGap(25, 25, 25)
+                        .addGap(0, 0, 0)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(QuanlysachLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(QuanlysachLayout.createSequentialGroup()
                         .addComponent(lblanh, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -753,6 +749,10 @@ public class QuanLySach extends javax.swing.JPanel implements poly.books.control
                     .addComponent(tabPane, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(15, 15, 15))
             .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(QuanlysachLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1016, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         QuanlysachLayout.setVerticalGroup(
             QuanlysachLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -802,7 +802,7 @@ public class QuanLySach extends javax.swing.JPanel implements poly.books.control
                                 .addGroup(QuanlysachLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel3)
                                     .addComponent(txttacgia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(9, 9, 9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(QuanlysachLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel4)
                                     .addGroup(QuanlysachLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -842,9 +842,9 @@ public class QuanLySach extends javax.swing.JPanel implements poly.books.control
                             .addComponent(lblanh, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(tabPane, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(101, Short.MAX_VALUE))
+                .addGap(79, 79, 79))
         );
 
         add(Quanlysach, java.awt.BorderLayout.CENTER);
@@ -1580,23 +1580,38 @@ public class QuanLySach extends javax.swing.JPanel implements poly.books.control
 
     @Override
     public void delete() {
-        if (XDialog.confirm("Bạn thực sự muốn xóa?")) {
-            int selectedRow = tbSach.getSelectedRow();
-            if (selectedRow >= 0 && selectedRow < sachList.size()) {
-                Sach entity = sachList.get(selectedRow);
-                int id = entity.getMaSach();
-                try {
-                    sachDAO.delete(id);
-                    this.fillToTable();
-                    this.clear();
-                    XDialog.alert("Xóa sách thành công!");
-                } catch (RuntimeException ex) {
-                    XDialog.alert("Lỗi" + ex.getMessage());
+       if (XDialog.confirm("Bạn thực sự muốn xóa?")) {
+        int selectedRow = tbSach.getSelectedRow();
+        if (selectedRow >= 0 && selectedRow < sachList.size()) {
+            Sach entity = sachList.get(selectedRow);
+            int id = entity.getMaSach();
+            try {
+                // Kiểm tra xem sách có trong hóa đơn không
+                String sql = "SELECT COUNT(*) FROM ChiTietHoaDon WHERE MaSach = ?";
+                int count = (int) XJdbc.getValue(sql, id);
+                if (count > 0) {
+                    XDialog.alert("Không thể xóa sách vì đã tồn tại trong hóa đơn!");
+                    return;
                 }
-            } else {
-                XDialog.alert("Vui lòng chọn một nhà xuất bản để xóa!");
+
+                // Xóa các bản ghi liên quan
+                XJdbc.executeUpdate("DELETE FROM Sach_LinhVuc WHERE MaSach = ?", id);
+                XJdbc.executeUpdate("DELETE FROM Sach_LoaiSach WHERE MaSach = ?", id);
+                XJdbc.executeUpdate("DELETE FROM Kho WHERE MaSach = ?", id);
+
+                // Xóa sách
+                sachDAO.delete(id);
+                this.fillToTable();
+                this.clear();
+                XDialog.alert("Xóa sách thành công!");
+            } catch (RuntimeException ex) {
+                XDialog.alert("Lỗi: " + ex.getMessage());
+                ex.printStackTrace();
             }
+        } else {
+            XDialog.alert("Vui lòng chọn một sách để xóa!");
         }
+    }
     }
 
     @Override
