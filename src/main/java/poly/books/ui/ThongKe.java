@@ -2124,7 +2124,7 @@ public class ThongKe extends javax.swing.JDialog {
 
     private void btnlammoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnlammoiActionPerformed
         // TODO add your handling code here:
-        filltableAll();
+
         txtngaydau.setText("");
         txtngaycuoi.setText("");
         txtngaycuoinv.setText("");
@@ -2270,7 +2270,7 @@ public class ThongKe extends javax.swing.JDialog {
     }//GEN-LAST:event_jPanel1MouseClicked
 
     private void ThongKeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ThongKeMouseClicked
-       filltableAll();
+
     }//GEN-LAST:event_ThongKeMouseClicked
     private void updatePanelVisibility(String selectedOption) {
         resetAllPanels();

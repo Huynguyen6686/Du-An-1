@@ -739,6 +739,7 @@ public void clear() {
     // Reset radio
     rdoAvailable.setSelected(false);
     rdoUnavailable.setSelected(false);
+    txtTenKhuyenMai.setText("");
 }
 
 
