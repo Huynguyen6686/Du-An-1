@@ -57,7 +57,7 @@ public class BanHang extends javax.swing.JPanel {
     private HoaDonDAO hoaDonDAO = new HoaDonDAO();
     private ChiTietHoaDonDAO chiTietHoaDonDAO = new ChiTietHoaDonDAO();
     private KhoDAO khoDAO = new KhoDAO();
-    private PhieuGiamGiaDAO phieugiamgiaDAO=new PhieuGiamGiaDAO();
+    private PhieuGiamGiaDAO phieugiamgiaDAO = new PhieuGiamGiaDAO();
     private JFrame parentFrame;
     private int maHD = -1;
     private ISBNScanner isbnScanner;
@@ -404,17 +404,17 @@ public class BanHang extends javax.swing.JPanel {
 
         tblHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Mã hoá đơn", "Ngày lập", "Tên khách hàng", "Tên đăng nhập", "Tên phiếu GG", "Tổng tiền", "Phương thức", "Ngày thanh toán", "Trạng thái"
+                "Mã hoá đơn", "Ngày lập", "Tên khách hàng", "Tên đăng nhập", "Tên phiếu GG", "Tổng tiền", "Phương thức", "Trạng thái"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -792,7 +792,7 @@ public class BanHang extends javax.swing.JPanel {
         }
 
         try {
-            double tongTien = calculateTongTien();
+            double tongTien = calculateTongTienWithoutDiscount(); // Tổng tiền trước giảm
             double giamGia = calculateGiamGia(tongTien);
             double thanhTien = tongTien - giamGia;
 
@@ -814,13 +814,12 @@ public class BanHang extends javax.swing.JPanel {
                 for (int i = 0; i < tbSanPham.getRowCount(); i++) {
                     int maSach = (int) tbSanPham.getValueAt(i, 0);
                     int soLuong = Integer.parseInt(tbSanPham.getValueAt(i, 3).toString());
-                    khoDAO.updateSoLuong(maSach, -soLuong); // Trừ tồn kho
+
                 }
 
                 txtTrangThai.setText("Đã thanh toán");
                 txtTongTien.setText(String.format("%.2f", thanhTien));
                 txtGiamGia.setText(String.format("%.2f", giamGia));
-
                 JOptionPane.showMessageDialog(this, "Thanh toán thành công!");
                 fillToTableHoaDon();
                 clearForm();
@@ -941,7 +940,6 @@ public class BanHang extends javax.swing.JPanel {
                 return;
             }
 
-            // Kiểm tra tồn kho nếu tăng số lượng
             if (soLuongMoi > soLuongCu) {
                 int canThem = soLuongMoi - soLuongCu;
                 if (canThem > tonKhoHienTai) {
@@ -953,10 +951,8 @@ public class BanHang extends javax.swing.JPanel {
                 }
             }
 
-            // Cập nhật
             if (soLuongMoi == 0) {
-                // Xóa sản phẩm khỏi giỏ hàng
-                khoDAO.updateSoLuong(maSach, soLuongCu); // Hoàn lại kho
+                khoDAO.updateSoLuong(maSach, soLuongCu);
 
                 String sqlDelete = "DELETE FROM ChiTietHoaDon WHERE MaHD = ? AND MaSach = ?";
                 try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sqlDelete)) {
@@ -968,13 +964,10 @@ public class BanHang extends javax.swing.JPanel {
                 model.removeRow(row);
                 JOptionPane.showMessageDialog(this, "Đã xóa sản phẩm khỏi giỏ hàng!");
 
-                // Clear form nếu sản phẩm vừa xóa đang được hiển thị
                 if (Integer.parseInt(txtMaSach.getText().trim()) == maSach) {
                     clear();
                 }
-
             } else {
-                // Cập nhật số lượng
                 int chenhLech = soLuongMoi - soLuongCu;
                 khoDAO.updateSoLuong(maSach, -chenhLech);
 
@@ -988,7 +981,6 @@ public class BanHang extends javax.swing.JPanel {
 
                 model.setValueAt(soLuongMoi, row, 3);
 
-                // Cập nhật form nếu sản phẩm này đang được hiển thị
                 if (!txtMaSach.getText().trim().isEmpty()
                         && Integer.parseInt(txtMaSach.getText().trim()) == maSach) {
                     spSoLuong.setValue(soLuongMoi);
@@ -999,8 +991,19 @@ public class BanHang extends javax.swing.JPanel {
             }
 
             updateGiamGia();
-            calculateTongTien();
-
+            double tongTien = calculateTongTien();
+            if (maHD != -1) {
+                try {
+                    HoaDon hoaDon = hoaDonDAO.findById(maHD);
+                    if (hoaDon != null) {
+                        hoaDon.setTongTien(tongTien);
+                        hoaDonDAO.update(hoaDon);
+                        fillToTableHoaDon();
+                    }
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật tổng tiền: " + e.getMessage());
+                }
+            }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập số hợp lệ!");
         } catch (Exception e) {
@@ -1079,7 +1082,7 @@ public class BanHang extends javax.swing.JPanel {
         model.setRowCount(0);
         try {
             String sql = "SELECT hd.MaHD, hd.NgayLap, kh.TenKH, hd.TenDangNhap, "
-                    + "pg.TenPhieu, hd.TongTien, hd.PhuongThuc, hd.NgayThanhToan, hd.TrangThai "
+                    + "pg.TenPhieu, hd.TongTien, hd.PhuongThuc, hd.TrangThai "
                     + "FROM HoaDon hd "
                     + "JOIN KhachHang kh ON hd.MaKH = kh.MaKH "
                     + "LEFT JOIN PhieuGiamGia pg ON hd.MaPhieu = pg.MaPhieu "
@@ -1094,7 +1097,6 @@ public class BanHang extends javax.swing.JPanel {
                         rs.getString("TenPhieu") != null ? rs.getString("TenPhieu") : "", // dùng TenPhieu thay cho MaPhieu
                         rs.getDouble("TongTien"),
                         rs.getInt("PhuongThuc") == 1 ? "Tiền mặt" : "Chuyển khoản",
-                        rs.getDate("NgayThanhToan") != null ? XDate.format(rs.getDate("NgayThanhToan"), "dd-MM-yyyy") : "",
                         rs.getInt("TrangThai") == 0 ? "Chờ thanh toán" : "Đã thanh toán"
                     });
 
@@ -1135,6 +1137,20 @@ public class BanHang extends javax.swing.JPanel {
         txtMaPhieu.setText(String.valueOf(maGG.getMaPhieu()));
         txtGiamGia.setText(String.format("%.2f", (double) maGG.getGiaTri()));
         txtTenMaGG.setText(maGG.getTenPhieu());
+        if (maHD != -1) {
+            try {
+                HoaDon hoaDon = hoaDonDAO.findById(maHD);
+                if (hoaDon != null) {
+                    hoaDon.setMaPhieu(maGG.getMaPhieu());
+                    double tongTien = calculateTongTien(); // Lấy tổng tiền đã giảm
+                    hoaDon.setTongTien(tongTien);
+                    hoaDonDAO.update(hoaDon);
+                    fillToTableHoaDon();
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
+            }
+        }
         updateGiamGia();
 
     }
@@ -1199,30 +1215,25 @@ public class BanHang extends javax.swing.JPanel {
 
     private void updateThanhTien() {
         try {
-            int soLuong = (Integer) spSoLuong.getValue();
-            double donGia = txtDonGia.getText().isEmpty() ? 0 : Double.parseDouble(txtDonGia.getText());
-            double thanhTien = soLuong * donGia;
+            DefaultTableModel model = (DefaultTableModel) tbSanPham.getModel();
+            double thanhTien = 0;
+            for (int i = 0; i < model.getRowCount(); i++) {
+                int soLuong = Integer.parseInt(model.getValueAt(i, 3).toString()); // Cột số lượng
+                double donGia = Double.parseDouble(model.getValueAt(i, 4).toString()); // Cột đơn giá
+                thanhTien += soLuong * donGia;
+            }
             txtThanhTien.setText(String.format("%.2f", thanhTien));
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             txtThanhTien.setText("0");
         }
     }
 
     private double calculateTongTien() {
-        DefaultTableModel model = (DefaultTableModel) tbSanPham.getModel();
-        double tongTien = 0;
-        for (int i = 0; i < model.getRowCount(); i++) {
-            try {
-                int soLuong = Integer.parseInt(model.getValueAt(i, 3).toString());
-                double donGia = Double.parseDouble(model.getValueAt(i, 4).toString());
-                tongTien += soLuong * donGia;
-            } catch (Exception e) {
-                continue;
-            }
-        }
+        double tongTien = calculateTongTienWithoutDiscount();
         double giamGia = calculateGiamGia(tongTien);
-        txtTongTien.setText(String.format("%.2f", tongTien - giamGia));
-        return tongTien;
+        double tongTienSauGiamGia = tongTien - giamGia;
+        txtTongTien.setText(String.format("%.2f", tongTienSauGiamGia));
+        return tongTienSauGiamGia;
     }
 
     private double calculateGiamGia(double tongTien) {
@@ -1231,7 +1242,6 @@ public class BanHang extends javax.swing.JPanel {
             txtGiamGia.setText("0");
             return 0;
         }
-
         try {
             int maPhieu = Integer.parseInt(maPhieuText);
             String sql = "SELECT GiaTri, DieuKienApDung FROM PhieuGiamGia WHERE MaPhieu = ? AND TrangThai = 1";
@@ -1241,25 +1251,29 @@ public class BanHang extends javax.swing.JPanel {
                 if (rs.next()) {
                     double giaTri = rs.getDouble("GiaTri");
                     int dieuKien = rs.getInt("DieuKienApDung");
-                    if (tongTien >= dieuKien) {
+                    double thanhTien = tongTien - giaTri;
+                    if (tongTien >= dieuKien && thanhTien >= 0) {
                         txtGiamGia.setText(String.format("%.2f", giaTri));
                         return giaTri;
                     } else {
-                        JOptionPane.showMessageDialog(this, "Tổng tiền không đủ để áp dụng mã giảm giá này!");
+                        JOptionPane.showMessageDialog(this, "Tổng tiền không đủ để áp dụng mã giảm giá!");
                         txtMaPhieu.setText("");
+                        txtTenMaGG.setText("");
                         txtGiamGia.setText("0");
                         return 0;
                     }
                 } else {
-                    JOptionPane.showMessageDialog(this, "Mã giảm giá không hợp lệ hoặc đã hết hiệu lực!");
+                    JOptionPane.showMessageDialog(this, "Mã giảm giá không hợp lệ!");
                     txtMaPhieu.setText("");
+                    txtTenMaGG.setText("");
                     txtGiamGia.setText("0");
                     return 0;
                 }
             }
-        } catch (NumberFormatException | SQLException e) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi kiểm tra mã giảm giá: " + e.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
             txtMaPhieu.setText("");
+            txtTenMaGG.setText("");
             txtGiamGia.setText("0");
             return 0;
         }
@@ -1297,10 +1311,7 @@ public class BanHang extends javax.swing.JPanel {
             return;
         }
 
-        // Lấy tồn kho hiện tại từ database
         int tonKhoHienTai = khoDAO.getSoLuong(maSachInt);
-
-        // Tính số lượng đã có trong giỏ hàng (nếu có)
         int soLuongTrongGio = 0;
         for (int i = 0; i < tbSanPham.getRowCount(); i++) {
             if (Integer.parseInt(tbSanPham.getValueAt(i, 0).toString()) == maSachInt) {
@@ -1309,9 +1320,7 @@ public class BanHang extends javax.swing.JPanel {
             }
         }
 
-        // Tồn kho khả dụng = tồn kho hiện tại + số lượng đã đặt trong giỏ
         int tonKhoKhaDung = tonKhoHienTai + soLuongTrongGio;
-
         if (soLuong > tonKhoKhaDung) {
             JOptionPane.showMessageDialog(this, "Số lượng vượt quá tồn kho khả dụng (" + tonKhoKhaDung + ")!");
             return;
@@ -1321,7 +1330,6 @@ public class BanHang extends javax.swing.JPanel {
         boolean productExists = false;
         int existingRow = -1;
 
-        // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
         for (int i = 0; i < model.getRowCount(); i++) {
             if (Integer.parseInt(model.getValueAt(i, 0).toString()) == maSachInt) {
                 productExists = true;
@@ -1331,22 +1339,16 @@ public class BanHang extends javax.swing.JPanel {
         }
 
         if (productExists) {
-            // Sản phẩm đã có trong giỏ hàng - cập nhật số lượng
             int currentQuantity = Integer.parseInt(model.getValueAt(existingRow, 3).toString());
             int newQuantity = currentQuantity + soLuong;
-
-            // Kiểm tra tổng số lượng mới có vượt quá tồn kho ban đầu không
-            // (tồn kho ban đầu = tồn kho hiện tại + số lượng đã có trong giỏ)
             int tonKhoBanDau = tonKhoHienTai + currentQuantity;
             if (newQuantity > tonKhoBanDau) {
                 JOptionPane.showMessageDialog(this, "Tổng số lượng (" + newQuantity + ") vượt quá tồn kho ban đầu (" + tonKhoBanDau + ")!");
                 return;
             }
 
-            // Cập nhật số lượng trong bảng
             model.setValueAt(newQuantity, existingRow, 3);
 
-            // Cập nhật số lượng trong database
             String sqlUpdate = "UPDATE ChiTietHoaDon SET SoLuong = ? WHERE MaHD = ? AND MaSach = ?";
             try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sqlUpdate)) {
                 ps.setInt(1, newQuantity);
@@ -1355,11 +1357,8 @@ public class BanHang extends javax.swing.JPanel {
                 ps.executeUpdate();
             }
 
-            // Chỉ trừ thêm số lượng mới thêm vào (không phải tổng số lượng)
             khoDAO.updateSoLuong(maSachInt, -soLuong);
-
         } else {
-            // Sản phẩm chưa có trong giỏ hàng - thêm mới
             model.insertRow(0, new Object[]{
                 sach.getMaSach(),
                 sach.getISBN(),
@@ -1368,7 +1367,6 @@ public class BanHang extends javax.swing.JPanel {
                 sach.getGiaBan()
             });
 
-            // Thêm vào database
             String sqlInsert = "INSERT INTO ChiTietHoaDon (MaHD, MaSach, SoLuong, DonGia) VALUES (?, ?, ?, ?)";
             try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sqlInsert)) {
                 ps.setInt(1, maHD);
@@ -1378,14 +1376,24 @@ public class BanHang extends javax.swing.JPanel {
                 ps.executeUpdate();
             }
 
-            // Trừ tồn kho
             khoDAO.updateSoLuong(maSachInt, -soLuong);
         }
 
-        // Cập nhật lại thông tin hiển thị
         updateGiamGia();
         updateThanhTien();
-        calculateTongTien();
+        double tongTien = calculateTongTien();
+        if (maHD != -1) {
+            try {
+                HoaDon hoaDon = hoaDonDAO.findById(maHD);
+                if (hoaDon != null) {
+                    hoaDon.setTongTien(tongTien);
+                    hoaDonDAO.update(hoaDon);
+                    fillToTableHoaDon();
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật tổng tiền: " + e.getMessage());
+            }
+        }
         clear();
     }
 
@@ -1400,97 +1408,117 @@ public class BanHang extends javax.swing.JPanel {
                         return -1;
                     }
                 }
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi kiểm tra số lượng hóa đơn: " + e.getMessage());
-            return -1;
-        }
-        if (XAuth.user == null || XAuth.currentTenDangNhap == null) {
-            JOptionPane.showMessageDialog(this, "Người dùng chưa đăng nhập!");
-            return -1;
-        }
-
-        String tenKH = txtTenKH.getText().trim();
-        if (tenKH.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn khách hàng!");
-            return -1;
-        }
-
-        int maKH;
-        try {
-            String sqlKH = "SELECT MaKH FROM KhachHang WHERE TenKH = ? AND SDT = ?";
-            try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sqlKH)) {
-                ps.setString(1, tenKH);
-                ps.setString(2, txtSDT.getText().trim());
-                ResultSet rs = ps.executeQuery();
-                if (!rs.next()) {
-                    JOptionPane.showMessageDialog(this, "Không tìm thấy khách hàng với tên và số điện thoại này!");
-                    return -1;
-                }
-                maKH = rs.getInt("MaKH");
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Lỗi kiểm tra khách hàng: " + e.getMessage());
-            return -1;
-        }
-
-        // kiểm tra xem trong bảng hòa đơn chờ có khách hàng đã tạo chưa    
-        try {
-            String sqlCheckPending = "SELECT COUNT(*) FROM HoaDon WHERE MaKH = ? AND TrangThai = 0";
-            try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sqlCheckPending)) {
-                ps.setInt(1, maKH);
-                ResultSet rs = ps.executeQuery();
-                if (rs.next() && rs.getInt(1) > 0) {
-                    JOptionPane.showMessageDialog(this, "Khách hàng này đã có một hóa đơn đang chờ thanh toán!");
-                    return -1;
-                }
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi kiểm tra hóa đơn chờ của khách hàng: " + e.getMessage());
-            return -1;
-        }
-
-        Integer maPhieu = null;
-        String maPhieuText = txtMaPhieu.getText().trim();
-        if (!maPhieuText.isEmpty()) {
-            try {
-                maPhieu = Integer.parseInt(maPhieuText);
-                String sql = "SELECT MaPhieu FROM PhieuGiamGia WHERE MaPhieu = ? AND TrangThai = 1";
-                try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-                    ps.setInt(1, maPhieu);
-                    ResultSet rs = ps.executeQuery();
-                    if (!rs.next()) {
-                        JOptionPane.showMessageDialog(this, "Mã giảm giá không hợp lệ!");
-                        return -1;
-                    }
-                }
-            } catch (NumberFormatException | SQLException e) {
-                JOptionPane.showMessageDialog(this, "Mã phiếu giảm giá không hợp lệ!");
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi kiểm tra số lượng hóa đơn: " + e.getMessage());
                 return -1;
             }
-        }
-
-        HoaDon hoaDon = new HoaDon();
-        hoaDon.setMaKH(maKH);
-        hoaDon.setTenDangNhap(XAuth.currentTenDangNhap.trim());
-        hoaDon.setNgayLap(new java.util.Date());
-        hoaDon.setTongTien(0.0);
-        hoaDon.setPhuongThuc(1);
-        hoaDon.setTrangThai(0);
-        hoaDon.setMaPhieu(maPhieu);
-
-        try {
-            int newMaHD = hoaDonDAO.create(hoaDon);
-            if (newMaHD > 0) {
-                maHD = newMaHD;
-                txtNgayLap.setText(XDate.format(new java.util.Date(), "dd-MM-yyyy"));
-                txtMaNV.setText(XAuth.currentTenDangNhap.trim());
-                txtTrangThai.setText("Chờ thanh toán");
-                updateGiamGia();
-                return newMaHD;
+            if (XAuth.user == null || XAuth.currentTenDangNhap == null) {
+                JOptionPane.showMessageDialog(this, "Người dùng chưa đăng nhập!");
+                return -1;
             }
-            return -1;
-        } catch (SQLException e) {
+
+            String tenKH = txtTenKH.getText().trim();
+            if (tenKH.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn khách hàng!");
+                return -1;
+            }
+
+            // Kiểm tra khách hàng
+            int maKH;
+            try {
+                String sqlKH;
+                String tenKHTrimmed = tenKH.trim();
+                String sdt = txtSDT.getText().trim();
+                if (tenKHTrimmed.equals("Khách vãng lai")) {
+                    sqlKH = "SELECT MaKH FROM KhachHang WHERE TenKH = ? AND SDT IS NULL";
+                    try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sqlKH)) {
+                        ps.setString(1, tenKHTrimmed);
+                        ResultSet rs = ps.executeQuery();
+                        if (!rs.next()) {
+                            JOptionPane.showMessageDialog(this, "Không tìm thấy khách hàng 'Khách vãng lai'!");
+                            return -1;
+                        }
+                        maKH = rs.getInt("MaKH");
+                    }
+                } else {
+                    sqlKH = "SELECT MaKH FROM KhachHang WHERE TenKH = ? AND (SDT = ? OR SDT IS NULL)";
+                    try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sqlKH)) {
+                        ps.setString(1, tenKHTrimmed);
+                        ps.setString(2, sdt.isEmpty() ? null : sdt);
+                        ResultSet rs = ps.executeQuery();
+                        if (!rs.next()) {
+                            JOptionPane.showMessageDialog(this, "Không tìm thấy khách hàng với tên và số điện thoại này!");
+                            return -1;
+                        }
+                        maKH = rs.getInt("MaKH");
+                    }
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Lỗi kiểm tra khách hàng: " + e.getMessage());
+                return -1;
+            }
+
+            // Kiểm tra hóa đơn chờ, bỏ qua nếu MaKH = 1 (Khách vãng lai)
+            if (maKH != 1) {
+                String sqlCheckPending = "SELECT COUNT(*) FROM HoaDon WHERE MaKH = ? AND TrangThai = 0";
+                try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sqlCheckPending)) {
+                    ps.setInt(1, maKH);
+                    ResultSet rs = ps.executeQuery();
+                    if (rs.next() && rs.getInt(1) > 0) {
+                        JOptionPane.showMessageDialog(this, "Khách hàng này đã có một hóa đơn đang chờ thanh toán!");
+                        return -1;
+                    }
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(this, "Lỗi khi kiểm tra hóa đơn chờ của khách hàng: " + e.getMessage());
+                    return -1;
+                }
+            }
+
+            Integer maPhieu = null;
+            String maPhieuText = txtMaPhieu.getText().trim();
+            if (!maPhieuText.isEmpty()) {
+                try {
+                    maPhieu = Integer.parseInt(maPhieuText);
+                    String sql = "SELECT MaPhieu FROM PhieuGiamGia WHERE MaPhieu = ? AND TrangThai = 1";
+                    try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+                        ps.setInt(1, maPhieu);
+                        ResultSet rs = ps.executeQuery();
+                        if (!rs.next()) {
+                            JOptionPane.showMessageDialog(this, "Mã giảm giá không hợp lệ!");
+                            return -1;
+                        }
+                    }
+                } catch (NumberFormatException | SQLException e) {
+                    JOptionPane.showMessageDialog(this, "Mã phiếu giảm giá không hợp lệ!");
+                    return -1;
+                }
+            }
+
+            HoaDon hoaDon = new HoaDon();
+            hoaDon.setMaKH(maKH);
+            hoaDon.setTenDangNhap(XAuth.currentTenDangNhap.trim());
+            hoaDon.setNgayLap(new java.util.Date());
+            hoaDon.setTongTien(0.0);
+            hoaDon.setPhuongThuc(1);
+            hoaDon.setTrangThai(0);
+            hoaDon.setMaPhieu(maPhieu);
+
+            try {
+                int newMaHD = hoaDonDAO.create(hoaDon);
+                if (newMaHD > 0) {
+                    maHD = newMaHD;
+                    txtNgayLap.setText(XDate.format(new java.util.Date(), "dd-MM-yyyy"));
+                    txtMaNV.setText(XAuth.currentTenDangNhap.trim());
+                    txtTrangThai.setText("Chờ thanh toán");
+                    updateGiamGia();
+                    return newMaHD;
+                }
+                return -1;
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Lỗi tạo hóa đơn: " + e.getMessage());
+                return -1;
+            }
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Lỗi tạo hóa đơn: " + e.getMessage());
             return -1;
         }
@@ -1507,10 +1535,15 @@ public class BanHang extends javax.swing.JPanel {
         double tongTien = 0;
         for (int i = 0; i < model.getRowCount(); i++) {
             try {
-                int soLuong = Integer.parseInt(model.getValueAt(i, 3).toString());
-                double donGia = Double.parseDouble(model.getValueAt(i, 4).toString());
-                tongTien += soLuong * donGia;
+                Object soLuongObj = model.getValueAt(i, 3);
+                Object donGiaObj = model.getValueAt(i, 4);
+                if (soLuongObj != null && donGiaObj != null) {
+                    int soLuong = Integer.parseInt(soLuongObj.toString());
+                    double donGia = Double.parseDouble(donGiaObj.toString());
+                    tongTien += soLuong * donGia;
+                }
             } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Dữ liệu không hợp lệ tại dòng " + i);
                 continue;
             }
         }
