@@ -402,7 +402,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
 
         try {
             // Đường dẫn đầy đủ tới file font .ttf
-            String fontPath = "E:\\polybooks\\src\\main\\resources\\fonts\\.ttf\\arial-unicode-ms.ttf";
+           String fontPath = "D:\\Du-An-1\\src\\main\\resources\\fonts\\arial-unicode-ms.ttf";
             File fontFile = new File(fontPath);
             if (!fontFile.exists()) {
                 JOptionPane.showMessageDialog(this, "Không tìm thấy file font: " + fontPath);
@@ -414,7 +414,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
             Font fontNormal = new Font(baseFont, 12);
 
             // Đảm bảo thư mục lưu file PDF
-            String folderPath = "E:/ExportBills";
+            String folderPath = "D:/ExportBills";
             File folder = new File(folderPath);
             if (!folder.exists()) {
                 folder.mkdirs();
@@ -440,7 +440,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
             document.add(new Paragraph("Phương thức: " + (lichSuEntity.getPhuongThuc() == 0 ? "Tiền mặt" : "Chuyển khoản"), fontNormal));
             document.add(new Paragraph("Tổng tiền: " + lichSuEntity.getThanhTien(),fontNormal));
             document.add(new Paragraph("Giảm: " + lichSuEntity.getGiam(),fontNormal));
-            document.add(new Paragraph("Thành tiền" + lichSuEntity.getGiaSauKhiGiam(),fontNormal));
+            document.add(new Paragraph("Thành tiền: " + lichSuEntity.getGiaSauKhiGiam(),fontNormal));
             document.add(new Paragraph("Trạng thái: " + (lichSuEntity.getTrangThai() == 1 ? "Đã thanh toán" : "Chưa thanh toán"), fontNormal));
             document.add(new Paragraph(" "));
 
