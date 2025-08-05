@@ -8,23 +8,22 @@ public class LichSuDAO {
 
     String getAllSQL = """
 SELECT 
-                         s.ISBN,
-                         ndsd.TenDangNhap,
-                         ndsd.HoTen,
-                         ndsd.QuanLy,
-                         kh.TenKH,
-                         hd.NgayThanhToan,
-                     	hd.PhuongThuc,
-                         (cthd.SoLuong * cthd.DonGia) AS ThanhTien,
-                         ISNULL(pgg.GiaTri, 0) AS Giam,
-                         (cthd.SoLuong * cthd.DonGia - ISNULL(pgg.GiaTri, 0)) AS GiaSauKhiGiam,
-                         hd.TrangThai
-                     FROM HoaDon hd
-                     JOIN NguoiDungSD ndsd ON hd.TenDangNhap = ndsd.TenDangNhap
-                     JOIN KhachHang kh ON kh.MaKH = hd.MaKH
-                     JOIN ChiTietHoaDon cthd ON hd.MaHD = cthd.MaHD
-                     JOIN Sach s ON cthd.MaSach = s.MaSach
-                     LEFT JOIN PhieuGiamGia pgg ON hd.MaPhieu = pgg.MaPhieu;
+    hd.MaHD,
+    ndsd.TenDangNhap,
+    ndsd.HoTen,
+    kh.TenKH,
+    hd.NgayThanhToan,
+    hd.PhuongThuc,
+    (cthd.SoLuong * cthd.DonGia) AS TongTien,
+    ISNULL(pgg.GiaTri, 0) AS Giam,
+    (cthd.SoLuong * cthd.DonGia - ISNULL(pgg.GiaTri, 0)) AS ThanhTien,
+    hd.TrangThai
+FROM HoaDon hd
+JOIN NguoiDungSD ndsd ON hd.TenDangNhap = ndsd.TenDangNhap
+JOIN KhachHang kh ON kh.MaKH = hd.MaKH
+JOIN ChiTietHoaDon cthd ON hd.MaHD = cthd.MaHD
+JOIN Sach s ON cthd.MaSach = s.MaSach
+LEFT JOIN PhieuGiamGia pgg ON hd.MaPhieu = pgg.MaPhieu;
                        """;
 
     public List<LichSuEntity> getAll() {

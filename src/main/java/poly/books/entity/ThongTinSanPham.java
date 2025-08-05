@@ -7,7 +7,7 @@ import lombok.*;
 @Data
 @Builder
 public class ThongTinSanPham {
-    private int MaHD;
+    private String ISBN;
     private String TenSach;
     private double GiaBan;
     private int SoLuong;

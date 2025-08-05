@@ -31,17 +31,17 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
     List<ThongTinSanPham> thongTinSanPhamList = new ArrayList<>();
     ThongTinSanPhamDAO thongTinSanPhamDAO = new ThongTinSanPhamDAO();
 
-    public void fillProductDetails(String ISBN) {
+    public void fillProductDetails(int MaHD) {
         DefaultTableModel defaultTableModel = (DefaultTableModel) tblProductDetails.getModel();
         defaultTableModel.setRowCount(0);
-        thongTinSanPhamList = thongTinSanPhamDAO.findByISBN(ISBN);
+        thongTinSanPhamList = thongTinSanPhamDAO.findByID(MaHD);
         if (thongTinSanPhamList.isEmpty()) {
-            System.out.println("Không tìm thấy dữ liệu cho MaHD: " + ISBN);
+            System.out.println("Không tìm thấy dữ liệu cho MaHD: " + MaHD);
             return;
         }
         for (ThongTinSanPham thongTinSanPham : thongTinSanPhamList) {
             Object[] rowData = {
-                thongTinSanPham.getMaHD(),
+                thongTinSanPham.getISBN(),
                 thongTinSanPham.getTenSach(),
                 thongTinSanPham.getGiaBan(),
                 thongTinSanPham.getSoLuong(),
@@ -86,15 +86,13 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         lbtUserName = new javax.swing.JLabel();
-        lblISBN = new javax.swing.JLabel();
+        txtBillID = new javax.swing.JLabel();
         lblEmployeeName = new javax.swing.JLabel();
-        lblManager = new javax.swing.JLabel();
         lblCustomerName = new javax.swing.JLabel();
         lblPaymentDay = new javax.swing.JLabel();
         lblPayment = new javax.swing.JLabel();
@@ -135,17 +133,17 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
 
         tblBills.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "ISBN", "Tên đăng nhập", "Họ Tên", "Chức Vụ", "Tên Khách hàng ", "Ngày thanh toán", "Phương thức ", "Tổng tiền", "Giá trị giảm ", "Thành tiền", "Trạng thái"
+                "Mã hoá đơn", "Tên đăng nhập", "Họ Tên", "Tên Khách hàng ", "Ngày thanh toán", "Phương thức ", "Tổng tiền", "Giá trị giảm ", "Thành tiền", "Trạng thái"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -185,7 +183,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnOutputBill)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(253, 253, 253))
         );
@@ -193,13 +191,11 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Thông tin hoá đơn", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 14))); // NOI18N
 
-        jLabel1.setText("ISBN:");
+        jLabel1.setText("Mã hoá đơn:");
 
         jLabel2.setText("Họ tên:");
 
         jLabel3.setText("Tên đăng nhập:");
-
-        jLabel4.setText("Quản lý:");
 
         jLabel5.setText("Ngày thanh toán:");
 
@@ -230,25 +226,17 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(lblCustomerName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addGap(26, 26, 26)
-                                .addComponent(lblManager, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(11, 11, 11)
-                                .addComponent(lblEmployeeName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblPaymentDay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(6, 6, 6))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -256,15 +244,19 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblISBN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addGap(18, 18, 18)
-                        .addComponent(lblStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(txtBillID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblEmployeeName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblCustomerName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addGap(12, 12, 12)
+                                .addComponent(lblPaymentDay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .addContainerGap())
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel7)
@@ -277,40 +269,36 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel1)
-                    .addComponent(lblISBN, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtBillID, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(32, 32, 32)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3)
                     .addComponent(lbtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(31, 31, 31)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(lblEmployeeName, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(lblManager, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(28, 28, 28)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6)
                     .addComponent(lblCustomerName, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
+                .addGap(38, 38, 38)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblPaymentDay, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
+                    .addComponent(jLabel5)
+                    .addComponent(lblPaymentDay, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(37, 37, 37)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblPayment, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTotal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblVoucher, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
+                .addGap(37, 37, 37)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel9)
                     .addComponent(lblDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -332,7 +320,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
                 {null, null, null, null, null}
             },
             new String [] {
-                "Mã hoá đơn", "Tên sách ", "Giá bán", "Số lượng ", "Thành tiền"
+                "ISBN", "Tên sách ", "Giá bán", "Số lượng ", "Thành tiền"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -382,7 +370,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         LichSu.add(pnlLichSu, java.awt.BorderLayout.CENTER);
@@ -396,9 +384,9 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
         if (index >= 0 && index < lichSuList.size()) {
             LichSuEntity entity = lichSuList.get(index);
             setForm(entity);
-            String ISBN = entity.getISBN(); // Sử dụng getMaHD() thay vì getSTT()
-            System.out.println("ISBN: " + ISBN); // Kiểm tra giá trị MaHD
-            fillProductDetails(ISBN);
+            int MaHD = entity.getMaHD(); // Sử dụng getMaHD() thay vì getSTT()
+            System.out.println("Mã Hoá đơn: " + MaHD); // Kiểm tra giá trị MaHD
+            fillProductDetails(MaHD);
         }
     }//GEN-LAST:event_tblBillsMouseClicked
 
@@ -410,7 +398,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
         }
 
         LichSuEntity lichSuEntity = lichSuList.get(index);
-        String ISBN = lichSuEntity.getISBN();
+        int MaHD = lichSuEntity.getMaHD();
 
         try {
             // Đường dẫn đầy đủ tới file font .ttf
@@ -432,7 +420,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
                 folder.mkdirs();
             }
 
-            String filePath = folderPath + "/hoadon_" + ISBN + ".pdf";
+            String filePath = folderPath + "/hoadon_" + MaHD + ".pdf";
 
             Document document = new Document();
             PdfWriter.getInstance(document, new FileOutputStream(filePath));
@@ -443,10 +431,9 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
             document.add(title);
             document.add(new Paragraph(" "));
 
-            document.add(new Paragraph("ISBN: " + lichSuEntity.getISBN(), fontNormal));
+            document.add(new Paragraph("Mã hoá đơn: " + lichSuEntity.getMaHD(), fontNormal));
             document.add(new Paragraph("Tên đăng nhập: " + lichSuEntity.getTenDangNhap(), fontNormal));
             document.add(new Paragraph("Họ tên nhân viên: " + lichSuEntity.getHoTen(), fontNormal));
-            document.add(new Paragraph("Quản lý: " + (lichSuEntity.isQuanLy() ? "Quản lý" : "Nhân viên"), fontNormal));
             document.add(new Paragraph("Tên khách hàng: " + lichSuEntity.getTenKH(), fontNormal));
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             document.add(new Paragraph("Ngày thanh toán: " + sdf.format(lichSuEntity.getNgayThanhToan()), fontNormal));
@@ -467,7 +454,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
             table.addCell(new PdfPCell(new Phrase("Giảm giá", fontNormal)));
             table.addCell(new PdfPCell(new Phrase("Tổng", fontNormal)));
 
-            List<ThongTinSanPham> dsSanPham = thongTinSanPhamDAO.findByISBN(ISBN);
+            List<ThongTinSanPham> dsSanPham = thongTinSanPhamDAO.findByID(MaHD);
             for (ThongTinSanPham sp : dsSanPham) {
                 table.addCell(new Phrase(sp.getTenSach(), fontNormal));
                 table.addCell(new Phrase(String.valueOf(sp.getGiaBan()), fontNormal));
@@ -496,7 +483,6 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -510,8 +496,6 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
     private javax.swing.JLabel lblCustomerName;
     private javax.swing.JLabel lblDiscount;
     private javax.swing.JLabel lblEmployeeName;
-    private javax.swing.JLabel lblISBN;
-    private javax.swing.JLabel lblManager;
     private javax.swing.JLabel lblPayment;
     private javax.swing.JLabel lblPaymentDay;
     private javax.swing.JLabel lblStatus;
@@ -521,6 +505,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
     private javax.swing.JPanel pnlLichSu;
     private javax.swing.JTable tblBills;
     private javax.swing.JTable tblProductDetails;
+    private javax.swing.JLabel txtBillID;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -530,10 +515,9 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
 
     @Override
     public void setForm(LichSuEntity entity) {
-        lblISBN.setText(String.valueOf(entity.getISBN()));
+        txtBillID.setText(String.valueOf(entity.getMaHD()));
         lbtUserName.setText(entity.getTenDangNhap());
         lblEmployeeName.setText(entity.getHoTen());
-        lblManager.setText(entity.isQuanLy() ? "Quản lý" : "Nhân viên");
         lblCustomerName.setText(entity.getTenKH());
         lblPaymentDay.setText(String.valueOf(entity.getNgayThanhToan()));
         lblPayment.setText(String.valueOf(entity.getPhuongThuc() == 2 ? "Chuyển khoản" : "Tiền mặt"));
@@ -555,10 +539,9 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
         lichSuList = lichSuDAO.getAll();
         for (LichSuEntity lichSuEntity : lichSuList) {
             Object[] rowData = {
-                lichSuEntity.getISBN(),
+                lichSuEntity.getMaHD(),
                 lichSuEntity.getTenDangNhap(),
                 lichSuEntity.getHoTen(),
-                lichSuEntity.isQuanLy() ? "Quản lý " : "Nhân viên",
                 lichSuEntity.getTenKH(),
                 lichSuEntity.getNgayThanhToan(),
                 lichSuEntity.getPhuongThuc() == 2 ? "Chuyển khoản" : "Tiền mặt",

@@ -8,10 +8,9 @@ import lombok.*;
 @Data
 @Builder
 public class LichSuEntity {
-    private String ISBN;
+        private int MaHD;
     private String TenDangNhap;
     private String HoTen;
-    private boolean QuanLy;
     private String TenKH;
     private Date NgayThanhToan;
     private int PhuongThuc;
