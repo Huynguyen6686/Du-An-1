@@ -12,7 +12,4 @@ public class ThongTinSanPham {
     private double GiaBan;
     private int SoLuong;
     private Double ThanhTien;
-    private int GiamGia;
-    private double Tong;
-    private int TrangThai;
 }
