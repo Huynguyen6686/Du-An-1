@@ -4,6 +4,9 @@
  */
 package poly.books.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 import poly.books.entity.ChiTietHoaDon;
 import poly.books.util.XJdbc;
@@ -58,6 +61,20 @@ public class ChiTietHoaDonDAO {
 
     public int delete(int MaHD) {
         return XJdbc.executeUpdate(deleteSQL, MaHD);
+    }
+
+    public void insert(ChiTietHoaDon chiTiet) throws SQLException {
+        String sql = "INSERT INTO ChiTietHoaDon (MaHD, MaSach, SoLuong, DonGia) VALUES (?, ?, ?, ?)";
+        try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, chiTiet.getMaHD());
+            ps.setInt(2, chiTiet.getMaSach());
+            ps.setInt(3, chiTiet.getSoLuong());
+            ps.setDouble(4, chiTiet.getDonGia());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("SQL Error in ChiTietHoaDonDAO.insert: " + e.getMessage());
+            throw e;
+        }
     }
 
     public int Delete(int maHD, int maSach) {
