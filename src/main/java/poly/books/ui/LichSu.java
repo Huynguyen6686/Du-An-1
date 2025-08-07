@@ -119,7 +119,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
         jLabel18.setBackground(new java.awt.Color(0, 144, 193));
         jLabel18.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel18.setText("Lịch Sử");
+        jLabel18.setText("Quản lý hóa đơn");
         jLabel18.setOpaque(true);
         jLabel18.setPreferredSize(new java.awt.Dimension(84, 50));
         LichSu.add(jLabel18, java.awt.BorderLayout.PAGE_START);
