@@ -453,7 +453,7 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
     // End of variables declaration//GEN-END:variables
     @Override
     public void init() {
-        this.setIconImage(XIcon.getIcon("/images/logo.png").getImage());
+        this.setIconImage(XIcon.getIcon("/images/logo_60x60.png").getImage());
         this.setLocationRelativeTo(null);
         this.showWelcomeJDialog(this);
         this.showLoginJDialog(this);

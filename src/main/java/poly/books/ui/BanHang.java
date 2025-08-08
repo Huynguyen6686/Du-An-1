@@ -20,7 +20,6 @@ import javax.swing.table.DefaultTableModel;
 import poly.books.dao.ChiTietHoaDonDAO;
 import poly.books.dao.HoaDonDAO;
 import poly.books.dao.KhachHangDAO;
-import poly.books.dao.KhoDAO;
 import poly.books.dao.PhieuGiamGiaDAO;
 import poly.books.dao.SachDAO;
 import poly.books.entity.ChiTietHoaDon;
@@ -46,7 +45,6 @@ public class BanHang extends javax.swing.JPanel {
     private KhachHangDAO khachHangDAO = new KhachHangDAO();
     private HoaDonDAO hoaDonDAO = new HoaDonDAO();
     private ChiTietHoaDonDAO chiTietHoaDonDAO = new ChiTietHoaDonDAO();
-    private KhoDAO khoDAO = new KhoDAO();
     private PhieuGiamGiaDAO phieugiamgiaDAO = new PhieuGiamGiaDAO();
     private JFrame parentFrame;
     private int maHD = -1;
@@ -798,7 +796,7 @@ public class BanHang extends javax.swing.JPanel {
             System.out.println("Adding product to MaHD: " + maHD);
             addToHoaDon();
             btnThanhToan.setEnabled(true);
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(BanHang.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnThemSPActionPerformed
@@ -922,7 +920,8 @@ public class BanHang extends javax.swing.JPanel {
                 for (int i = 0; i < tbSanPham.getRowCount(); i++) {
                     int maSach = Integer.parseInt(tbSanPham.getValueAt(i, 0).toString());
                     int soLuong = Integer.parseInt(tbSanPham.getValueAt(i, 3).toString());
-                    khoDAO.updateSoLuong(maSach, soLuong); // Hoàn lại tồn kho
+                    // SỬA: Hoàn lại tồn kho trực tiếp vào bảng Sach
+                    updateSoLuongInSach(maSach, soLuong);
                 }
             }
 
@@ -944,6 +943,7 @@ public class BanHang extends javax.swing.JPanel {
             System.out.println("SQL Exception: " + e.getMessage());
             e.printStackTrace();
         }
+
     }//GEN-LAST:event_btnHuyActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
@@ -983,7 +983,9 @@ public class BanHang extends javax.swing.JPanel {
         try {
             int soLuongCu = Integer.parseInt(model.getValueAt(row, 3).toString());
             String tenSach = model.getValueAt(row, 2).toString();
-            int tonKhoHienTai = khoDAO.getSoLuong(maSach);
+
+            // SỬA: Lấy tồn kho trực tiếp từ bảng Sach
+            int tonKhoHienTai = getSoLuongFromSach(maSach);
 
             String message = String.format(
                     "Sản phẩm: %s\n"
@@ -1017,7 +1019,8 @@ public class BanHang extends javax.swing.JPanel {
             }
 
             if (soLuongMoi == 0) {
-                khoDAO.updateSoLuong(maSach, soLuongCu);
+                // SỬA: Cập nhật trực tiếp vào bảng Sach
+                updateSoLuongInSach(maSach, soLuongCu);
 
                 String sqlDelete = "DELETE FROM ChiTietHoaDon WHERE MaHD = ? AND MaSach = ?";
                 try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sqlDelete)) {
@@ -1034,7 +1037,8 @@ public class BanHang extends javax.swing.JPanel {
                 }
             } else {
                 int chenhLech = soLuongMoi - soLuongCu;
-                khoDAO.updateSoLuong(maSach, -chenhLech);
+                // SỬA: Cập nhật trực tiếp vào bảng Sach
+                updateSoLuongInSach(maSach, -chenhLech);
 
                 String sqlUpdate = "UPDATE ChiTietHoaDon SET SoLuong = ? WHERE MaHD = ? AND MaSach = ?";
                 try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sqlUpdate)) {
@@ -1049,7 +1053,8 @@ public class BanHang extends javax.swing.JPanel {
                 if (!txtMaSach.getText().trim().isEmpty()
                         && Integer.parseInt(txtMaSach.getText().trim()) == maSach) {
                     spSoLuong.setValue(soLuongMoi);
-                    txtTonKho.setText(String.valueOf(khoDAO.getSoLuong(maSach)));
+                    // SỬA: Cập nhật hiển thị tồn kho
+                    txtTonKho.setText(String.valueOf(getSoLuongFromSach(maSach)));
                 }
 
                 JOptionPane.showMessageDialog(this, "Đã cập nhật số lượng!");
@@ -1076,6 +1081,31 @@ public class BanHang extends javax.swing.JPanel {
         }
     }
 
+    private void updateSoLuongInSach(int maSach, int soLuongThayDoi) {
+        String sql = "UPDATE Sach SET SoLuong = SoLuong + ? WHERE MaSach = ?";
+        try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, soLuongThayDoi);
+            ps.setInt(2, maSach);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi cập nhật tồn kho: " + e.getMessage());
+        }
+    }
+
+    private int getSoLuongFromSach(int maSach) {
+        String sql = "SELECT SoLuong FROM Sach WHERE MaSach = ?";
+        try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maSach);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("SoLuong");
+            }
+            return 0;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi lấy số lượng tồn kho: " + e.getMessage());
+            return 0;
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JPanel BanHang;
     private javax.swing.JButton DanhSachSanPham;
@@ -1177,7 +1207,10 @@ public class BanHang extends javax.swing.JPanel {
         txtTenSach.setText(sach.getTenSach());
         txtDonGia.setText(String.valueOf(sach.getGiaBan()));
         txtISBN.setText(sach.getISBN());
-        txtTonKho.setText(String.valueOf(khoDAO.getSoLuong(sach.getMaSach())));
+
+        // SỬA: Lấy số lượng trực tiếp từ bảng Sach thay vì KhoDAO
+        txtTonKho.setText(String.valueOf(sach.getSoLuong()));
+
         spSoLuong.setValue(1);
         lbAnh.setIcon(null);
         lbAnh.setText("");
@@ -1354,7 +1387,7 @@ public class BanHang extends javax.swing.JPanel {
         }
     }
 
-    private void addToHoaDon() throws SQLException {
+    private void addToHoaDon() {
         if (maHD == -1) {
             JOptionPane.showMessageDialog(this, "Vui lòng tạo hóa đơn trước!");
             return;
@@ -1386,53 +1419,67 @@ public class BanHang extends javax.swing.JPanel {
             return;
         }
 
-        // Kiểm tra tồn kho chính xác hơn
-        int tonKhoHienTai = khoDAO.getSoLuong(maSachInt);
-        if (tonKhoHienTai < 0) {
-            JOptionPane.showMessageDialog(this, "Lỗi: Tồn kho hiện tại bị âm! Vui lòng liên hệ quản trị viên.");
+        // Kiểm tra số lượng tồn kho
+        Integer tonKho = null;
+        String sqlSachCheck = "SELECT SoLuong FROM Sach WHERE MaSach = ?";
+        try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sqlSachCheck)) {
+            ps.setInt(1, maSachInt);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                tonKho = rs.getInt("SoLuong");
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi kiểm tra tồn kho: " + e.getMessage());
             return;
         }
 
-        int soLuongTrongGio = 0;
-        DefaultTableModel model = (DefaultTableModel) tbSanPham.getModel();
-        int existingRow = -1;
+        if (tonKho == null || tonKho < soLuong) {
+            JOptionPane.showMessageDialog(this, "Số lượng tồn kho không đủ (" + (tonKho == null ? 0 : tonKho) + ")!");
+            return;
+        }
 
+        DefaultTableModel model = (DefaultTableModel) tbSanPham.getModel();
+        boolean productExists = false;
+        int existingRow = -1;
+        int currentQuantityInHD = 0;
+
+        // Kiểm tra sản phẩm đã có trong hóa đơn chưa
         for (int i = 0; i < model.getRowCount(); i++) {
-            if (Integer.parseInt(model.getValueAt(i, 0).toString()) == maSachInt) {
-                soLuongTrongGio = Integer.parseInt(model.getValueAt(i, 3).toString());
+            Object maSachObj = model.getValueAt(i, 0);
+            if (maSachObj != null && Integer.parseInt(maSachObj.toString()) == maSachInt) {
+                productExists = true;
                 existingRow = i;
+                currentQuantityInHD = Integer.parseInt(model.getValueAt(i, 3).toString());
                 break;
             }
         }
 
-        // Tính toán tồn kho khả dụng chính xác
-        int tongSoLuongCanThem = soLuong;
-        if (existingRow != -1) {
-            tongSoLuongCanThem = soLuongTrongGio + soLuong;
-        }
-
-        // Kiểm tra có đủ tồn kho không
-        int tonKhoCanThiet = tongSoLuongCanThem - soLuongTrongGio;
-        if (tonKhoCanThiet > tonKhoHienTai) {
-            JOptionPane.showMessageDialog(this,
-                    String.format("Không đủ tồn kho!\nTồn kho hiện tại: %d\nSố lượng cần thêm: %d\nSố lượng trong giỏ: %d",
-                            tonKhoHienTai, tonKhoCanThiet, soLuongTrongGio));
+        // Tính tổng số lượng
+        int totalQuantity = currentQuantityInHD + soLuong;
+        if (totalQuantity > tonKho) {
+            JOptionPane.showMessageDialog(this, "Tổng số lượng vượt quá tồn kho (" + tonKho + ")!");
             return;
         }
 
+        Connection conn = null;
         try {
-            if (existingRow != -1) {
-                // Cập nhật sản phẩm đã có trong giỏ
-                model.setValueAt(tongSoLuongCanThem, existingRow, 3);
+            conn = XJdbc.openConnection();
+            conn.setAutoCommit(false);
 
-                ChiTietHoaDon chiTiet = new ChiTietHoaDon();
-                chiTiet.setMaHD(maHD);
-                chiTiet.setMaSach(maSachInt);
-                chiTiet.setSoLuong(tongSoLuongCanThem);
-                chiTiet.setDonGia(sach.getGiaBan());
-                chiTietHoaDonDAO.update(chiTiet);
+            if (productExists) {
+                // Cập nhật số lượng trong bảng hiển thị
+                model.setValueAt(totalQuantity, existingRow, 3);
+
+                // Cập nhật chi tiết hóa đơn
+                String sqlUpdate = "UPDATE ChiTietHoaDon SET SoLuong = ? WHERE MaHD = ? AND MaSach = ?";
+                try (PreparedStatement ps = conn.prepareStatement(sqlUpdate)) {
+                    ps.setInt(1, totalQuantity);
+                    ps.setInt(2, maHD);
+                    ps.setInt(3, maSachInt);
+                    ps.executeUpdate();
+                }
             } else {
-                // Thêm sản phẩm mới vào giỏ
+                // Thêm sản phẩm mới vào bảng hiển thị
                 model.insertRow(0, new Object[]{
                     sach.getMaSach(),
                     sach.getISBN(),
@@ -1441,37 +1488,47 @@ public class BanHang extends javax.swing.JPanel {
                     sach.getGiaBan()
                 });
 
-                ChiTietHoaDon chiTiet = new ChiTietHoaDon();
-                chiTiet.setMaHD(maHD);
-                chiTiet.setMaSach(maSachInt);
-                chiTiet.setSoLuong(soLuong);
-                chiTiet.setDonGia(sach.getGiaBan());
-                chiTietHoaDonDAO.insert(chiTiet);
+                // Thêm chi tiết hóa đơn
+                String sqlInsert = "INSERT INTO ChiTietHoaDon (MaHD, MaSach, SoLuong, DonGia) VALUES (?, ?, ?, ?)";
+                try (PreparedStatement ps = conn.prepareStatement(sqlInsert)) {
+                    ps.setInt(1, maHD);
+                    ps.setInt(2, maSachInt);
+                    ps.setInt(3, soLuong);
+                    ps.setDouble(4, sach.getGiaBan());
+                    ps.executeUpdate();
+                }
             }
 
-            // Chỉ trừ số lượng thêm vào
-            khoDAO.updateSoLuong(maSachInt, -tonKhoCanThiet);
+            // Cập nhật số lượng trong bảng Sach
+            String sqlSachUpdate = "UPDATE Sach SET SoLuong = SoLuong - ? WHERE MaSach = ?";
+            try (PreparedStatement ps = conn.prepareStatement(sqlSachUpdate)) {
+                ps.setInt(1, soLuong);
+                ps.setInt(2, maSachInt);
+                ps.executeUpdate();
+            }
 
-            // Cập nhật giao diện
+            conn.commit();
             updateGiamGia();
-            updateThanhTien();
-
-            // Cập nhật tổng tiền trong hóa đơn
-            double tongTien = calculateTongTien();
-            HoaDon hoaDon = hoaDonDAO.findById(maHD);
-            if (hoaDon != null) {
-                hoaDon.setTongTien(tongTien);
-                hoaDonDAO.update(hoaDon);
-                fillToTableHoaDon();
-            }
-
-            clear();
-            JOptionPane.showMessageDialog(this, "Thêm sản phẩm vào giỏ hàng thành công!");
+            txtThanhTien.setText(String.format("%.2f", calculateTongTienWithoutDiscount()));
+            txtTonKho.setText(String.valueOf(tonKho - soLuong));
         } catch (SQLException e) {
-            // Rollback tồn kho nếu có lỗi
-            khoDAO.updateSoLuong(maSachInt, tonKhoCanThiet);
-            JOptionPane.showMessageDialog(this, "Lỗi khi thêm sản phẩm: " + e.getMessage());
-            throw e;
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(this, "Lỗi rollback: " + ex.getMessage());
+                }
+            }
+            JOptionPane.showMessageDialog(this, "Lỗi thêm sản phẩm: " + e.getMessage());
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(this, "Lỗi đóng kết nối: " + ex.getMessage());
+                }
+            }
         }
     }
 

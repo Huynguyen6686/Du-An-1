@@ -29,40 +29,23 @@ public class SachDAO {
                              ,[Tap]
                              ,[MaNgonNgu]
                              ,[HinhAnh]
+                             ,SoLuong
                          FROM [QLNhaSachPro].[dbo].[Sach]
                        """;
 
     // SQL tạo sách mới (đã bỏ MaLinhVuc và MaLoaiSach)
     String createSQL = """
-                       INSERT INTO [dbo].[Sach]
-                                  ([TenSach]
-                                  ,[MaTacGia]
-                                  ,[MaNXB]
-                                  ,[NamXuatBan]
-                                  ,[GiaBan]
-                                  ,[LanTaiBan]
-                                  ,[ISBN]
-                                  ,[Tap]
-                                  ,[MaNgonNgu]
-                                  ,[HinhAnh])
-                            VALUES
-                                  (?,?,?,?,?,?,?,?,?,?)
+                     INSERT INTO [dbo].[Sach]
+                                                          ([TenSach], [MaTacGia], [MaNXB], [NamXuatBan], [GiaBan], [LanTaiBan], [ISBN], [Tap], [MaNgonNgu], [HinhAnh], [SoLuong])
+                                                    VALUES (?,?,?,?,?,?,?,?,?,?,?)
                        """;
 
     // SQL cập nhật sách (đã bỏ MaLinhVuc và MaLoaiSach)
     String updateSQL = """
-                       UPDATE [dbo].[Sach]
-                          SET [TenSach] = ?
-                             ,[MaTacGia] = ?
-                             ,[MaNXB] = ?
-                             ,[NamXuatBan] = ?
-                             ,[GiaBan] = ?
-                             ,[LanTaiBan] = ?
-                             ,[ISBN] = ?
-                             ,[Tap] = ?
-                             ,[MaNgonNgu] = ?
-                             ,[HinhAnh] = ?
-                        WHERE MaSach = ?
+                      UPDATE [dbo].[Sach]
+                                    SET [TenSach] = ?, [MaTacGia] = ?, [MaNXB] = ?, [NamXuatBan] = ?, [GiaBan] = ?, 
+                                        [LanTaiBan] = ?, [ISBN] = ?, [Tap] = ?, [MaNgonNgu] = ?, [HinhAnh] = ?, [SoLuong] = ?
+                                  WHERE MaSach = ?
                        """;
 
     String deleteSQL = """
@@ -94,9 +77,8 @@ public class SachDAO {
                                """;
     String gallDanhSachSP = """
                           SELECT s.MaSach, s.TenSach, s.MaTacGia, s.MaNXB, 
-                                 s.NamXuatBan, s.GiaBan, s.LanTaiBan, s.ISBN, s.Tap, s.MaNgonNgu, k.SoLuong, s.HinhAnh 
-                          FROM Sach s 
-                          JOIN Kho k ON s.MaSach = k.MaSach
+                                     s.NamXuatBan, s.GiaBan, s.LanTaiBan, s.ISBN, s.Tap, s.MaNgonNgu, s.SoLuong, s.HinhAnh 
+                              FROM Sach s
                           """;
 
     public List<Sach> getAllDanhSachSP() {
@@ -131,7 +113,8 @@ public class SachDAO {
             sach.getISBN(),
             sach.getTap(),
             sach.getMaNgonNgu(),
-            sach.getHinhAnh()
+            sach.getHinhAnh(),
+            sach.getSoLuong()
         };
         return XJdbc.executeUpdate(createSQL, values);
     }
@@ -151,6 +134,7 @@ public class SachDAO {
             sach.getTap(),
             sach.getMaNgonNgu(),
             sach.getHinhAnh(),
+            sach.getSoLuong(),
             sach.getMaSach()
         };
         return XJdbc.executeUpdate(updateSQL, values);
@@ -300,35 +284,16 @@ public class SachDAO {
 
     public int updateSachHoanChinh(Sach sach, List<Integer> danhSachLinhVuc, List<Integer> danhSachLoaiSach) {
         try {
-            // Cập nhật thông tin sách
-            int result = update(sach);
+            int result = update(sach); // Cập nhật cả SoLuong
             if (result <= 0) {
                 throw new RuntimeException("Không thể cập nhật thông tin sách");
             }
-
-            // Cập nhật lĩnh vực
             if (danhSachLinhVuc != null) {
                 updateLinhVuc(sach.getMaSach(), danhSachLinhVuc);
             }
-
-            // Cập nhật loại sách
             if (danhSachLoaiSach != null) {
                 updateLoaiSach(sach.getMaSach(), danhSachLoaiSach);
             }
-
-            // Cập nhật số lượng trong bảng Kho
-            String checkKhoSQL = "SELECT COUNT(*) FROM Kho WHERE MaSach = ?";
-            int count = (int) XJdbc.getValue(checkKhoSQL, sach.getMaSach());
-            if (count > 0) {
-                // Nếu bản ghi tồn tại, cập nhật số lượng
-                String updateKhoSQL = "UPDATE Kho SET SoLuong = ? WHERE MaSach = ?";
-                XJdbc.executeUpdate(updateKhoSQL, sach.getSoLuong(), sach.getMaSach());
-            } else {
-                // Nếu bản ghi không tồn tại, thêm mới
-                String insertKhoSQL = "INSERT INTO Kho (MaSach, SoLuong) VALUES (?, ?)";
-                XJdbc.executeUpdate(insertKhoSQL, sach.getMaSach(), sach.getSoLuong());
-            }
-
             return result;
         } catch (Exception ex) {
             throw new RuntimeException("Lỗi khi cập nhật sách hoàn chỉnh: " + ex.getMessage(), ex);
