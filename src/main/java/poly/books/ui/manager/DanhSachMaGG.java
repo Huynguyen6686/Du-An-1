@@ -52,7 +52,7 @@ public class DanhSachMaGG extends javax.swing.JDialog {
                 phieuGiamGia.getTenPhieu(),
                 phieuGiamGia.getGiaTri(),
                 phieuGiamGia.getDieuKienApDung(),
-                phieuGiamGia.getTrangThai() == 1 ? "Có hiệu lực" : "Đã hết hạn"
+                phieuGiamGia.getTrangThai() == 1 ? "Còn hiệu lực" : " hết hiệu lực"
             };
             defaultTableModel.addRow(rowData);
         }
@@ -218,7 +218,7 @@ public class DanhSachMaGG extends javax.swing.JDialog {
         int selectedRow = tblPhieuGiamGia.getSelectedRow();
         if (selectedRow >= 0) {
             PhieuGiamGia Phieu = phieuGiamGiaDAO.getAll().get(selectedRow);
-            parentBanHang.setSelectedMaGG(Phieu); // <<< đúng
+            parentBanHang.chonPhieuGiamGia(Phieu); // <<< đúng
             this.dispose();
         } else {
             javax.swing.JOptionPane.showMessageDialog(this, "Vui lòng chọn một mã giảm giá trước khi xác nhận!");

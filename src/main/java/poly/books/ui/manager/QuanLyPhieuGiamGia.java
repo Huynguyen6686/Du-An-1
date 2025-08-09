@@ -38,6 +38,8 @@ public class QuanLyPhieuGiamGia extends javax.swing.JPanel implements poly.books
      */
     public QuanLyPhieuGiamGia() {
         initComponents();
+        rdoAvailable.setEnabled(false);
+        rdoUnavailable.setEnabled(false);
         jDateChooserBatDau.addPropertyChangeListener("date", new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
@@ -160,11 +162,11 @@ public class QuanLyPhieuGiamGia extends javax.swing.JPanel implements poly.books
 
         buttonGroup1.add(rdoAvailable);
         rdoAvailable.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        rdoAvailable.setText("Có hiệu lực");
+        rdoAvailable.setText("Còn hiệu lực");
 
         buttonGroup1.add(rdoUnavailable);
         rdoUnavailable.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        rdoUnavailable.setText("Đã hết hạn");
+        rdoUnavailable.setText("Hết hiệu lực");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel2.setText("Ngày bắt đầu");
@@ -570,7 +572,7 @@ public class QuanLyPhieuGiamGia extends javax.swing.JPanel implements poly.books
                 pg.getDieuKienApDung(),
                 sdf.format(pg.getNgayBatDau()),
                 sdf.format(pg.getNgayKetThuc()),
-                pg.getTrangThai() == 1 ? "Có hiệu lực" : "Đã hết hạn"
+                pg.getTrangThai() == 1 ? "Còn hiệu lực" : " hết hiệu lực"
             };
             model.addRow(row);
         }

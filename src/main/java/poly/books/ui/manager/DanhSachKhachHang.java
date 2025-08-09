@@ -199,7 +199,7 @@ public class DanhSachKhachHang extends javax.swing.JDialog {
         int selectedRow = tbKhachHang.getSelectedRow();
         if (selectedRow >= 0) {
             KhachHang khachHang = KHdao.getAll().get(selectedRow);
-            parentBanHang.setSelectedKhachHang(khachHang);
+            parentBanHang.chonKhachHang(khachHang);
             this.dispose();
         } else {
             javax.swing.JOptionPane.showMessageDialog(this, "Vui lòng chọn một Khách Hàng trước khi xác nhận!");

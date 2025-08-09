@@ -467,7 +467,7 @@ public class DanhSachSanPham extends javax.swing.JDialog implements poly.books.c
         int selectedRow = tbDanhSachSP.getSelectedRow();
         if (selectedRow >= 0) {
             Sach sach = sachDAO.getAll().get(selectedRow);
-            parentBanHang.setSelectedSach(sach);
+            parentBanHang.chonSach(sach);
             this.dispose();
         } else {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm trước khi xác nhận!");
