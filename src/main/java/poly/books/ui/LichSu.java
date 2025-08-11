@@ -17,6 +17,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 
@@ -45,8 +46,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
                 thongTinSanPham.getTenSach(),
                 thongTinSanPham.getGiaBan(),
                 thongTinSanPham.getSoLuong(),
-                thongTinSanPham.getThanhTien(),
-            };
+                thongTinSanPham.getThanhTien(),};
             defaultTableModel.addRow(rowData);
         }
     }
@@ -395,6 +395,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
     }//GEN-LAST:event_tblBillsMouseClicked
 
     private void btnOutputBillActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOutputBillActionPerformed
+
         int index = tblBills.getSelectedRow();
         if (index < 0) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn 1 hoá đơn để xuất pdf");
@@ -405,65 +406,73 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
         int MaHD = lichSuEntity.getMaHD();
 
         try {
-            // Đường dẫn đầy đủ tới file font .ttf
-           String fontPath = "D:\\Du-An-1\\src\\main\\resources\\fonts\\arial-unicode-ms.ttf";
+            // Font
+            String fontPath = "D:\\Du-An-1\\src\\main\\resources\\fonts\\arial-unicode-ms.ttf";
             File fontFile = new File(fontPath);
             if (!fontFile.exists()) {
                 JOptionPane.showMessageDialog(this, "Không tìm thấy file font: " + fontPath);
                 return;
             }
-
             BaseFont baseFont = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             Font fontTitle = new Font(baseFont, 16, Font.BOLD);
             Font fontNormal = new Font(baseFont, 12);
 
-            // Đảm bảo thư mục lưu file PDF
+            // Đảm bảo thư mục
             String folderPath = "D:/ExportBills";
             File folder = new File(folderPath);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-
             String filePath = folderPath + "/hoadon_" + MaHD + ".pdf";
 
+            // Tạo PDF
             Document document = new Document();
             PdfWriter.getInstance(document, new FileOutputStream(filePath));
             document.open();
 
+            // Tiêu đề
             Paragraph title = new Paragraph("HÓA ĐƠN BÁN HÀNG", fontTitle);
             title.setAlignment(Element.ALIGN_CENTER);
             document.add(title);
             document.add(new Paragraph(" "));
 
+            // Thông tin hoá đơn
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            DecimalFormat df = new DecimalFormat("#,### VND");
+
             document.add(new Paragraph("Mã hoá đơn: " + lichSuEntity.getMaHD(), fontNormal));
             document.add(new Paragraph("Tên đăng nhập: " + lichSuEntity.getTenDangNhap(), fontNormal));
             document.add(new Paragraph("Họ tên nhân viên: " + lichSuEntity.getHoTen(), fontNormal));
             document.add(new Paragraph("Tên khách hàng: " + lichSuEntity.getTenKH(), fontNormal));
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             document.add(new Paragraph("Ngày thanh toán: " + sdf.format(lichSuEntity.getNgayThanhToan()), fontNormal));
             document.add(new Paragraph("Phương thức: " + (lichSuEntity.getPhuongThuc() == 0 ? "Tiền mặt" : "Chuyển khoản"), fontNormal));
-            document.add(new Paragraph("Tổng tiền: " + lichSuEntity.getThanhTien(),fontNormal));
-            document.add(new Paragraph("Giảm: " + lichSuEntity.getGiam(),fontNormal));
-            document.add(new Paragraph("Thành tiền: " + lichSuEntity.getGiaSauKhiGiam(),fontNormal));
+            document.add(new Paragraph("Tổng tiền: " + df.format(lichSuEntity.getThanhTien()), fontNormal));
+            document.add(new Paragraph("Giảm: " + df.format(lichSuEntity.getGiam()), fontNormal));
+            document.add(new Paragraph("Thành tiền: " + df.format(lichSuEntity.getGiaSauKhiGiam()), fontNormal));
             document.add(new Paragraph("Trạng thái: " + (lichSuEntity.getTrangThai() == 1 ? "Đã thanh toán" : "Chưa thanh toán"), fontNormal));
             document.add(new Paragraph(" "));
 
-            PdfPTable table = new PdfPTable(6);
+            // Bảng sản phẩm
+            PdfPTable table = new PdfPTable(5); // Tên sách, Giá bán, SL, Giảm giá, Thành tiền
             table.setWidthPercentage(100);
-            table.setWidths(new float[]{2, 4, 2, 2, 2, 2});
+            table.setWidths(new float[]{4, 2, 1, 2, 2});
+
+            // Tiêu đề cột
             table.addCell(new PdfPCell(new Phrase("Tên sách", fontNormal)));
             table.addCell(new PdfPCell(new Phrase("Giá bán", fontNormal)));
             table.addCell(new PdfPCell(new Phrase("Số lượng", fontNormal)));
-            table.addCell(new PdfPCell(new Phrase("Thành tiền", fontNormal)));
             table.addCell(new PdfPCell(new Phrase("Giảm giá", fontNormal)));
-            table.addCell(new PdfPCell(new Phrase("Tổng", fontNormal)));
+            table.addCell(new PdfPCell(new Phrase("Thành tiền", fontNormal)));
 
+            // Dữ liệu sản phẩm
             List<ThongTinSanPham> dsSanPham = thongTinSanPhamDAO.findByID(MaHD);
             for (ThongTinSanPham sp : dsSanPham) {
                 table.addCell(new Phrase(sp.getTenSach(), fontNormal));
-                table.addCell(new Phrase(String.valueOf(sp.getGiaBan()), fontNormal));
+                table.addCell(new Phrase(df.format(sp.getGiaBan()), fontNormal));
                 table.addCell(new Phrase(String.valueOf(sp.getSoLuong()), fontNormal));
-                table.addCell(new Phrase(String.valueOf(sp.getThanhTien()), fontNormal));
+                table.addCell(new Phrase("0", fontNormal)); // Nếu chưa có dữ liệu giảm giá, để mặc định 0
+                double thanhTien = (sp.getThanhTien() != null) ? sp.getThanhTien() : sp.getGiaBan() * sp.getSoLuong();
+                table.addCell(new Phrase(df.format(thanhTien), fontNormal));
             }
 
             document.add(table);
