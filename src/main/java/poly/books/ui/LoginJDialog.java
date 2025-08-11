@@ -51,10 +51,10 @@ public class LoginJDialog extends javax.swing.JDialog implements poly.books.cont
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        icon.setBackground(new java.awt.Color(255, 255, 255));
+        icon.setBackground(new java.awt.Color(249, 243, 226));
         icon.setForeground(new java.awt.Color(153, 102, 255));
         icon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo_11.png"))); // NOI18N
+        icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Login.png"))); // NOI18N
         icon.setOpaque(true);
         icon.setPreferredSize(new java.awt.Dimension(200, 200));
 
@@ -119,7 +119,7 @@ public class LoginJDialog extends javax.swing.JDialog implements poly.books.cont
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(icon, javax.swing.GroupLayout.PREFERRED_SIZE, 281, Short.MAX_VALUE)
+                        .addComponent(icon, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
