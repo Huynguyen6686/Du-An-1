@@ -41,7 +41,7 @@ public class WelcomeJDialog extends javax.swing.JDialog implements poly.books.co
             }
         });
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBackground(new java.awt.Color(249, 243, 226));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 144, 193)));
 
         jLabel3.setBackground(new java.awt.Color(249, 243, 226));

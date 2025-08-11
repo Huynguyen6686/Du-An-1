@@ -49,7 +49,7 @@ public class LoginJDialog extends javax.swing.JDialog implements poly.books.cont
         setTitle("Đăng nhập");
         setBackground(new java.awt.Color(204, 255, 204));
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBackground(new java.awt.Color(249, 243, 226));
 
         icon.setBackground(new java.awt.Color(249, 243, 226));
         icon.setForeground(new java.awt.Color(153, 102, 255));
@@ -58,7 +58,7 @@ public class LoginJDialog extends javax.swing.JDialog implements poly.books.cont
         icon.setOpaque(true);
         icon.setPreferredSize(new java.awt.Dimension(200, 200));
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBackground(new java.awt.Color(249, 243, 226));
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "ĐĂNG NHẬP", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 24))); // NOI18N
         jPanel1.setForeground(new java.awt.Color(153, 255, 153));
 
@@ -67,6 +67,10 @@ public class LoginJDialog extends javax.swing.JDialog implements poly.books.cont
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Mật Khẩu");
+
+        txtUsername.setBackground(new java.awt.Color(249, 243, 226));
+
+        txtPassword.setBackground(new java.awt.Color(249, 243, 226));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
