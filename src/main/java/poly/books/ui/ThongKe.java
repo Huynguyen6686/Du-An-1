@@ -484,7 +484,7 @@ public class ThongKe extends javax.swing.JDialog {
         }
 
         JFreeChart chart = ChartFactory.createBarChart(
-                "THỐNG KÊ DOANH THU CỦA NHÂN VIÊN THÁNG NÀY",
+                "THỐNG KÊ DOANH THU CỦA NHÂN VIÊN NĂM NAY",
                 "Nhân viên",
                 "Doanh thu",
                 dataset,
@@ -2098,6 +2098,7 @@ public class ThongKe extends javax.swing.JDialog {
 
             // Reset và hiển thị panel cần thiết
             resetAllPanels();
+            jpnngay.setVisible(true);
             jPanel17.setVisible(true);
             jPanel18.setVisible(true);
 
@@ -2124,7 +2125,7 @@ public class ThongKe extends javax.swing.JDialog {
 
     private void btnlammoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnlammoiActionPerformed
         // TODO add your handling code here:
-
+        
         txtngaydau.setText("");
         txtngaycuoi.setText("");
         txtngaycuoinv.setText("");
@@ -2137,6 +2138,8 @@ public class ThongKe extends javax.swing.JDialog {
         jPanel14.setVisible(true);
         jPanel23.setVisible(true);
         jPanel34.setVisible(true);
+        jPanel20.setVisible(false);
+        
         jPanel24.setVisible(false);
         jPanel25.setVisible(false);
         jPanel26.setVisible(false);
@@ -2162,7 +2165,7 @@ public class ThongKe extends javax.swing.JDialog {
         jPanel28.setVisible(false);
         jPanel29.setVisible(false);
         jPanel30.setVisible(false);
-
+       jPanel31.setVisible(false);
     }//GEN-LAST:event_btnlammoiActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -2530,7 +2533,7 @@ public class ThongKe extends javax.swing.JDialog {
         }
 
         JFreeChart chart = ChartFactory.createBarChart(
-                "THỐNG KÊ DOANH THU CỦA SẢN PHẨM ",
+                "THỐNG KÊ DOANH THU CỦA SẢN PHẨM HÔM NAY ",
                 "Sản Phẩm",
                 "Doanh thu",
                 dataset,
@@ -2564,7 +2567,7 @@ public class ThongKe extends javax.swing.JDialog {
         }
 
         JFreeChart chart = ChartFactory.createBarChart(
-                "THỐNG KÊ DOANH THU CỦA SẢN PHẨM ",
+                "THỐNG KÊ DOANH THU CỦA SẢN PHẨM THÁNG NÀY",
                 "Sản Phẩm",
                 "Doanh thu",
                 dataset,
@@ -2598,7 +2601,7 @@ public class ThongKe extends javax.swing.JDialog {
         }
 
         JFreeChart chart = ChartFactory.createBarChart(
-                "THỐNG KÊ DOANH THU CỦA SẢN PHẨM ",
+                "THỐNG KÊ DOANH THU CỦA SẢN PHẨM NĂM NAY",
                 "Sản Phẩm",
                 "Doanh thu",
                 dataset,
