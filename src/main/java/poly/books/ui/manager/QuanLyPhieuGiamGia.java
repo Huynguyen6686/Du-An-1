@@ -46,6 +46,7 @@ public class QuanLyPhieuGiamGia extends javax.swing.JPanel implements poly.books
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 if (jDateChooserBatDau.getDate() != null) {
                     txtNgayBatDau.setText(sdf.format(jDateChooserBatDau.getDate()));
+                    updateStatusBasedOnDates();
                 }
             }
         });
@@ -56,6 +57,7 @@ public class QuanLyPhieuGiamGia extends javax.swing.JPanel implements poly.books
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 if (jDateChooserKetThuc.getDate() != null) {
                     txtNgayKetThuc.setText(sdf.format(jDateChooserKetThuc.getDate()));
+                    updateStatusBasedOnDates();
                 }
             }
         });
@@ -68,6 +70,7 @@ public class QuanLyPhieuGiamGia extends javax.swing.JPanel implements poly.books
         });
 //        initComponents();
     }
+
     private Date resetTime(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -76,7 +79,7 @@ public class QuanLyPhieuGiamGia extends javax.swing.JPanel implements poly.books
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         return cal.getTime();
-}
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -519,21 +522,22 @@ public class QuanLyPhieuGiamGia extends javax.swing.JPanel implements poly.books
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-     @Override
+    @Override
     public void setForm(PhieuGiamGia entity) {
         txtVoucherID.setText(String.valueOf(entity.getMaPhieu()));
         txtTenKhuyenMai.setText(String.valueOf(entity.getTenPhieu()));
         txtValue.setText(String.valueOf(entity.getGiaTri()));
         txtCondition.setText(String.valueOf(entity.getDieuKienApDung()));
 
-        rdoAvailable.setSelected(entity.getTrangThai() == 1);
-        rdoUnavailable.setSelected(entity.getTrangThai() == 0);
+        // Cập nhật trạng thái dựa trên ngày
+        int status = determineStatus(entity.getNgayBatDau(), entity.getNgayKetThuc());
+        rdoAvailable.setSelected(status == 1);
+        rdoUnavailable.setSelected(status == 0);
 
         // Set ngày bắt đầu và kết thúc
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         jDateChooserBatDau.setDate(entity.getNgayBatDau());
         txtNgayBatDau.setText(sdf.format(entity.getNgayBatDau()));
-
         jDateChooserKetThuc.setDate(entity.getNgayKetThuc());
         txtNgayKetThuc.setText(sdf.format(entity.getNgayKetThuc()));
     }
@@ -565,6 +569,7 @@ public class QuanLyPhieuGiamGia extends javax.swing.JPanel implements poly.books
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
         for (PhieuGiamGia pg : phieuGiamGiaList) {
+            int status = determineStatus(pg.getNgayBatDau(), pg.getNgayKetThuc());
             Object[] row = {
                 pg.getMaPhieu(),
                 pg.getTenPhieu(),
@@ -572,114 +577,129 @@ public class QuanLyPhieuGiamGia extends javax.swing.JPanel implements poly.books
                 pg.getDieuKienApDung(),
                 sdf.format(pg.getNgayBatDau()),
                 sdf.format(pg.getNgayKetThuc()),
-                pg.getTrangThai() == 1 ? "Còn hiệu lực" : " hết hiệu lực"
+                status == 1 ? "Còn hiệu lực" : "Hết hiệu lực"
             };
             model.addRow(row);
         }
     }
 
+    private int determineStatus(Date ngayBatDau, Date ngayKetThuc) {
+        if (ngayBatDau == null || ngayKetThuc == null) {
+            return 0; // Hết hiệu lực nếu ngày không hợp lệ
+        }
+        Date today = resetTime(new Date());
+        ngayBatDau = resetTime(ngayBatDau);
+        ngayKetThuc = resetTime(ngayKetThuc);
+
+        if (!ngayBatDau.after(today) && !ngayKetThuc.before(today)) {
+            return 1; // Còn hiệu lực
+        }
+        return 0; // Hết hiệu lực
+    }
+
+    private void updateStatusBasedOnDates() {
+        int status = determineStatus(jDateChooserBatDau.getDate(), jDateChooserKetThuc.getDate());
+        rdoAvailable.setSelected(status == 1);
+        rdoUnavailable.setSelected(status == 0);
+    }
+
     @Override
-public void create() {
-    if (txtValue.getText().trim().isEmpty() || txtCondition.getText().trim().isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Giá trị và điều kiện áp dụng không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        return;
+    public void create() {
+        if (txtValue.getText().trim().isEmpty() || txtCondition.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Giá trị và điều kiện áp dụng không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int giaTri = Integer.parseInt(txtValue.getText().trim());
+        int dieuKien = Integer.parseInt(txtCondition.getText().trim());
+        if (giaTri >= dieuKien) {
+            JOptionPane.showMessageDialog(this, "Giá trị phải nhỏ hơn điều kiện áp dụng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (jDateChooserBatDau.getDate() == null || jDateChooserKetThuc.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày bắt đầu và ngày kết thúc!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        Date today = resetTime(new Date());
+        Date ngayBatDau = resetTime(jDateChooserBatDau.getDate());
+        Date ngayKetThuc = resetTime(jDateChooserKetThuc.getDate());
+
+        if (ngayBatDau.before(today)) {
+            JOptionPane.showMessageDialog(this, "Ngày bắt đầu không được ở quá khứ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (ngayKetThuc.before(ngayBatDau)) {
+            JOptionPane.showMessageDialog(this, "Ngày kết thúc phải sau hoặc bằng ngày bắt đầu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            PhieuGiamGia phieuGiamGia = getForm();
+            phieuGiamGia.setTrangThai(determineStatus(ngayBatDau, ngayKetThuc)); // Cập nhật trạng thái
+            phieuGiamGiaDAO.create(phieuGiamGia);
+            this.fillToTable();
+            this.clear();
+            JOptionPane.showMessageDialog(this, "Thêm phiếu giảm giá thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+        } catch (RuntimeException ex) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi thêm phiếu giảm giá: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
-    // Kiểm tra giá trị < điều kiện áp dụng
-    int giaTri = Integer.parseInt(txtValue.getText().trim());
-    int dieuKien = Integer.parseInt(txtCondition.getText().trim());
-    if (giaTri >= dieuKien) {
-        JOptionPane.showMessageDialog(this, "Giá trị phải nhỏ hơn điều kiện áp dụng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        return;
+    @Override
+    public void update() {
+        int selectedRow = tblPhieuGiamGia.getSelectedRow();
+        if (selectedRow < 0 || selectedRow >= phieuGiamGiaList.size()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một phiếu giảm giá để sửa!", "Lỗi", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (txtVoucherID.getText().trim().isEmpty() || txtCondition.getText().trim().isEmpty() || txtValue.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ Mã phiếu, Giá trị và Điều kiện áp dụng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (jDateChooserBatDau.getDate() == null || jDateChooserKetThuc.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày bắt đầu và ngày kết thúc!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int giaTri = Integer.parseInt(txtValue.getText().trim());
+        int dieuKien = Integer.parseInt(txtCondition.getText().trim());
+
+        if (giaTri >= dieuKien) {
+            JOptionPane.showMessageDialog(this, "Giá trị phải nhỏ hơn điều kiện áp dụng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        Date today = resetTime(new Date());
+        Date ngayBatDau = resetTime(jDateChooserBatDau.getDate());
+        Date ngayKetThuc = resetTime(jDateChooserKetThuc.getDate());
+
+        if (ngayBatDau.before(today)) {
+            JOptionPane.showMessageDialog(this, "Ngày bắt đầu không được ở quá khứ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (ngayKetThuc.before(ngayBatDau)) {
+            JOptionPane.showMessageDialog(this, "Ngày kết thúc phải sau hoặc bằng ngày bắt đầu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            PhieuGiamGia phieuGiamGia = getForm();
+            phieuGiamGia.setMaPhieu(Integer.parseInt(txtVoucherID.getText().trim()));
+            phieuGiamGia.setTrangThai(determineStatus(ngayBatDau, ngayKetThuc)); // Cập nhật trạng thái
+            phieuGiamGiaDAO.update(phieuGiamGia);
+            this.fillToTable();
+            this.clear();
+            JOptionPane.showMessageDialog(this, "Cập nhật phiếu giảm giá thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+        } catch (RuntimeException ex) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật phiếu giảm giá: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
     }
-
-    // Kiểm tra ngày bắt đầu và ngày kết thúc
-    if (jDateChooserBatDau.getDate() == null || jDateChooserKetThuc.getDate() == null) {
-        JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày bắt đầu và ngày kết thúc!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    // Chuẩn hóa ngày
-    Date today = resetTime(new Date());
-    Date ngayBatDau = resetTime(jDateChooserBatDau.getDate());
-    Date ngayKetThuc = resetTime(jDateChooserKetThuc.getDate());
-
-    if (ngayBatDau.before(today)) {
-        JOptionPane.showMessageDialog(this, "Ngày bắt đầu không được ở quá khứ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    if (ngayKetThuc.before(ngayBatDau)) {
-        JOptionPane.showMessageDialog(this, "Ngày kết thúc phải sau hoặc bằng ngày bắt đầu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    try {
-        PhieuGiamGia phieuGiamGia = getForm();
-        phieuGiamGiaDAO.create(phieuGiamGia);
-        this.fillToTable();
-        this.clear();
-        JOptionPane.showMessageDialog(this, "Thêm phiếu giảm giá thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
-    } catch (RuntimeException ex) {
-        JOptionPane.showMessageDialog(this, "Lỗi khi thêm phiếu giảm giá: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-    }
-}
-
-
-   @Override
-public void update() {
-    int selectedRow = tblPhieuGiamGia.getSelectedRow();
-    if (selectedRow < 0 || selectedRow >= phieuGiamGiaList.size()) {
-        JOptionPane.showMessageDialog(this, "Vui lòng chọn một phiếu giảm giá để sửa!", "Lỗi", JOptionPane.WARNING_MESSAGE);
-        return;
-    }
-
-    if (txtVoucherID.getText().trim().isEmpty() || txtCondition.getText().trim().isEmpty() || txtValue.getText().trim().isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ Mã phiếu, Giá trị và Điều kiện áp dụng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    if (jDateChooserBatDau.getDate() == null || jDateChooserKetThuc.getDate() == null) {
-        JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày bắt đầu và ngày kết thúc!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    int giaTri = Integer.parseInt(txtValue.getText().trim());
-    int dieuKien = Integer.parseInt(txtCondition.getText().trim());
-
-    if (giaTri >= dieuKien) {
-        JOptionPane.showMessageDialog(this, "Giá trị phải nhỏ hơn điều kiện áp dụng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    // Chuẩn hóa ngày
-    Date today = resetTime(new Date());
-    Date ngayBatDau = resetTime(jDateChooserBatDau.getDate());
-    Date ngayKetThuc = resetTime(jDateChooserKetThuc.getDate());
-
-    if (ngayBatDau.before(today)) {
-        JOptionPane.showMessageDialog(this, "Ngày bắt đầu không được ở quá khứ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    if (ngayKetThuc.before(ngayBatDau)) {
-        JOptionPane.showMessageDialog(this, "Ngày kết thúc phải sau hoặc bằng ngày bắt đầu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    try {
-        PhieuGiamGia phieuGiamGia = getForm();
-        phieuGiamGia.setMaPhieu(Integer.parseInt(txtVoucherID.getText().trim()));
-
-        phieuGiamGiaDAO.update(phieuGiamGia);
-        this.fillToTable();
-        this.clear();
-        JOptionPane.showMessageDialog(this, "Cập nhật phiếu giảm giá thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
-    } catch (RuntimeException ex) {
-        JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật phiếu giảm giá: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-    }
-}
-
 
     @Override
     public void delete() {
@@ -706,35 +726,35 @@ public void update() {
             XDialog.alert("Không thể xóa vì phiếu giảm giá này đang được sử dụng trong sách hoặc hệ thống.");
         }
     }
-@Override
-public void clear() {
-    int confirm = JOptionPane.showConfirmDialog(this, "Bạn có muốn làm mới không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
-    if (confirm != JOptionPane.YES_OPTION) {
-        return;
+
+    @Override
+    public void clear() {
+        int confirm = JOptionPane.showConfirmDialog(this, "Bạn có muốn làm mới không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        Date today = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+        // Ngày bắt đầu -> hôm nay
+        jDateChooserBatDau.setDate(today);
+        txtNgayBatDau.setText(sdf.format(today));
+
+        // Ngày kết thúc -> clear
+        jDateChooserKetThuc.setDate(null);
+        txtNgayKetThuc.setText("");
+
+        // Reset các ô text
+        txtVoucherID.setText("");
+        txtValue.setText("");
+        txtCondition.setText("");
+        txtTenKhuyenMai.setText("");
+
+        // Trạng thái: Mặc định là "Có hiệu lực"
+        rdoAvailable.setSelected(true);
+        rdoUnavailable.setSelected(false);
     }
-
-    Date today = new Date();
-    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
-    // Ngày bắt đầu -> hôm nay
-    jDateChooserBatDau.setDate(today);
-    txtNgayBatDau.setText(sdf.format(today));
-
-    // Ngày kết thúc -> clear
-    jDateChooserKetThuc.setDate(null);
-    txtNgayKetThuc.setText("");
-
-    // Reset các ô text
-    txtVoucherID.setText("");
-    txtValue.setText("");
-    txtCondition.setText("");
-    txtTenKhuyenMai.setText("");
-
-    // Trạng thái: Mặc định là "Có hiệu lực"
-    rdoAvailable.setSelected(true);
-    rdoUnavailable.setSelected(false);
-}
-
 
     @Override
     public void setEditable(boolean editable) {
