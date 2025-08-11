@@ -378,7 +378,7 @@ public class BanHang extends javax.swing.JPanel {
             kichHoatButtonThanhToan();
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi thêm sản phẩm: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Lỗi thêm sản phẩm: Vui lòng chọn hóa đơn để thêm sản phẩm "); 
             Logger.getLogger(BanHang.class.getName()).log(Level.SEVERE, "Loi them san pham", e);
         }
     }
