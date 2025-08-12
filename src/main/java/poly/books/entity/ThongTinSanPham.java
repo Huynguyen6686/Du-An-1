@@ -11,5 +11,4 @@ public class ThongTinSanPham {
     private String TenSach;
     private double GiaBan;
     private int SoLuong;
-    private Double ThanhTien;
 }

@@ -214,21 +214,17 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(8, 8, 8)
-                        .addComponent(jLabel10))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel11)))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblVoucher, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel10))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblVoucher, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -297,11 +293,11 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblTotal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(35, 35, 35)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblVoucher, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
+                .addGap(28, 28, 28)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel9)
                     .addComponent(lblDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -452,26 +448,24 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
             document.add(new Paragraph(" "));
 
             // Bảng sản phẩm
-            PdfPTable table = new PdfPTable(5); // Tên sách, Giá bán, SL, Giảm giá, Thành tiền
+            PdfPTable table = new PdfPTable(4);
             table.setWidthPercentage(100);
-            table.setWidths(new float[]{4, 2, 1, 2, 2});
+            table.setWidths(new float[]{4, 2, 1, 1});
 
             // Tiêu đề cột
+            table.addCell(new PdfPCell(new Phrase("ISBN", fontNormal)));
             table.addCell(new PdfPCell(new Phrase("Tên sách", fontNormal)));
             table.addCell(new PdfPCell(new Phrase("Giá bán", fontNormal)));
             table.addCell(new PdfPCell(new Phrase("Số lượng", fontNormal)));
-            table.addCell(new PdfPCell(new Phrase("Giảm giá", fontNormal)));
-            table.addCell(new PdfPCell(new Phrase("Thành tiền", fontNormal)));
+
 
             // Dữ liệu sản phẩm
             List<ThongTinSanPham> dsSanPham = thongTinSanPhamDAO.findByID(MaHD);
             for (ThongTinSanPham sp : dsSanPham) {
+                table.addCell(new Phrase(sp.getISBN(), fontNormal));
                 table.addCell(new Phrase(sp.getTenSach(), fontNormal));
                 table.addCell(new Phrase(df.format(sp.getGiaBan()), fontNormal));
-                table.addCell(new Phrase(String.valueOf(sp.getSoLuong()), fontNormal));
-                table.addCell(new Phrase("0", fontNormal)); // Nếu chưa có dữ liệu giảm giá, để mặc định 0
-                double thanhTien = (sp.getThanhTien() != null) ? sp.getThanhTien() : sp.getGiaBan() * sp.getSoLuong();
-                table.addCell(new Phrase(df.format(thanhTien), fontNormal));
+                table.addCell(new Phrase(String.valueOf(sp.getSoLuong()), fontNormal)); // Nếu chưa có dữ liệu giảm giá, để mặc định 0
             }
 
             document.add(table);
