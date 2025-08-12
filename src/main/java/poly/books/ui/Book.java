@@ -46,20 +46,7 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
         cardLayout = (CardLayout) QuanLy.getLayout();
     }
 
-    private void showThongKe() {
-
-        // Tạo instance của QuanLySach và lấy nội dung
-        ThongKe QlTK = new ThongKe(this, false); // Không cần modal
-        JPanel contentPanel = QlTK.getContentPanel();
-
-        // Thêm nội dung vào mainSach
-        pnlThongke.setLayout(new BorderLayout());
-        pnlThongke.add(contentPanel, BorderLayout.CENTER);
-        pnlThongke.revalidate();
-        pnlThongke.repaint();
-        
-
-    }
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -92,10 +79,8 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
         qLTaiKhoan1 = new poly.books.ui.manager.QLTaiKhoan();
         quanLySach1 = new poly.books.ui.manager.QuanLySach();
         changePassword1 = new poly.books.ui.ChangePassword();
-        qlThongKe = new javax.swing.JPanel();
-        jLabel9 = new javax.swing.JLabel();
-        pnlThongke = new javax.swing.JPanel();
         quanLyPhieuGiamGia1 = new poly.books.ui.manager.QuanLyPhieuGiamGia();
+        thongKe1 = new poly.books.ui.ThongKe();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1323, 800));
@@ -281,35 +266,8 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
         QuanLy.add(qLTaiKhoan1, "card6");
         QuanLy.add(quanLySach1, "card7");
         QuanLy.add(changePassword1, "card8");
-
-        qlThongKe.setLayout(new java.awt.BorderLayout());
-
-        jLabel9.setBackground(new java.awt.Color(0, 144, 193));
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("Thống Kê");
-        jLabel9.setMinimumSize(new java.awt.Dimension(82, 50));
-        jLabel9.setOpaque(true);
-        jLabel9.setPreferredSize(new java.awt.Dimension(82, 50));
-        qlThongKe.add(jLabel9, java.awt.BorderLayout.PAGE_START);
-
-        pnlThongke.setBackground(new java.awt.Color(255, 255, 255));
-
-        javax.swing.GroupLayout pnlThongkeLayout = new javax.swing.GroupLayout(pnlThongke);
-        pnlThongke.setLayout(pnlThongkeLayout);
-        pnlThongkeLayout.setHorizontalGroup(
-            pnlThongkeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1213, Short.MAX_VALUE)
-        );
-        pnlThongkeLayout.setVerticalGroup(
-            pnlThongkeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 750, Short.MAX_VALUE)
-        );
-
-        qlThongKe.add(pnlThongke, java.awt.BorderLayout.CENTER);
-
-        QuanLy.add(qlThongKe, "card9");
         QuanLy.add(quanLyPhieuGiamGia1, "card4");
+        QuanLy.add(thongKe1, "card9");
 
         Book.setRightComponent(QuanLy);
 
@@ -335,7 +293,6 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
 
 
     private void lbThongKeMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_lbThongKeMouseClicked
-        showThongKe();
         cardLayout.show(QuanLy, "card9");
     }// GEN-LAST:event_lbThongKeMouseClicked
 
@@ -429,7 +386,6 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
     public javax.swing.JPanel QuanLy;
     public poly.books.ui.BanHang banHang;
     private poly.books.ui.ChangePassword changePassword1;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel lbBanHang;
     private javax.swing.JLabel lbDangXuat;
     private javax.swing.JLabel lbDoiMk;
@@ -444,12 +400,11 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
     private javax.swing.JLabel lblHoTen;
     public poly.books.ui.LichSu lichSu1;
     private javax.swing.JPanel menu;
-    private javax.swing.JPanel pnlThongke;
     public poly.books.ui.manager.QLTaiKhoan qLTaiKhoan1;
-    public javax.swing.JPanel qlThongKe;
     public poly.books.ui.manager.QuanLyKhachHang quanLyKhachHang1;
     private poly.books.ui.manager.QuanLyPhieuGiamGia quanLyPhieuGiamGia1;
     public poly.books.ui.manager.QuanLySach quanLySach1;
+    private poly.books.ui.ThongKe thongKe1;
     // End of variables declaration//GEN-END:variables
     @Override
     public void init() {

@@ -233,7 +233,9 @@ public class BanHang extends javax.swing.JPanel {
 
     private boolean coTheTaoHoaDonMoi() throws SQLException {
         String sql = "SELECT COUNT(*) FROM HoaDon WHERE TrangThai = 0";
-        try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+        try (Connection conn = XJdbc.openConnection();
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
 
             if (rs.next() && rs.getInt(1) >= SO_HOA_DON_CHO_TOI_DA) {
                 JOptionPane.showMessageDialog(this,
@@ -251,13 +253,15 @@ public class BanHang extends javax.swing.JPanel {
         String sql;
         if (TEN_KHACH_VANG_LAI.equals(tenKhachHang)) {
             sql = "SELECT MaKH FROM KhachHang WHERE TenKH = ? AND SDT IS NULL";
-            try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            try (Connection conn = XJdbc.openConnection();
+                    PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, tenKhachHang);
                 return layMaKhachHangTuKetQua(ps.executeQuery());
             }
         } else {
             sql = "SELECT MaKH FROM KhachHang WHERE TenKH = ? AND (SDT = ? OR SDT IS NULL)";
-            try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            try (Connection conn = XJdbc.openConnection(); 
+                    PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, tenKhachHang);
                 ps.setString(2, soDienThoai.isEmpty() ? null : soDienThoai);
                 return layMaKhachHangTuKetQua(ps.executeQuery());
@@ -523,9 +527,9 @@ public class BanHang extends javax.swing.JPanel {
 
     private void hienThiThongBaoThanhCong(double tongTien, double giamGia, double thanhTien) {
         txtTrangThai.setText("Đã thanh toán");
-        txtTongTien.setText(String.format("%.2f", thanhTien));
+        txtTanhtien.setText(String.format("%.2f", thanhTien));
         txtGiamGia.setText(String.format("%.2f", giamGia));
-        txtThanhTien.setText(String.format("%.2f", tongTien));
+        txtTongtien.setText(String.format("%.2f", tongTien));
 
         JOptionPane.showMessageDialog(this, "Thanh toán thành công!");
         taiDuLieuBangHoaDon();
@@ -612,8 +616,8 @@ public class BanHang extends javax.swing.JPanel {
         double giamGia = tinhGiamGia(tongTienTruocGiam);
         double thanhTien = tongTienTruocGiam - giamGia;
 
-        txtThanhTien.setText(String.format("%.2f", tongTienTruocGiam));
-        txtTongTien.setText(String.format("%.2f", thanhTien));
+        txtTongtien.setText(String.format("%.2f", tongTienTruocGiam));
+        txtTanhtien.setText(String.format("%.2f", thanhTien));
         txtGiamGia.setText(String.format("%.2f", giamGia));
     }
 
@@ -658,7 +662,7 @@ public class BanHang extends javax.swing.JPanel {
         txtNgayLap.setText(XDate.format(hoaDon.getNgayLap(), "dd-MM-yyyy"));
         txtMaPhieu.setText(hoaDon.getMaPhieu() != null ? String.valueOf(hoaDon.getMaPhieu()) : "");
         txtTrangThai.setText(hoaDon.getTrangThai() == 0 ? "Chờ thanh toán" : "Đã thanh toán");
-        txtTongTien.setText(String.format("%.2f", hoaDon.getTongTien()));
+        txtTanhtien.setText(String.format("%.2f", hoaDon.getTongTien()));
 
         rdoTienMat.setSelected(hoaDon.getPhuongThuc() == 1);
         rdoTk.setSelected(hoaDon.getPhuongThuc() == 2);
@@ -1036,11 +1040,11 @@ public class BanHang extends javax.swing.JPanel {
         txtTenKH.setText("");
         txtMaPhieu.setText("");
         txtTrangThai.setText("");
-        txtTongTien.setText("");
+        txtTanhtien.setText("");
         txtGiamGia.setText("0");
         txtSDT.setText("");
         txtTenMaGG.setText("");
-        txtThanhTien.setText("");
+        txtTongtien.setText("");
 
         buttonGroup1.clearSelection();
         ((DefaultTableModel) tbSanPham.getModel()).setRowCount(0);
@@ -1118,11 +1122,11 @@ public class BanHang extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tbSanPham = new javax.swing.JTable();
-        txtTongTien = new javax.swing.JTextField();
+        txtTanhtien = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
         txtGiamGia = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
-        txtThanhTien = new javax.swing.JTextField();
+        txtTongtien = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         rdoTienMat = new javax.swing.JRadioButton();
@@ -1483,11 +1487,11 @@ public class BanHang extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        jLabel14.setText("Tổng tiền:");
+        jLabel14.setText("Thành tiền:");
 
         jLabel15.setText("Giảm giá:");
 
-        jLabel17.setText("Thành tiền:");
+        jLabel17.setText("Tổng tiền:");
 
         jLabel18.setText("Phương thức thanh toán:");
 
@@ -1577,7 +1581,7 @@ public class BanHang extends javax.swing.JPanel {
                             .addGroup(TTHDLayout.createSequentialGroup()
                                 .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(26, 26, 26)
-                                .addComponent(txtThanhTien, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtTongtien, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(TTHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, TTHDLayout.createSequentialGroup()
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1585,9 +1589,9 @@ public class BanHang extends javax.swing.JPanel {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(txtGiamGia, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(30, 30, 30)
-                                        .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtTongTien, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(txtTanhtien, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(TTHDLayout.createSequentialGroup()
                                         .addGroup(TTHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(TTHDLayout.createSequentialGroup()
@@ -1657,11 +1661,11 @@ public class BanHang extends javax.swing.JPanel {
                         .addGap(29, 29, 29)
                         .addGroup(TTHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel17)
-                            .addComponent(txtThanhTien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtTongtien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtGiamGia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel15)
                             .addComponent(jLabel14)
-                            .addComponent(txtTongTien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtTanhtien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(TTHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(TTHDLayout.createSequentialGroup()
                                 .addGap(18, 18, 18)
@@ -1847,13 +1851,13 @@ public class BanHang extends javax.swing.JPanel {
     private javax.swing.JTextField txtMaSach;
     private javax.swing.JTextField txtNgayLap;
     private javax.swing.JTextField txtSDT;
+    private javax.swing.JTextField txtTanhtien;
     private javax.swing.JTextField txtTenKH;
     private javax.swing.JTextField txtTenMaGG;
     private javax.swing.JTextField txtTenSach;
-    private javax.swing.JTextField txtThanhTien;
     private javax.swing.JLabel txtTieuDe;
     private javax.swing.JTextField txtTonKho;
-    private javax.swing.JTextField txtTongTien;
+    private javax.swing.JTextField txtTongtien;
     private javax.swing.JTextField txtTrangThai;
     // End of variables declaration//GEN-END:variables
 private static class KetQuaValidation {

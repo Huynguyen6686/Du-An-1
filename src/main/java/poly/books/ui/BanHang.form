@@ -651,7 +651,7 @@
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="jLabel17" min="-2" pref="67" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                                          <Component id="txtThanhTien" min="-2" pref="125" max="-2" attributes="0"/>
+                                          <Component id="txtTongtien" min="-2" pref="125" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                               <Group type="102" alignment="1" attributes="0">
                                                   <EmptySpace max="-2" attributes="0"/>
@@ -659,9 +659,9 @@
                                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                                   <Component id="txtGiamGia" min="-2" pref="109" max="-2" attributes="0"/>
                                                   <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
-                                                  <Component id="jLabel14" min="-2" pref="55" max="-2" attributes="0"/>
-                                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                                  <Component id="txtTongTien" min="-2" pref="125" max="-2" attributes="0"/>
+                                                  <Component id="jLabel14" min="-2" pref="61" max="-2" attributes="0"/>
+                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                                  <Component id="txtTanhtien" min="-2" pref="125" max="-2" attributes="0"/>
                                               </Group>
                                               <Group type="102" alignment="0" attributes="0">
                                                   <Group type="103" groupAlignment="0" attributes="0">
@@ -757,11 +757,11 @@
                                   <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="jLabel17" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtThanhTien" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="txtTongtien" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="txtGiamGia" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel15" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel14" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtTongTien" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="txtTanhtien" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
@@ -925,11 +925,11 @@
                     </Container>
                   </SubComponents>
                 </Container>
-                <Component class="javax.swing.JTextField" name="txtTongTien">
+                <Component class="javax.swing.JTextField" name="txtTanhtien">
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel14">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="T&#x1ed5;ng ti&#x1ec1;n:"/>
+                    <Property name="text" type="java.lang.String" value="Th&#xe0;nh ti&#x1ec1;n:"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtGiamGia">
@@ -939,11 +939,11 @@
                     <Property name="text" type="java.lang.String" value="Gi&#x1ea3;m gi&#xe1;:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="txtThanhTien">
+                <Component class="javax.swing.JTextField" name="txtTongtien">
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel17">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Th&#xe0;nh ti&#x1ec1;n:"/>
+                    <Property name="text" type="java.lang.String" value="T&#x1ed5;ng ti&#x1ec1;n:"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel18">
