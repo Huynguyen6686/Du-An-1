@@ -16,6 +16,6 @@ public class LichSuEntity {
     private int PhuongThuc;
     private double ThanhTien;
     private int Giam;
-    private double GiaSauKhiGiam;
+    private double TongTien;
     private int TrangThai;
 }

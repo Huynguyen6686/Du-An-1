@@ -14,9 +14,9 @@ SELECT DISTINCT
     kh.TenKH,
     hd.NgayThanhToan,
     hd.PhuongThuc,
-   hd.TongTien as ThanhTien,
+    (hd.TongTien + ISNULL(pgg.GiaTri, 0)) as TongTien,
     ISNULL(pgg.GiaTri, 0) AS Giam,
-    (hd.TongTien- ISNULL(pgg.GiaTri, 0)) AS GiaSauKhiGiam,
+    hd.TongTien  AS ThanhTien,
     hd.TrangThai
 FROM HoaDon hd
 JOIN NguoiDungSD ndsd ON hd.TenDangNhap = ndsd.TenDangNhap

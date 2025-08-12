@@ -441,9 +441,9 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
             document.add(new Paragraph("Tên khách hàng: " + lichSuEntity.getTenKH(), fontNormal));
             document.add(new Paragraph("Ngày thanh toán: " + sdf.format(lichSuEntity.getNgayThanhToan()), fontNormal));
             document.add(new Paragraph("Phương thức: " + (lichSuEntity.getPhuongThuc() == 0 ? "Tiền mặt" : "Chuyển khoản"), fontNormal));
-            document.add(new Paragraph("Tổng tiền: " + df.format(lichSuEntity.getThanhTien()), fontNormal));
+            document.add(new Paragraph("Tổng tiền: " + df.format(lichSuEntity.getTongTien()), fontNormal));
             document.add(new Paragraph("Giảm: " + df.format(lichSuEntity.getGiam()), fontNormal));
-            document.add(new Paragraph("Thành tiền: " + df.format(lichSuEntity.getGiaSauKhiGiam()), fontNormal));
+            document.add(new Paragraph("Thành tiền: " + df.format(lichSuEntity.getThanhTien()), fontNormal));
             document.add(new Paragraph("Trạng thái: " + (lichSuEntity.getTrangThai() == 1 ? "Đã thanh toán" : "Chưa thanh toán"), fontNormal));
             document.add(new Paragraph(" "));
 
@@ -457,7 +457,6 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
             table.addCell(new PdfPCell(new Phrase("Tên sách", fontNormal)));
             table.addCell(new PdfPCell(new Phrase("Giá bán", fontNormal)));
             table.addCell(new PdfPCell(new Phrase("Số lượng", fontNormal)));
-
 
             // Dữ liệu sản phẩm
             List<ThongTinSanPham> dsSanPham = thongTinSanPhamDAO.findByID(MaHD);
@@ -527,9 +526,11 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
         lblCustomerName.setText(entity.getTenKH());
         lblPaymentDay.setText(String.valueOf(entity.getNgayThanhToan()));
         lblPayment.setText(String.valueOf(entity.getPhuongThuc() == 2 ? "Chuyển khoản" : "Tiền mặt"));
-        lblTotal.setText(String.valueOf(entity.getThanhTien()));
-        lblVoucher.setText(String.valueOf(entity.getGiam()));
-        lblDiscount.setText(String.valueOf(entity.getGiaSauKhiGiam()));
+
+        lblTotal.setText(String.valueOf(entity.getTongTien()));        // Tổng tiền gốc
+        lblVoucher.setText(String.valueOf(entity.getGiam()));          // Giảm giá
+        lblDiscount.setText(String.valueOf(entity.getThanhTien()));    // Thành tiền (sau giảm)
+
         lblStatus.setText(String.valueOf(entity.getTrangThai() == 1 ? "Đã Thanh toán" : "Chưa thanh toán"));
     }
 
@@ -551,8 +552,8 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
                 lichSuEntity.getTenKH(),
                 lichSuEntity.getNgayThanhToan(),
                 lichSuEntity.getPhuongThuc() == 2 ? "Chuyển khoản" : "Tiền mặt",
-                lichSuEntity.getGiam(),
-                lichSuEntity.getGiaSauKhiGiam(),
+                lichSuEntity.getGiam(), 
+                lichSuEntity.getThanhTien(), 
                 lichSuEntity.getTrangThai() == 1 ? "Đã Thanh toán" : "Chưa thanh toán"
             };
             defaultTableModel.addRow(rowData);
