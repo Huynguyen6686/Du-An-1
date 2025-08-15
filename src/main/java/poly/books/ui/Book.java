@@ -7,12 +7,16 @@ package poly.books.ui;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Image;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import poly.books.controller.PolybookController;
 import poly.books.dao.impl.UserDAOImpl;
 import poly.books.entity.NguoiDungSD;
@@ -44,9 +48,44 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
         addClickEffect(lbDoiMk);
         addClickEffect(lbLichSu);
         cardLayout = (CardLayout) QuanLy.getLayout();
+        QuanLy.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                // Refresh active panel
+                Component[] components = QuanLy.getComponents();
+                for (Component comp : components) {
+                    if (comp.isVisible() && comp instanceof ThongKe) {
+                        ((ThongKe) comp).refreshAll();
+                        break;
+                    }
+                }
+            }
+        });
     }
 
-   
+    private void refreshThongKe() {
+        if (thongKe1 != null) {
+            // Sử dụng method refreshAll() thay vì filltableAll()
+            thongKe1.refreshAll();
+        }
+    }
+
+    private void refreshAllPanels() {
+        // Refresh thống kê
+        if (thongKe1 != null) {
+            thongKe1.refreshAll(); // Sử dụng public method
+        }
+
+        // Refresh các panel khác nếu cần
+        if (lichSu1 != null) {
+            // lichSu1.loadData(); // Đảm bảo method này là public
+        }
+
+        // Revalidate và repaint toàn bộ QuanLy panel
+        QuanLy.revalidate();
+        QuanLy.repaint();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -291,9 +330,16 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
 
     }// GEN-LAST:event_lbQuanLyKHMouseClicked
 
-
     private void lbThongKeMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_lbThongKeMouseClicked
+        // Hiển thị panel trước
         cardLayout.show(QuanLy, "card9");
+
+        // Làm mới với độ trễ nhỏ để đảm bảo UI đã sẵn sàng
+        SwingUtilities.invokeLater(() -> {
+            thongKe1.refreshAll();
+            thongKe1.revalidate();
+            thongKe1.repaint();
+        });
     }// GEN-LAST:event_lbThongKeMouseClicked
 
     private void lbgiamgiaMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_lbgiamgiaMouseClicked
@@ -323,7 +369,6 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
     private JLabel selectedLabel = null;
 
     private void addClickEffect(JLabel label) {
-
         Color colorEnd = new Color(88, 169, 198);
 
         label.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -338,6 +383,14 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
                 label.setForeground(Color.WHITE);
                 label.setOpaque(true);
                 selectedLabel = label;
+
+                // Thêm delay nhỏ để đảm bảo UI update
+                javax.swing.Timer timer = new javax.swing.Timer(50, e -> {
+                    QuanLy.revalidate();
+                    QuanLy.repaint();
+                    ((javax.swing.Timer) e.getSource()).stop();
+                });
+                timer.start();
             }
         });
     }
