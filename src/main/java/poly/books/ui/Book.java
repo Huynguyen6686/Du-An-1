@@ -4,7 +4,6 @@
  */
 package poly.books.ui;
 
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -15,7 +14,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import poly.books.controller.PolybookController;
 import poly.books.dao.impl.UserDAOImpl;
@@ -348,8 +346,19 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
     }// GEN-LAST:event_lbgiamgiaMouseClicked
 
     private void lbDangXuatMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_lbDangXuatMouseClicked
-        XAuth.user = null;
-        System.exit(0);
+        if (XAuth.user != null) {
+            // Xóa thông tin người dùng hiện tại
+            XAuth.user = null;
+            // Đóng giao diện hiện tại
+            this.dispose();
+
+            // Chạy lại Book
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    new Book().setVisible(true);
+                }
+            });
+        }
     }// GEN-LAST:event_lbDangXuatMouseClicked
 
     private void lbDoiMkMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_lbDoiMkMouseClicked
