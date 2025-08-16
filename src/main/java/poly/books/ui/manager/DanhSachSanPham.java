@@ -439,20 +439,20 @@ public class DanhSachSanPham extends javax.swing.JDialog implements poly.books.c
     }//GEN-LAST:event_tbDanhSachSPMouseClicked
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
-          String timkiem = txtTimKiem.getText().trim().toLowerCase();
-    DefaultTableModel defaultTableModel = (DefaultTableModel) tbDanhSachSP.getModel();
-    TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(defaultTableModel);
-    tbDanhSachSP.setRowSorter(sorter);
+        String timkiem = txtTimKiem.getText().trim().toLowerCase();
+        DefaultTableModel defaultTableModel = (DefaultTableModel) tbDanhSachSP.getModel();
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(defaultTableModel);
+        tbDanhSachSP.setRowSorter(sorter);
 
-    if (timkiem.isEmpty()) {
-        // Nếu chuỗi tìm kiếm trống, reset bộ lọc và làm mới bảng
-        sorter.setRowFilter(null);
-        fillToTable(); // Gọi lại dữ liệu ban đầu (nếu bạn có phương thức này)
-        return;
-    }
+        if (timkiem.isEmpty()) {
+            // Nếu chuỗi tìm kiếm trống, reset bộ lọc và làm mới bảng
+            sorter.setRowFilter(null);
+            fillToTable(); // Gọi lại dữ liệu ban đầu (nếu bạn có phương thức này)
+            return;
+        }
 
-    // Áp dụng lọc theo cột 1 (ví dụ: cột thể loại)
-    sorter.setRowFilter(RowFilter.regexFilter("(?i)" + timkiem, 1));
+        // Áp dụng lọc theo cột 1 (ví dụ: cột thể loại)
+        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + timkiem, 1));
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
     private void btnDongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDongActionPerformed

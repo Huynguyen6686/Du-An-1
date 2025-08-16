@@ -88,6 +88,11 @@ public class BanHang extends javax.swing.JPanel {
         txtTonKho.setEditable(false);
         txtMaPhieu.setEditable(false);
         txtTenMaGG.setEditable(false);
+        txtISBN.setEditable(false);
+        txtMaSach.setEditable(false);
+        txtTenSach.setEditable(false);
+        txtTonKho.setEditable(false);
+        txtDonGia.setEditable(false);
     }
 
     private void khoiTaoISBNScanner() {
@@ -233,9 +238,7 @@ public class BanHang extends javax.swing.JPanel {
 
     private boolean coTheTaoHoaDonMoi() throws SQLException {
         String sql = "SELECT COUNT(*) FROM HoaDon WHERE TrangThai = 0";
-        try (Connection conn = XJdbc.openConnection();
-                PreparedStatement ps = conn.prepareStatement(sql);
-                ResultSet rs = ps.executeQuery()) {
+        try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
 
             if (rs.next() && rs.getInt(1) >= SO_HOA_DON_CHO_TOI_DA) {
                 JOptionPane.showMessageDialog(this,
@@ -253,15 +256,13 @@ public class BanHang extends javax.swing.JPanel {
         String sql;
         if (TEN_KHACH_VANG_LAI.equals(tenKhachHang)) {
             sql = "SELECT MaKH FROM KhachHang WHERE TenKH = ? AND SDT IS NULL";
-            try (Connection conn = XJdbc.openConnection();
-                    PreparedStatement ps = conn.prepareStatement(sql)) {
+            try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, tenKhachHang);
                 return layMaKhachHangTuKetQua(ps.executeQuery());
             }
         } else {
             sql = "SELECT MaKH FROM KhachHang WHERE TenKH = ? AND (SDT = ? OR SDT IS NULL)";
-            try (Connection conn = XJdbc.openConnection(); 
-                    PreparedStatement ps = conn.prepareStatement(sql)) {
+            try (Connection conn = XJdbc.openConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, tenKhachHang);
                 ps.setString(2, soDienThoai.isEmpty() ? null : soDienThoai);
                 return layMaKhachHangTuKetQua(ps.executeQuery());
@@ -382,7 +383,7 @@ public class BanHang extends javax.swing.JPanel {
             kichHoatButtonThanhToan();
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi thêm sản phẩm: Vui lòng chọn hóa đơn để thêm sản phẩm "); 
+            JOptionPane.showMessageDialog(this, "Lỗi thêm sản phẩm: Vui lòng chọn hóa đơn để thêm sản phẩm ");
             Logger.getLogger(BanHang.class.getName()).log(Level.SEVERE, "Loi them san pham", e);
         }
     }
