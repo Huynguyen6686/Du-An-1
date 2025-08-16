@@ -139,7 +139,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
                 {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "STT", "Tên đăng nhập", "Họ Tên", "Tên Khách hàng ", "Ngày thanh toán", "Phương thức ", "Giảm giá", "Thành tiền", "Trạng thái"
+                "Mã Hoá đơn", "Tên đăng nhập", "Họ Tên", "Tên Khách hàng ", "Ngày thanh toán", "Phương thức ", "Giảm giá", "Thành tiền", "Trạng thái"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -191,7 +191,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Thông tin hoá đơn", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 14))); // NOI18N
 
-        jLabel1.setText("STT:");
+        jLabel1.setText("Mã Hoá đơn:");
 
         jLabel2.setText("Họ tên:");
 
