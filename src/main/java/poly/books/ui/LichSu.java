@@ -60,6 +60,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
             @Override
             public void componentShown(ComponentEvent e) {
                 fillToTable();
+                reload(e);
             }
 
         });
@@ -138,7 +139,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
                 {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Mã hoá đơn", "Tên đăng nhập", "Họ Tên", "Tên Khách hàng ", "Ngày thanh toán", "Phương thức ", "Giảm giá", "Thành tiền", "Trạng thái"
+                "STT", "Tên đăng nhập", "Họ Tên", "Tên Khách hàng ", "Ngày thanh toán", "Phương thức ", "Giảm giá", "Thành tiền", "Trạng thái"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -190,7 +191,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Thông tin hoá đơn", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 14))); // NOI18N
 
-        jLabel1.setText("Mã hoá đơn:");
+        jLabel1.setText("STT:");
 
         jLabel2.setText("Họ tên:");
 
@@ -450,7 +451,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
             // Bảng sản phẩm
             PdfPTable table = new PdfPTable(4);
             table.setWidthPercentage(100);
-            table.setWidths(new float[]{4, 2, 1, 1});
+            table.setWidths(new float[]{3, 2, 1, 1});
 
             // Tiêu đề cột
             table.addCell(new PdfPCell(new Phrase("ISBN", fontNormal)));
@@ -552,8 +553,8 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
                 lichSuEntity.getTenKH(),
                 lichSuEntity.getNgayThanhToan(),
                 lichSuEntity.getPhuongThuc() == 2 ? "Chuyển khoản" : "Tiền mặt",
-                lichSuEntity.getGiam(), 
-                lichSuEntity.getThanhTien(), 
+                lichSuEntity.getGiam(),
+                lichSuEntity.getThanhTien(),
                 lichSuEntity.getTrangThai() == 1 ? "Đã Thanh toán" : "Chưa thanh toán"
             };
             defaultTableModel.addRow(rowData);
@@ -583,5 +584,10 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
     @Override
     public void setEditable(boolean editable) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    public void reload(ComponentEvent e) {
+        fillToTable();
+        DefaultTableModel model = (DefaultTableModel) tblProductDetails.getModel();
+        model.setRowCount(0); // Xóa sạch dữ liệu bảng sản phẩm
     }
 }
