@@ -22,12 +22,23 @@ import poly.books.entity.NguoiDungSD;
  *
  * @author Thuy
  */
-public class QLTaiKhoan extends javax.swing.JPanel implements poly.books.controller.NguoiDungSDController{
-    List<NguoiDungSD> listndsd=new ArrayList<>();
-    NguoiDungSDDAO ndsddao=new NguoiDungSDDAO();
+public class QLTaiKhoan extends javax.swing.JPanel implements poly.books.controller.NguoiDungSDController {
+
+    List<NguoiDungSD> listndsd = new ArrayList<>();
+    NguoiDungSDDAO ndsddao = new NguoiDungSDDAO();
+
     public QLTaiKhoan() {
         initComponents();
         fillToTable();
+    }
+
+    private boolean isDuplicateUsername(String username) {
+        for (NguoiDungSD nd : listndsd) {
+            if (nd.getTenDangNhap().equalsIgnoreCase(username)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -375,7 +386,7 @@ public class QLTaiKhoan extends javax.swing.JPanel implements poly.books.control
         txtTendangnhap.setText(String.valueOf(ndsd.getTenDangNhap()));
         txtMatKhau.setText(String.valueOf(ndsd.getMatKhau()));
         txtHovaten.setText(String.valueOf(ndsd.getHoTen()));
-        
+
         if (ndsd.isTrangThai()) {
             rdoConLam.setSelected(true);
         } else {
@@ -387,18 +398,18 @@ public class QLTaiKhoan extends javax.swing.JPanel implements poly.books.control
         } else {
             rdoNhanVien.setSelected(true);
         }
-        
+
         lblAnh.setIcon(null);
-            lblAnh.setText("");
-            if (ndsd.getHinhAnh() != null && !ndsd.getHinhAnh().isEmpty()) {
-                lblAnh.setToolTipText(ndsd.getHinhAnh());
-                java.net.URL imageUrl = getClass().getResource("/imgTaiKhoan/" + ndsd.getHinhAnh());
-                if (imageUrl != null) {
-                    ImageIcon icon = new ImageIcon(imageUrl);
-                    Image img = icon.getImage().getScaledInstance(lblAnh.getWidth(), lblAnh.getHeight(), Image.SCALE_SMOOTH);
-                    lblAnh.setIcon(new ImageIcon(img));
-                }
+        lblAnh.setText("");
+        if (ndsd.getHinhAnh() != null && !ndsd.getHinhAnh().isEmpty()) {
+            lblAnh.setToolTipText(ndsd.getHinhAnh());
+            java.net.URL imageUrl = getClass().getResource("/imgTaiKhoan/" + ndsd.getHinhAnh());
+            if (imageUrl != null) {
+                ImageIcon icon = new ImageIcon(imageUrl);
+                Image img = icon.getImage().getScaledInstance(lblAnh.getWidth(), lblAnh.getHeight(), Image.SCALE_SMOOTH);
+                lblAnh.setIcon(new ImageIcon(img));
             }
+        }
     }
 
     @Override
@@ -417,70 +428,94 @@ public class QLTaiKhoan extends javax.swing.JPanel implements poly.books.control
 
     @Override
     public void fillToTable() {
-        DefaultTableModel defaultTableModel=(DefaultTableModel) tblTaiKhoan.getModel();
+        DefaultTableModel defaultTableModel = (DefaultTableModel) tblTaiKhoan.getModel();
         defaultTableModel.setRowCount(0);
-        listndsd=ndsddao.findAll();
-        for(NguoiDungSD ndsd:listndsd){
-           defaultTableModel.addRow(new Object[]{
-            ndsd.getTenDangNhap(),
-            ndsd.getMatKhau(),
-            ndsd.getHoTen(),
-            ndsd.isTrangThai() ? "Còn làm" : "Nghỉ làm",
-            ndsd.isQuanLy() ? "Quản lý" : "Nhân viên",
-            ndsd.getHinhAnh()
-        }); 
+        listndsd = ndsddao.findAll();
+        for (NguoiDungSD ndsd : listndsd) {
+            defaultTableModel.addRow(new Object[]{
+                ndsd.getTenDangNhap(),
+                ndsd.getMatKhau(),
+                ndsd.getHoTen(),
+                ndsd.isTrangThai() ? "Còn làm" : "Nghỉ làm",
+                ndsd.isQuanLy() ? "Quản lý" : "Nhân viên",
+                ndsd.getHinhAnh()
+            });
         }
     }
 
     @Override
     public void create() {
         NguoiDungSD nd = getForm();
-    if (nd == null) return;
+        if (nd == null) {
+            return;
+        }
 
-    try {
-        ndsddao.craete(nd);
-        fillToTable();
-        clear();
-        JOptionPane.showMessageDialog(this, "Thêm tài khoản thành công!");
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Thêm tài khoản thất bại!");
-    }
+        // Kiểm tra trùng tên đăng nhập
+        if (isDuplicateUsername(nd.getTenDangNhap())) {
+            JOptionPane.showMessageDialog(this, "Tên đăng nhập đã tồn tại!");
+            return;
+        }
+
+        try {
+            ndsddao.craete(nd);
+            fillToTable();
+            clear();
+            JOptionPane.showMessageDialog(this, "Thêm tài khoản thành công!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Thêm tài khoản thất bại!");
+        }
     }
 
     @Override
     public void update() {
         NguoiDungSD nd = getForm();
-    if (nd == null) return;
+        if (nd == null) {
+            return;
+        }
 
-    try {
-        ndsddao.update(nd);
-        fillToTable();
-        clear();
-        JOptionPane.showMessageDialog(this, "Cập nhật tài khoản thành công!");
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Cập nhật tài khoản thất bại!");
-    }
+        // Lấy username hiện tại đang chọn
+        int index = tblTaiKhoan.getSelectedRow();
+        if (index < 0) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn tài khoản cần cập nhật!");
+            return;
+        }
+        String currentUsername = listndsd.get(index).getTenDangNhap();
+
+        // Nếu đổi sang username đã tồn tại (khác chính nó) thì báo lỗi
+        if (!nd.getTenDangNhap().equalsIgnoreCase(currentUsername) && isDuplicateUsername(nd.getTenDangNhap())) {
+            JOptionPane.showMessageDialog(this, "Tên đăng nhập đã tồn tại!");
+            return;
+        }
+
+        try {
+            ndsddao.update(nd);
+            fillToTable();
+            clear();
+            JOptionPane.showMessageDialog(this, "Cập nhật tài khoản thành công!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Cập nhật tài khoản thất bại!");
+        }
     }
 
     @Override
     public void delete() {
-         String tendangnhap = txtTendangnhap.getText();
-    if (tendangnhap.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Vui lòng chọn tài khoản để xóa!");
-        return;
-    }
-
-    int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa tài khoản này?");
-    if (confirm == JOptionPane.YES_OPTION) {
-        try {
-            ndsddao.detele(tendangnhap);
-            fillToTable();
-            clear();
-            JOptionPane.showMessageDialog(this, "Xóa tài khoản thành công!");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Xóa tài khoản thất bại!");
+        String tendangnhap = txtTendangnhap.getText();
+        if (tendangnhap.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn tài khoản để xóa!");
+            return;
         }
-    }
+
+        int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa tài khoản này?");
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                ndsddao.detele(tendangnhap);
+                fillToTable();
+                clear();
+                JOptionPane.showMessageDialog(this, "Xóa tài khoản thành công!");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Xóa tài khoản thất bại!");
+            }
+        }
     }
 
     @Override
@@ -489,8 +524,8 @@ public class QLTaiKhoan extends javax.swing.JPanel implements poly.books.control
         txtMatKhau.setText("");
         txtHovaten.setText("");
         rdoConLam.setSelected(true);
-         rdoNghiLam.setSelected(true);
-         lblAnh.setIcon(null);
+        rdoNghiLam.setSelected(true);
+        lblAnh.setIcon(null);
         lblAnh.setToolTipText(null);
     }
 

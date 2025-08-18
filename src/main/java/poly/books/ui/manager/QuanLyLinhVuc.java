@@ -35,7 +35,7 @@ public class QuanLyLinhVuc extends javax.swing.JDialog implements poly.books.con
         this.quanLySach = sql;
         initComponents();
         fillToTable();
-       setLocationRelativeTo(null);
+        setLocationRelativeTo(null);
         txtMaLinhVuc.setEditable(false);
     }
 
@@ -288,20 +288,20 @@ public class QuanLyLinhVuc extends javax.swing.JDialog implements poly.books.con
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
         // TODO add your handling code here:
-         String timkiem = txtTimKiem.getText().trim().toLowerCase();
-    DefaultTableModel defaultTableModel = (DefaultTableModel) tbLinhVuc.getModel();
-    TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(defaultTableModel);
-    tbLinhVuc.setRowSorter(sorter);
+        String timkiem = txtTimKiem.getText().trim().toLowerCase();
+        DefaultTableModel defaultTableModel = (DefaultTableModel) tbLinhVuc.getModel();
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(defaultTableModel);
+        tbLinhVuc.setRowSorter(sorter);
 
-    if (timkiem.isEmpty()) {
-        // Nếu chuỗi tìm kiếm trống, reset bộ lọc và làm mới bảng
-        sorter.setRowFilter(null);
-        fillToTable(); // Gọi lại dữ liệu ban đầu (nếu bạn có phương thức này)
-        return;
-    }
+        if (timkiem.isEmpty()) {
+            // Nếu chuỗi tìm kiếm trống, reset bộ lọc và làm mới bảng
+            sorter.setRowFilter(null);
+            fillToTable(); // Gọi lại dữ liệu ban đầu (nếu bạn có phương thức này)
+            return;
+        }
 
-    // Áp dụng lọc theo cột 1 (ví dụ: cột thể loại)
-    sorter.setRowFilter(RowFilter.regexFilter("(?i)" + timkiem, 1));
+        // Áp dụng lọc theo cột 1 (ví dụ: cột thể loại)
+        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + timkiem, 1));
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
     /**
@@ -403,12 +403,37 @@ public class QuanLyLinhVuc extends javax.swing.JDialog implements poly.books.con
         }
     }
 
+    private boolean isDuplicateTenLinhVuc(String ten, Integer excludeId) {
+        if (ten == null) {
+            return false;
+        }
+        String normalized = ten.trim().toLowerCase();
+
+        for (LinhVuc lv : listLV) {
+            String currentName = lv.getTenLinhVuc();
+            if (currentName != null && currentName.trim().toLowerCase().equals(normalized)) {
+                Integer currentId = lv.getMaLinhVuc();
+                if (excludeId == null || (currentId != null && !currentId.equals(excludeId))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     @Override
     public void create() {
-        if (txtTenLinhVuc.getText().trim().isEmpty()) {
+        String ten = txtTenLinhVuc.getText().trim();
+        if (ten.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Tên lĩnh vực không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
+
+        if (isDuplicateTenLinhVuc(ten, null)) {
+            JOptionPane.showMessageDialog(this, "Tên lĩnh vực đã tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         try {
             LinhVuc lv = getForm();
             Lvdao.create(lv);
@@ -430,10 +455,19 @@ public class QuanLyLinhVuc extends javax.swing.JDialog implements poly.books.con
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một lĩnh vực để sửa!", "Lỗi", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (txtTenLinhVuc.getText().trim().isEmpty()) {
+
+        String ten = txtTenLinhVuc.getText().trim();
+        if (ten.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Tên lĩnh vực không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
+
+        int id = Integer.parseInt(txtMaLinhVuc.getText());
+        if (isDuplicateTenLinhVuc(ten, id)) {
+            JOptionPane.showMessageDialog(this, "Tên lĩnh vực đã tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         try {
             LinhVuc lv = getForm();
             Lvdao.update(lv);
@@ -444,7 +478,7 @@ public class QuanLyLinhVuc extends javax.swing.JDialog implements poly.books.con
             }
             JOptionPane.showMessageDialog(this, "Cập nhật lĩnh vực thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
         } catch (RuntimeException ex) {
-            JOptionPane.showMessageDialog(this, "Cập nhật ngôn ngữ đã xảy ra lỗi: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Cập nhật lĩnh vực đã xảy ra lỗi: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
 

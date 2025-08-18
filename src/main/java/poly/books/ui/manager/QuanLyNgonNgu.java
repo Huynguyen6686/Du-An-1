@@ -26,16 +26,17 @@ public class QuanLyNgonNgu extends javax.swing.JDialog implements poly.books.con
 
     List<NgonNgu> listNN = new ArrayList<>();
     NgonNguDAO NNdao = new NgonNguDAO();
-  private QuanLySach quanLySach;
+    private QuanLySach quanLySach;
+
     /**
      * Creates new form QuanLyNgoNgu
      */
-    public QuanLyNgonNgu(java.awt.Frame parent, boolean modal,QuanLySach sql) {
+    public QuanLyNgonNgu(java.awt.Frame parent, boolean modal, QuanLySach sql) {
         super(parent, modal);
         initComponents();
         fillToTable();
-          this.quanLySach=sql;
-       setLocationRelativeTo(null);
+        this.quanLySach = sql;
+        setLocationRelativeTo(null);
         txtMaNN.setEditable(false);
     }
 
@@ -279,20 +280,20 @@ public class QuanLyNgonNgu extends javax.swing.JDialog implements poly.books.con
     }//GEN-LAST:event_btnXoaActionPerformed
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
-         String timkiem = txtTimKiem.getText().trim().toLowerCase();
-    DefaultTableModel defaultTableModel = (DefaultTableModel) tbNgonNgu.getModel();
-    TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(defaultTableModel);
-    tbNgonNgu.setRowSorter(sorter);
+        String timkiem = txtTimKiem.getText().trim().toLowerCase();
+        DefaultTableModel defaultTableModel = (DefaultTableModel) tbNgonNgu.getModel();
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(defaultTableModel);
+        tbNgonNgu.setRowSorter(sorter);
 
-    if (timkiem.isEmpty()) {
-        // Nếu chuỗi tìm kiếm trống, reset bộ lọc và làm mới bảng
-        sorter.setRowFilter(null);
-        fillToTable(); // Gọi lại dữ liệu ban đầu (nếu bạn có phương thức này)
-        return;
-    }
+        if (timkiem.isEmpty()) {
+            // Nếu chuỗi tìm kiếm trống, reset bộ lọc và làm mới bảng
+            sorter.setRowFilter(null);
+            fillToTable(); // Gọi lại dữ liệu ban đầu (nếu bạn có phương thức này)
+            return;
+        }
 
-    // Áp dụng lọc theo cột 1 (ví dụ: cột thể loại)
-    sorter.setRowFilter(RowFilter.regexFilter("(?i)" + timkiem, 1));
+        // Áp dụng lọc theo cột 1 (ví dụ: cột thể loại)
+        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + timkiem, 1));
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
     /**
@@ -326,7 +327,7 @@ public class QuanLyNgonNgu extends javax.swing.JDialog implements poly.books.con
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                QuanLyNgonNgu dialog = new QuanLyNgonNgu(new javax.swing.JFrame(), true,null);
+                QuanLyNgonNgu dialog = new QuanLyNgonNgu(new javax.swing.JFrame(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -397,13 +398,23 @@ public class QuanLyNgonNgu extends javax.swing.JDialog implements poly.books.con
 
     }
 
-   
     @Override
     public void create() {
-        if (txtNgonNgu.getText().trim().isEmpty()) {
+        String tenNN = txtNgonNgu.getText().trim();
+
+        if (tenNN.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Tên ngôn ngữ không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
+
+        // Kiểm tra trùng tên
+        boolean isDuplicate = listNN.stream()
+                .anyMatch(n -> n.getTenNgonNgu().equalsIgnoreCase(tenNN));
+        if (isDuplicate) {
+            JOptionPane.showMessageDialog(this, "Ngôn ngữ đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         try {
             NgonNgu n = getForm();
             NNdao.create(n);
@@ -422,10 +433,24 @@ public class QuanLyNgonNgu extends javax.swing.JDialog implements poly.books.con
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một ngôn ngữ để sửa!", "Lỗi", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (txtNgonNgu.getText().trim().isEmpty()) {
+
+        String tenNN = txtNgonNgu.getText().trim();
+        if (tenNN.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Tên ngôn ngữ không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
+
+        int maDangSua = Integer.parseInt(txtMaNN.getText());
+
+        // Kiểm tra trùng tên (loại trừ chính nó)
+        boolean isDuplicate = listNN.stream()
+                .anyMatch(n -> n.getTenNgonNgu().equalsIgnoreCase(tenNN)
+                && n.getMaNgonNgu() != maDangSua);
+        if (isDuplicate) {
+            JOptionPane.showMessageDialog(this, "Ngôn ngữ đã tồn tại!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         try {
             NgonNgu n = getForm();
             NNdao.update(n);
@@ -435,7 +460,6 @@ public class QuanLyNgonNgu extends javax.swing.JDialog implements poly.books.con
         } catch (RuntimeException ex) {
             JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật ngôn ngữ: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
-       
     }
 
     @Override

@@ -398,6 +398,16 @@ public class QuanLyTheLoai extends javax.swing.JDialog implements poly.books.con
             JOptionPane.showMessageDialog(this, "Tên Loại Sách không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
+
+        String tenMoi = txtTheLoai.getText().trim();
+        // Kiểm tra trùng tên
+        for (LoaiSach ls : listLSach) {
+            if (ls.getTenLoaiSach().equalsIgnoreCase(tenMoi)) {
+                JOptionPane.showMessageDialog(this, "Tên Loại Sách đã tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
         try {
             LoaiSach n = getForm();
             lSachDAO.create(n);
@@ -406,7 +416,7 @@ public class QuanLyTheLoai extends javax.swing.JDialog implements poly.books.con
             if (quanLySach != null) {
                 quanLySach.refresLoaiSachTable();
             }
-            JOptionPane.showMessageDialog(this, "Thêm Loại Sách  thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Thêm Loại Sách thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
         } catch (RuntimeException ex) {
             JOptionPane.showMessageDialog(this, "Lỗi khi thêm Loại Sách : " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
@@ -423,6 +433,17 @@ public class QuanLyTheLoai extends javax.swing.JDialog implements poly.books.con
             JOptionPane.showMessageDialog(this, "Tên Loại Sách không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
+
+        String tenMoi = txtTheLoai.getText().trim();
+        int maHienTai = Integer.parseInt(txtMaTL.getText());
+        // Kiểm tra trùng tên (trừ chính nó)
+        for (LoaiSach ls : listLSach) {
+            if (ls.getTenLoaiSach().equalsIgnoreCase(tenMoi) && ls.getMaLoaiSach() != maHienTai) {
+                JOptionPane.showMessageDialog(this, "Tên Loại Sách đã tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
         try {
             LoaiSach n = getForm();
             lSachDAO.update(n);

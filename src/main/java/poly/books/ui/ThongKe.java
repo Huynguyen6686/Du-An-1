@@ -1023,7 +1023,7 @@ public class ThongKe extends javax.swing.JPanel {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lbsodon)
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addContainerGap(46, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1740,7 +1740,7 @@ public class ThongKe extends javax.swing.JPanel {
                 {null, null, null, null}
             },
             new String [] {
-                "Mã sản phẩm ", "Tên sản phẩm", "Số lượng", "Doanh thu"
+                "Mã sản phẩm ", "Tên sản phẩm", "Doanh thu", "Số lượng"
             }
         ));
         jScrollPane9.setViewportView(tbndoanhthungay5);

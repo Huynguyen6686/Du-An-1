@@ -402,10 +402,20 @@ public class QuanLyNhaXuatBan extends javax.swing.JDialog implements poly.books.
 
     @Override
     public void create() {
-        if (txtTacGia.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Tên tác giả không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        String tenNXB = txtTacGia.getText().trim();
+        if (tenNXB.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Tên nhà xuất bản không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
+
+        // Check trùng tên
+        for (NhaXuatBan nxb : nxbList) {
+            if (nxb.getTenNXB().equalsIgnoreCase(tenNXB)) {
+                JOptionPane.showMessageDialog(this, "Tên nhà xuất bản đã tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
         try {
             NhaXuatBan nhaXuatBan = getForm();
             nhaXuatBanDAO.create(nhaXuatBan);
@@ -421,13 +431,25 @@ public class QuanLyNhaXuatBan extends javax.swing.JDialog implements poly.books.
     public void update() {
         int selectedRow = tbNhaXuatBan.getSelectedRow();
         if (selectedRow < 0 || selectedRow >= nxbList.size()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một tác giả để sửa!", "Lỗi", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một nhà xuất bản để sửa!", "Lỗi", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (txtTacGia.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Tên tác giả không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+
+        String tenNXB = txtTacGia.getText().trim();
+        if (tenNXB.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Tên nhà xuất bản không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
+
+        // Check trùng tên (ngoại trừ chính nó)
+        int maDangSua = nxbList.get(selectedRow).getMaNXB();
+        for (NhaXuatBan nxb : nxbList) {
+            if (nxb.getTenNXB().equalsIgnoreCase(tenNXB) && nxb.getMaNXB() != maDangSua) {
+                JOptionPane.showMessageDialog(this, "Tên nhà xuất bản đã tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
         try {
             NhaXuatBan nhaXuatBan = getForm();
             nhaXuatBanDAO.update(nhaXuatBan);

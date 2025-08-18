@@ -583,6 +583,20 @@ public class QuanLyPhieuGiamGia extends javax.swing.JPanel implements poly.books
         }
     }
 
+    private boolean isDuplicateName(String ten, Integer excludeRow) {
+        DefaultTableModel model = (DefaultTableModel) tblPhieuGiamGia.getModel();
+        for (int i = 0; i < model.getRowCount(); i++) {
+            if (excludeRow != null && i == excludeRow) {
+                continue; // bỏ qua dòng đang sửa
+            }
+            String currentName = model.getValueAt(i, 1).toString(); // cột 1 = Tên khuyến mãi
+            if (currentName.equalsIgnoreCase(ten)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private int determineStatus(Date ngayBatDau, Date ngayKetThuc) {
         if (ngayBatDau == null || ngayKetThuc == null) {
             return 0; // Hết hiệu lực nếu ngày không hợp lệ
@@ -605,6 +619,12 @@ public class QuanLyPhieuGiamGia extends javax.swing.JPanel implements poly.books
 
     @Override
     public void create() {
+        String ten = txtTenKhuyenMai.getText().trim();
+        if (isDuplicateName(ten, null)) {
+            JOptionPane.showMessageDialog(this, "Tên phiếu giảm giá đã tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         if (txtValue.getText().trim().isEmpty() || txtCondition.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Giá trị và điều kiện áp dụng không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
@@ -651,6 +671,11 @@ public class QuanLyPhieuGiamGia extends javax.swing.JPanel implements poly.books
     @Override
     public void update() {
         int selectedRow = tblPhieuGiamGia.getSelectedRow();
+        String ten = txtTenKhuyenMai.getText().trim();
+        if (isDuplicateName(ten, selectedRow)) {
+            JOptionPane.showMessageDialog(this, "Tên phiếu giảm giá đã tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         if (selectedRow < 0 || selectedRow >= phieuGiamGiaList.size()) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một phiếu giảm giá để sửa!", "Lỗi", JOptionPane.WARNING_MESSAGE);
             return;
@@ -757,7 +782,8 @@ public class QuanLyPhieuGiamGia extends javax.swing.JPanel implements poly.books
     }
 
     @Override
-    public void setEditable(boolean editable) {
+    public void setEditable(boolean editable
+    ) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
