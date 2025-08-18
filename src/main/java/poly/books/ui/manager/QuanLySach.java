@@ -1525,10 +1525,6 @@ public class QuanLySach extends javax.swing.JPanel implements poly.books.control
             // Thêm sách và các quan hệ
             int result = sachDAO.createSachHoanChinh(sach, linhVucIds, loaiSachIds);
             if (result > 0) {
-                // Thêm vào bảng Kho
-                int soLuong = Integer.parseInt(txtSoLuong.getText());
-                XJdbc.executeUpdate("INSERT INTO Sach (MaSach, SoLuong) VALUES (?, ?)", result, soLuong);
-
                 this.fillToTable();
                 this.clear();
                 XDialog.alert("Thêm sách thành công!");

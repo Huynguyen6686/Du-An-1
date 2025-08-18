@@ -229,7 +229,7 @@ public class Book extends javax.swing.JFrame implements poly.books.controller.Po
         lbLichSu.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lbLichSu.setForeground(new java.awt.Color(255, 255, 255));
         lbLichSu.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbLichSu.setText("Quản lý hóa dơn");
+        lbLichSu.setText("Quản lý hóa đơn");
         lbLichSu.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lbLichSuMouseClicked(evt);
