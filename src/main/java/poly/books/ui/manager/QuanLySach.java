@@ -383,9 +383,17 @@ public class QuanLySach extends javax.swing.JPanel implements poly.books.control
                 {null, null, null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "MaSach", "TenSach", "MaTacGia", "MaLinhVuc", "MaLoaiSach", "MaNXB", "NamXuatBan", "GiaBan", "LanTaiBan", "ISBN", "Tap", "MaNgonNgu", "Số Lượng", "HinhAnh"
+                "Mã sách", "Tên Sách", "Tác Giả", "Lĩnh Vực ", "Loại sách", "Nhà xuất bản ", "Năm xuất bản", "Giá bán", "Lần tái bản", "ISBN", "Tập", "Ngôn ngữ", "Số Lượng", "Hình ảnh"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tbSach.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tbSachMouseClicked(evt);
@@ -1519,7 +1527,7 @@ public class QuanLySach extends javax.swing.JPanel implements poly.books.control
             if (result > 0) {
                 // Thêm vào bảng Kho
                 int soLuong = Integer.parseInt(txtSoLuong.getText());
-                XJdbc.executeUpdate("INSERT INTO Kho (MaSach, SoLuong) VALUES (?, ?)", result, soLuong);
+                XJdbc.executeUpdate("INSERT INTO Sach (MaSach, SoLuong) VALUES (?, ?)", result, soLuong);
 
                 this.fillToTable();
                 this.clear();
@@ -1595,7 +1603,7 @@ public class QuanLySach extends javax.swing.JPanel implements poly.books.control
                     // Xóa các bản ghi liên quan
                     XJdbc.executeUpdate("DELETE FROM Sach_LinhVuc WHERE MaSach = ?", id);
                     XJdbc.executeUpdate("DELETE FROM Sach_LoaiSach WHERE MaSach = ?", id);
-                    XJdbc.executeUpdate("DELETE FROM Kho WHERE MaSach = ?", id);
+                    XJdbc.executeUpdate("DELETE FROM Sach WHERE MaSach = ?", id);
 
                     // Xóa sách
                     sachDAO.delete(id);

@@ -540,20 +540,20 @@
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="14" rowCount="4">
-                    <Column editable="true" title="MaSach" type="java.lang.Object"/>
-                    <Column editable="true" title="TenSach" type="java.lang.Object"/>
-                    <Column editable="true" title="MaTacGia" type="java.lang.Object"/>
-                    <Column editable="true" title="MaLinhVuc" type="java.lang.Object"/>
-                    <Column editable="true" title="MaLoaiSach" type="java.lang.Object"/>
-                    <Column editable="true" title="MaNXB" type="java.lang.Object"/>
-                    <Column editable="true" title="NamXuatBan" type="java.lang.Object"/>
-                    <Column editable="true" title="GiaBan" type="java.lang.Object"/>
-                    <Column editable="true" title="LanTaiBan" type="java.lang.Object"/>
-                    <Column editable="true" title="ISBN" type="java.lang.Object"/>
-                    <Column editable="true" title="Tap" type="java.lang.Object"/>
-                    <Column editable="true" title="MaNgonNgu" type="java.lang.Object"/>
-                    <Column editable="true" title="S&#x1ed1; L&#x1b0;&#x1ee3;ng" type="java.lang.Object"/>
-                    <Column editable="true" title="HinhAnh" type="java.lang.Object"/>
+                    <Column editable="false" title="M&#xe3; s&#xe1;ch" type="java.lang.Object"/>
+                    <Column editable="false" title="T&#xea;n S&#xe1;ch" type="java.lang.Object"/>
+                    <Column editable="false" title="T&#xe1;c Gi&#x1ea3;" type="java.lang.Object"/>
+                    <Column editable="false" title="L&#x129;nh V&#x1ef1;c " type="java.lang.Object"/>
+                    <Column editable="false" title="Lo&#x1ea1;i s&#xe1;ch" type="java.lang.Object"/>
+                    <Column editable="false" title="Nh&#xe0; xu&#x1ea5;t b&#x1ea3;n " type="java.lang.Object"/>
+                    <Column editable="false" title="N&#x103;m xu&#x1ea5;t b&#x1ea3;n" type="java.lang.Object"/>
+                    <Column editable="false" title="Gi&#xe1; b&#xe1;n" type="java.lang.Object"/>
+                    <Column editable="false" title="L&#x1ea7;n t&#xe1;i b&#x1ea3;n" type="java.lang.Object"/>
+                    <Column editable="false" title="ISBN" type="java.lang.Object"/>
+                    <Column editable="false" title="T&#x1ead;p" type="java.lang.Object"/>
+                    <Column editable="false" title="Ng&#xf4;n ng&#x1eef;" type="java.lang.Object"/>
+                    <Column editable="false" title="S&#x1ed1; L&#x1b0;&#x1ee3;ng" type="java.lang.Object"/>
+                    <Column editable="false" title="H&#xec;nh &#x1ea3;nh" type="java.lang.Object"/>
                   </Table>
                 </Property>
               </Properties>
