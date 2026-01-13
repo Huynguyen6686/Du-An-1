@@ -201,6 +201,7 @@ public class DanhSachKhachHang extends javax.swing.JDialog {
             KhachHang khachHang = KHdao.getAll().get(selectedRow);
             parentBanHang.chonKhachHang(khachHang);
             this.dispose();
+            JOptionPane.showMessageDialog(this, "Chọn khách hàng thành công");
         } else {
             javax.swing.JOptionPane.showMessageDialog(this, "Vui lòng chọn một Khách Hàng trước khi xác nhận!");
         }
@@ -213,13 +214,10 @@ public class DanhSachKhachHang extends javax.swing.JDialog {
         tbKhachHang.setRowSorter(sorter);
 
         if (timkiem.isEmpty()) {
-            // Nếu chuỗi tìm kiếm trống, reset bộ lọc và làm mới bảng
             sorter.setRowFilter(null);
-            fillToTable(); // Gọi lại dữ liệu ban đầu (nếu bạn có phương thức này)
+            fillToTable();
             return;
         }
-
-        // Áp dụng lọc theo cột 1 (ví dụ: cột thể loại)
         sorter.setRowFilter(RowFilter.regexFilter("(?i)" + timkiem, 1));
     }//GEN-LAST:event_btnTimKiemActionPerformed
 

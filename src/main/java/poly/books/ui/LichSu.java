@@ -403,7 +403,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
 
         try {
             // Font
-            String fontPath = "D:\\Du-An-1\\src\\main\\resources\\fonts\\arial-unicode-ms.ttf";
+            String fontPath = "E:\\polybooks\\src\\main\\resources\\fonts\\arial-unicode-ms.ttf";
             File fontFile = new File(fontPath);
             if (!fontFile.exists()) {
                 JOptionPane.showMessageDialog(this, "Không tìm thấy file font: " + fontPath);
@@ -414,7 +414,7 @@ public class LichSu extends javax.swing.JPanel implements poly.books.controller.
             Font fontNormal = new Font(baseFont, 12);
 
             // Đảm bảo thư mục
-            String folderPath = "D:/ExportBills";
+            String folderPath = "E:/ExportBills";
             File folder = new File(folderPath);
             if (!folder.exists()) {
                 folder.mkdirs();

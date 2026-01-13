@@ -381,7 +381,7 @@ public class BanHang extends javax.swing.JPanel {
 
             capNhatGiaTriHoaDon();
             kichHoatButtonThanhToan();
-
+             JOptionPane.showMessageDialog(this, " Thêm sản phẩm vào giỏ hàng thành công ");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Lỗi thêm sản phẩm: Vui lòng chọn hóa đơn để thêm sản phẩm ");
             Logger.getLogger(BanHang.class.getName()).log(Level.SEVERE, "Loi them san pham", e);
@@ -1009,10 +1009,29 @@ public class BanHang extends javax.swing.JPanel {
 
     // Phuong thuc xu ly ISBN thu cong
     private void nhapISBNThuCong() {
+
         String isbn = JOptionPane.showInputDialog(this, "Nhập ISBN:", "Nhập ISBN", JOptionPane.PLAIN_MESSAGE);
-        if (isbn != null && !isbn.trim().isEmpty()) {
-            xuLyQuetISBN(isbn.trim());
+        if (isbn == null) {
+            JOptionPane.showMessageDialog(this, "Đã hủy nhập ISBN");
+            return;
         }
+
+        isbn = isbn.trim();
+        if (isbn.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng không để trống ISBN");
+            return;
+        }
+        if (!(isbn.length() == 13)) {
+            JOptionPane.showMessageDialog(this, "Độ dài ISBN không hợp lệ! ISBN phải có 13 ký tự.");
+            return;
+        }
+        if (!isbn.matches("\\d{13}")) {
+            JOptionPane.showMessageDialog(this, "ISBN chỉ được chứa 13 chữ số (không được có ký tự khác).");
+            return;
+        }
+        xuLyQuetISBN(isbn);
+        JOptionPane.showMessageDialog(this, "Thêm sản phẩm vào giỏ hàng thành công");
+
     }
 
     // Phuong thuc utility
@@ -1766,6 +1785,7 @@ public class BanHang extends javax.swing.JPanel {
     }//GEN-LAST:event_btnQuetISBNActionPerformed
 
     private void tblHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMouseClicked
+        kichHoatButtonSauTaoHoaDon();
         int dongDuocChon = tblHoaDon.getSelectedRow();
         if (dongDuocChon == -1) {
             return;

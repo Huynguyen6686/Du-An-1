@@ -9,6 +9,7 @@ import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
@@ -220,6 +221,7 @@ public class DanhSachMaGG extends javax.swing.JDialog {
             PhieuGiamGia Phieu = phieuGiamGiaDAO.getAll().get(selectedRow);
             parentBanHang.chonPhieuGiamGia(Phieu); // <<< đúng
             this.dispose();
+            JOptionPane.showMessageDialog(this, "Thêm mã giảm giá thành công");
         } else {
             javax.swing.JOptionPane.showMessageDialog(this, "Vui lòng chọn một mã giảm giá trước khi xác nhận!");
         }
